@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MenuIcon, XIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,7 +26,12 @@ export default function Navbar() {
               transition={{ duration: 0.5 }}
               className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center"
             >
-              <span className="text-white font-bold text-lg">I</span>
+              <Image
+                src="/logo.png"
+                alt={"logo"}
+                height={50}
+                width={50}
+              ></Image>
             </motion.div>
             <span className="text-xl font-bold text-neutral-900">
               InvoiceFlow
