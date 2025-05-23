@@ -7,13 +7,11 @@ import Testimonials from "@/components/testimonials";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
-      <Navbar />
+    <main className="min-h-screen bg-white">      
       <Hero />
       <Features />
       <Pricing />
       <Testimonials />
-      <Footer />
     </main>
   );
 }

@@ -6,6 +6,14 @@ import { Button } from "@/components/ui/button";
 import { MenuIcon, XIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -67,10 +75,19 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
+            
             <div className="hidden md:block">
-              <Button className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white rounded-xl">
-                Get Started
-              </Button>
+              <SignedOut>
+                <SignInButton>
+                  <Button className=" bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white rounded-xl">
+                    Sign in
+                  </Button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <UserButton/>
+              </SignedIn>
+              
             </div>
 
             <Button
@@ -127,7 +144,7 @@ export default function Navbar() {
                 Contact
               </Link>
               <Button className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white w-full rounded-xl">
-                Get Started
+                Sign in
               </Button>
             </div>
           </motion.div>
