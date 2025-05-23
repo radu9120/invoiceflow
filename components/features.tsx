@@ -49,20 +49,34 @@ const features = [
   },
 ];
 
+function BackgroundDecoration() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-blue-100/20 mix-blend-multiply blur-2xl"></div>
+      <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-cyan-100/10 mix-blend-multiply blur-2xl"></div>
+    </div>
+  );
+}
+
 export default function Features() {
   return (
-    <section id="features" className="py-24 bg-neutral-50">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="features" className="relative py-24 bg-neutral-50">
+      <BackgroundDecoration />
+      <div className="container relative z-10 mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-3xl md:text-4xl font-bold mb-4 text-neutral-900"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-neutral-900"
           >
-            Powerful Features for Modern Businesses
+            Powerful Features for{" "}
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">
+              Modern Businesses
+            </span>
           </motion.h2>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -86,9 +100,11 @@ export default function Features() {
               className="bg-white rounded-xl p-8 shadow-md hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:-translate-y-1"
             >
               <div className="mb-4">{feature.icon}</div>
+
               <h3 className="text-xl font-bold mb-3 text-neutral-900">
                 {feature.title}
               </h3>
+
               <p className="text-neutral-700">{feature.description}</p>
             </motion.div>
           ))}

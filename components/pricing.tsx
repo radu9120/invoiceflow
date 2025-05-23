@@ -3,46 +3,45 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { SectionTitle } from "./ui/SectionTitle";
 
 const pricingPlans = [
   {
-    name: "Starter",
-    price: "$9",
-    description: "Perfect for freelancers and small businesses",
+    name: "Free",
+    price: "£0",
+    description: "Get started with basic invoicing needs",
     features: [
-      "Up to 10 clients",
-      "20 invoices per month",
+      "1 invoice per month",
       "Basic templates",
       "Email support",
       "Payment tracking",
       "Client portal",
     ],
-    cta: "Start Free Trial",
+    cta: "Get Started",
     popular: false,
   },
   {
     name: "Professional",
-    price: "$29",
-    description: "Ideal for growing businesses with more clients",
+    price: "£4.99",
+    description: "Perfect for freelancers and small businesses",
     features: [
-      "Unlimited clients",
-      "Unlimited invoices",
+      "Up to 10 invoices per month",
       "Custom templates",
       "Priority support",
       "Recurring invoices",
-      "Team access (3 users)",
+      "Team access (2 users)",
       "Advanced reporting",
       "Multi-currency",
     ],
-    cta: "Start Free Trial",
+    cta: "Start Now",
     popular: true,
   },
   {
     name: "Enterprise",
-    price: "$79",
+    price: "£19.99",
     description: "For established businesses with complex needs",
     features: [
-      "Everything in Professional",
+      "Unlimited invoices",
       "Unlimited team members",
       "API access",
       "Dedicated account manager",
@@ -51,36 +50,20 @@ const pricingPlans = [
       "Bulk operations",
       "White labeling",
     ],
-    cta: "Contact Sales",
+    cta: "Start Now",
     popular: false,
   },
 ];
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-24 bg-white">
+    <section id="pricing" className="py-24  bg-white">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-3xl md:text-4xl font-bold mb-4 text-neutral-900"
-          >
-            Simple, Transparent Pricing
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-lg text-neutral-700 max-w-2xl mx-auto"
-          >
-            Choose the plan that works best for your business. All plans include
-            a 14-day free trial.
-          </motion.p>
-        </div>
+        <SectionTitle
+          regularText="Simple, Transparent"
+          highlightedText="Pricing"
+          description="Choose the plan that works best for your business."
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {pricingPlans.map((plan, index) => (
@@ -109,7 +92,9 @@ export default function Pricing() {
                   <span className="text-4xl font-bold text-neutral-900">
                     {plan.price}
                   </span>
-                  <span className="text-neutral-600">/month</span>
+                  {plan.price !== "£0" && (
+                    <span className="text-neutral-600">/month</span>
+                  )}
                 </div>
                 <p className="text-neutral-700 mb-6">{plan.description}</p>
 
@@ -123,7 +108,7 @@ export default function Pricing() {
                 </ul>
 
                 <Button
-                  className={`w-full rounded-xl py-6 ${
+                  className={`w-full cursor-pointer rounded-xl py-6 ${
                     plan.popular
                       ? "bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white shadow-md hover:shadow-xl"
                       : "bg-white hover:bg-neutral-50 text-neutral-900 border border-neutral-200"
