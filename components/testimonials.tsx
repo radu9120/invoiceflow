@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SectionTitle } from "./ui/SectionTitle";
 
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -130,37 +131,11 @@ export default function Testimonials() {
 
       <div className="relative z-10 container mx-auto px-4 md:px-6">
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-block mb-4 px-4 py-1.5 bg-blue-50 border border-blue-100 rounded-full"
-          >
-            <span className="text-blue-600 font-medium text-sm">
-              Customer Success Stories
-            </span>
-          </motion.div>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-3xl md:text-4xl font-bold mb-4 text-neutral-900"
-          >
-            What Our Customers Say
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg text-neutral-700"
-          >
-            Thousands of businesses trust InvoiceFlow to handle their invoicing
-            needs
-          </motion.p>
+          <SectionTitle
+            regularText="What Our"
+            highlightedText="Customers Say"
+            description="Thousands of businesses trust InvoiceFlow to handle their invoicing needs"
+          />
         </div>
 
         <div className="relative max-w-6xl mx-auto">
