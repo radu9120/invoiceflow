@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, TouchEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionTitle } from "./ui/SectionTitle";
 
 function FloatingPaths({ position }: { position: number }) {
+  // Keep existing FloatingPaths code
   const paths = Array.from({ length: 36 }, (_, i) => ({
     id: i,
     d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
@@ -96,9 +97,38 @@ const testimonials = [
   },
 ];
 
+const stats = [
+  { label: "Customer Satisfaction", value: "98%" },
+  { label: "Time Saved on Invoicing", value: "75%" },
+  { label: "Faster Payments", value: "3x" },
+  { label: "ROI for Customers", value: "320%" },
+];
+
 export default function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile on mount and on window resize
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
+
+  // Fixed minimum heights that won't change
+  const minHeights = {
+    mobile: 600,
+    desktop: 400,
+  };
 
   useEffect(() => {
     if (!autoplay) return;
@@ -122,15 +152,44 @@ export default function Testimonials() {
     setActiveIndex((current) => (current + 1) % testimonials.length);
   };
 
+  // Touch handlers for mobile swiping
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    touchEndX.current = e.changedTouches[0].clientX;
+    handleSwipe();
+  };
+
+  const handleSwipe = () => {
+    // Minimum distance required for a swipe - adjust as needed
+    const minSwipeDistance = 50;
+    const distance = touchStartX.current - touchEndX.current;
+
+    if (Math.abs(distance) < minSwipeDistance) return;
+
+    if (distance > 0) {
+      // Swiped left, go to next
+      handleNext();
+    } else {
+      // Swiped right, go to previous
+      handlePrev();
+    }
+  };
+
   return (
-    <section id="testimonials" className="relative py-24 overflow-hidden">
+    <section
+      id="testimonials"
+      className="relative py-16 md:py-24 overflow-hidden"
+    >
       <div className="absolute inset-0 bg-gradient-to-b from-blue-50 to-white">
         <FloatingPaths position={1} />
         <FloatingPaths position={-1} />
       </div>
 
       <div className="relative z-10 container mx-auto px-4 md:px-6">
-        <div className="text-center mb-16 max-w-3xl mx-auto">
+        <div className="text-center mb-10 md:mb-16 max-w-3xl mx-auto">
           <SectionTitle
             regularText="What Our"
             highlightedText="Customers Say"
@@ -142,152 +201,178 @@ export default function Testimonials() {
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-cyan-200 rounded-full opacity-20 blur-3xl"></div>
 
-          <div className="relative">
+          {/* Testimonial carousel with swipe support */}
+          <div
+            ref={containerRef}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className="relative w-full touch-pan-y"
+            style={{
+              minHeight: isMobile
+                ? `${minHeights.mobile}px`
+                : `${minHeights.desktop}px`,
+              cursor: "grab",
+            }}
+          >
             <AnimatePresence mode="wait">
+              {/* This wrapper contains both the card AND the navigation buttons */}
               <motion.div
                 key={activeIndex}
                 initial={{ opacity: 0, x: 100 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -100 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 md:p-12 border border-blue-100"
+                className="relative" // Added relative positioning to this wrapper
               >
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                  <div className="md:col-span-4 flex flex-col items-center md:items-start">
-                    <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-4 border-white shadow-lg">
-                      <img
-                        src={
-                          testimonials[activeIndex].image || "/placeholder.svg"
-                        }
-                        alt={testimonials[activeIndex].author}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                {/* Navigation buttons now inside the animated wrapper */}
+                <div className="hidden md:block">
+                  <button
+                    onClick={handlePrev}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 w-12 h-12 rounded-full bg-white/90 shadow-lg border border-blue-100 hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center justify-center"
+                    aria-label="Previous testimonial"
+                  >
+                    <ChevronLeft className="h-6 w-6 text-blue-600" />
+                  </button>
 
-                    <h3 className="text-xl font-bold text-neutral-900 mb-1 text-center md:text-left">
-                      {testimonials[activeIndex].author}
-                    </h3>
-                    <p className="text-neutral-600 mb-3 text-center md:text-left">
-                      {testimonials[activeIndex].position}
-                    </p>
+                  <button
+                    onClick={handleNext}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-20 w-12 h-12 rounded-full bg-white/90 shadow-lg border border-blue-100 hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center justify-center"
+                    aria-label="Next testimonial"
+                  >
+                    <ChevronRight className="h-6 w-6 text-blue-600" />
+                  </button>
+                </div>
 
-                    <div className="flex mb-4">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-5 w-5 ${
-                            i < testimonials[activeIndex].rating
-                              ? "text-yellow-400 fill-yellow-400"
-                              : "text-neutral-300"
-                          }`}
+                {/* The actual card */}
+                <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-6 md:p-12 border border-blue-100 w-full">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
+                    {/* Keep all your existing card content */}
+                    <div className="md:col-span-4 flex flex-col items-center md:items-start">
+                      <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden mb-3 md:mb-4 border-4 border-white shadow-lg">
+                        <img
+                          src={
+                            testimonials[activeIndex].image ||
+                            "/placeholder.svg"
+                          }
+                          alt={testimonials[activeIndex].author}
+                          className="w-full h-full object-cover"
                         />
-                      ))}
+                      </div>
+
+                      <h3 className="text-lg md:text-xl font-bold text-neutral-900 mb-1 text-center md:text-left">
+                        {testimonials[activeIndex].author}
+                      </h3>
+                      <p className="text-sm md:text-base text-neutral-600 mb-3 text-center md:text-left">
+                        {testimonials[activeIndex].position}
+                      </p>
+
+                      <div className="flex mb-3 md:mb-4">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 md:h-5 md:w-5 ${
+                              i < testimonials[activeIndex].rating
+                                ? "text-yellow-400 fill-yellow-400"
+                                : "text-neutral-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+
+                      <div className="p-2 md:p-3 bg-neutral-50 rounded-lg border border-neutral-200 w-full max-w-[180px] md:max-w-[200px]">
+                        <img
+                          src={
+                            testimonials[activeIndex].companyLogo ||
+                            "/placeholder.svg"
+                          }
+                          alt={testimonials[activeIndex].company}
+                          className="w-full h-auto"
+                        />
+                      </div>
                     </div>
 
-                    <div className="p-3 bg-neutral-50 rounded-lg border border-neutral-200 w-full max-w-[200px]">
-                      <img
-                        src={
-                          testimonials[activeIndex].companyLogo ||
-                          "/placeholder.svg"
-                        }
-                        alt={testimonials[activeIndex].company}
-                        className="w-full h-auto"
-                      />
-                    </div>
-                  </div>
+                    {/* Fixed quote position that doesn't overlap text */}
+                    <div className="md:col-span-8 relative">
+                      {/* Quote icon in its own container */}
+                      <div className="hidden md:block absolute -top-4 -left-4">
+                        <div className="bg-blue-50 rounded-full p-2 border border-blue-100">
+                          <Quote className="h-8 w-8 text-blue-300" />
+                        </div>
+                      </div>
 
-                  <div className="md:col-span-8 relative">
-                    <Quote className="absolute top-0 left-0 h-12 w-12 text-blue-100 -translate-x-6 -translate-y-6" />
-                    <p className="text-lg md:text-xl text-neutral-700 italic leading-relaxed">
-                      "{testimonials[activeIndex].quote}"
-                    </p>
+                      {/* Quote for mobile that won't overlap */}
+                      <div className="flex md:hidden justify-center mb-3">
+                        <div className="bg-blue-50 rounded-full p-2 border border-blue-100">
+                          <Quote className="h-5 w-5 text-blue-300" />
+                        </div>
+                      </div>
+
+                      {/* Text with proper padding */}
+                      <div className="md:pt-6 md:pl-6">
+                        <p className="text-base md:text-xl text-neutral-700 italic leading-relaxed">
+                          "{testimonials[activeIndex].quote}"
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
             </AnimatePresence>
-
-            <div className="flex justify-center mt-8 space-x-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setAutoplay(false);
-                    setActiveIndex(index);
-                  }}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    activeIndex === index
-                      ? "bg-blue-600 w-8"
-                      : "bg-blue-200 hover:bg-blue-300"
-                  }`}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                />
-              ))}
-            </div>
-
-            <div className="flex justify-between mt-8">
-              <Button
-                onClick={handlePrev}
-                variant="outline"
-                size="icon"
-                className="rounded-full w-12 h-12 border-blue-200 hover:border-blue-300 hover:bg-blue-50"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft className="h-6 w-6 text-blue-600" />
-              </Button>
-
-              <Button
-                onClick={handleNext}
-                variant="outline"
-                size="icon"
-                className="rounded-full w-12 h-12 border-blue-200 hover:border-blue-300 hover:bg-blue-50"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight className="h-6 w-6 text-blue-600" />
-              </Button>
-            </div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6"
-          >
-            {[
-              { label: "Customer Satisfaction", value: "98%" },
-              { label: "Time Saved on Invoicing", value: "75%" },
-              { label: "Faster Payments", value: "3x" },
-              { label: "ROI for Customers", value: "320%" },
-            ].map((stat, i) => (
-              <div
-                key={i}
-                className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-100 text-center"
-              >
-                <p className="text-3xl font-bold text-blue-600 mb-2">
-                  {stat.value}
-                </p>
-                <p className="text-neutral-600 text-sm">{stat.label}</p>
-              </div>
+          {/* Keep the rest of your component the same */}
+          <div className="flex justify-center mt-4 md:mt-6 space-x-2">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setAutoplay(false);
+                  setActiveIndex(index);
+                }}
+                className={`transition-all duration-300 rounded-full ${
+                  activeIndex === index
+                    ? "w-8 h-3 bg-blue-600"
+                    : "w-3 h-3 bg-blue-200 hover:bg-blue-300"
+                }`}
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
             ))}
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-16 text-center"
-          >
+          {/* Stats cards with reliable design - reduced spacing */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-12">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white/80 backdrop-blur-sm rounded-xl p-4 md:p-6 shadow-lg border border-blue-100 text-center"
+              >
+                <p className="text-xs md:text-sm text-neutral-600 mb-1 md:mb-2">
+                  {stat.label}
+                </p>
+                <div className="relative">
+                  <p className="text-2xl md:text-3xl font-bold text-blue-600">
+                    {stat.value}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* CTA section - better spacing */}
+          <div className="mt-10 md:mt-16 text-center">
             <Button
-              className="rounded-xl px-8 py-6 text-lg font-medium 
-              bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-primary-dark hover:to-cyan-600
-              text-white transition-all duration-300 
-              hover:-translate-y-0.5 shadow-lg hover:shadow-xl shadow-primary/20"
+
+              className="rounded-xl px-6 py-4 md:px-8 md:py-6 text-base md:text-lg font-medium 
+              bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600
+              text-white transition-all duration-300 shadow-lg hover:shadow-xl shadow-blue-500/20"
             >
               Join Thousands of Happy Customers
             </Button>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
