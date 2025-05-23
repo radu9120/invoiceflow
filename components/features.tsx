@@ -12,37 +12,37 @@ import {
 
 const features = [
   {
-    icon: <FileText className="h-10 w-10 text-blue-500" />,
+    icon: <FileText className="h-10 w-10 text-primary" />,
     title: "Professional Invoices",
     description:
       "Create beautiful, customizable invoices in seconds with our intuitive template system.",
   },
   {
-    icon: <CreditCard className="h-10 w-10 text-blue-500" />,
+    icon: <CreditCard className="h-10 w-10 text-primary" />,
     title: "Multiple Payment Options",
     description:
       "Accept payments via credit card, bank transfer, PayPal, and more with integrated payment processing.",
   },
   {
-    icon: <BarChart4 className="h-10 w-10 text-blue-500" />,
+    icon: <BarChart4 className="h-10 w-10 text-primary" />,
     title: "Financial Insights",
     description:
       "Track your business performance with detailed reports and analytics dashboards.",
   },
   {
-    icon: <Clock className="h-10 w-10 text-blue-500" />,
+    icon: <Clock className="h-10 w-10 text-primary" />,
     title: "Automated Reminders",
     description:
       "Set up automatic payment reminders to reduce late payments and improve cash flow.",
   },
   {
-    icon: <Globe className="h-10 w-10 text-blue-500" />,
+    icon: <Globe className="h-10 w-10 text-primary" />,
     title: "Multi-Currency Support",
     description:
       "Invoice clients in their local currency with automatic exchange rate calculations.",
   },
   {
-    icon: <Shield className="h-10 w-10 text-blue-500" />,
+    icon: <Shield className="h-10 w-10 text-primary" />,
     title: "Secure & Compliant",
     description:
       "Bank-level security and compliance with global tax regulations for peace of mind.",

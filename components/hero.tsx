@@ -20,7 +20,7 @@ function FloatingPaths({ position }: { position: number }) {
   return (
     <div className="absolute inset-0 pointer-events-none opacity-40">
       <svg
-        className="w-full h-full text-blue-500"
+        className="w-full h-full text-primary"
         viewBox="0 0 696 316"
         fill="none"
       >
@@ -71,7 +71,7 @@ export default function Hero() {
           >
             {/* Simplified badge */}
             <div className="inline-block mb-4 px-4 py-1.5 bg-blue-100 border border-blue-200 rounded-full shadow-sm">
-              <span className="text-blue-700 font-medium text-sm">
+              <span className="text-primary-dark font-medium text-sm">
                 Invoicing made simple
               </span>
             </div>
@@ -98,7 +98,7 @@ export default function Hero() {
                 "14-day free trial",
               ].map((feature, i) => (
                 <div key={i} className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-blue-500 mr-2 shrink-0" />
+                  <CheckCircle className="h-5 w-5 text-primary mr-2 shrink-0" />
                   <span className="text-neutral-700 text-base font-medium">
                     {feature}
                   </span>
@@ -110,8 +110,8 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
               <Button
                 className="rounded-xl px-8 py-7 text-lg font-medium
-                bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600
-                text-white shadow-md hover:shadow-lg hover:shadow-blue-500/20"
+                bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-primary-dark hover:to-cyan-600
+                text-white shadow-md hover:shadow-lg hover:shadow-primary/20"
               >
                 Start free trial
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -236,7 +236,7 @@ export default function Hero() {
                         {/* Larger text */}
                         Recent Invoices
                       </div>
-                      <div className="text-sm text-blue-500">View all</div>{" "}
+                      <div className="text-sm text-primary">View all</div>{" "}
                       {/* Larger text */}
                     </div>
 

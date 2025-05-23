@@ -75,12 +75,12 @@ export default function Pricing() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className={`relative rounded-2xl overflow-hidden ${
                 plan.popular
-                  ? "border-2 border-blue-500 shadow-xl"
+                  ? "border-2 border-primary shadow-xl"
                   : "border border-neutral-200 shadow-lg"
               }`}
             >
               {plan.popular && (
-                <div className="absolute top-0 right-0 bg-gradient-to-r from-blue-500 to-cyan-400 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                <div className="absolute top-0 right-0 bg-gradient-to-r from-primary to-cyan-400 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
                   MOST POPULAR
                 </div>
               )}
@@ -101,7 +101,7 @@ export default function Pricing() {
                 <ul className="space-y-3 mb-8 flex-grow">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start">
-                      <Check className="h-5 w-5 text-blue-500 mr-2 shrink-0 mt-0.5" />
+                      <Check className="h-5 w-5 text-primary mr-2 shrink-0 mt-0.5" />
                       <span className="text-neutral-700">{feature}</span>
                     </li>
                   ))}
@@ -110,7 +110,7 @@ export default function Pricing() {
                 <Button
                   className={`w-full cursor-pointer rounded-xl py-6 ${
                     plan.popular
-                      ? "bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white shadow-md hover:shadow-xl"
+                      ? "bg-gradient-to-r from-primary to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white shadow-md hover:shadow-xl"
                       : "bg-white hover:bg-neutral-50 text-neutral-900 border border-neutral-200"
                   } transition-all duration-300 hover:-translate-y-0.5`}
                 >

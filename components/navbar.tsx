@@ -32,7 +32,7 @@ export default function Navbar() {
               initial={{ rotate: -10 }}
               animate={{ rotate: 0 }}
               transition={{ duration: 0.5 }}
-              className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center"
+              className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center"
             >
               <Image
                 src="/logo.png"
@@ -79,7 +79,7 @@ export default function Navbar() {
             <div className="hidden md:block">
               <SignedOut>
                 <SignInButton>
-                  <Button className=" bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white rounded-xl">
+                  <Button className=" bg-gradient-to-r from-primary to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white rounded-xl">
                     Sign in
                   </Button>
                 </SignInButton>
@@ -143,7 +143,7 @@ export default function Navbar() {
               >
                 Contact
               </Link>
-              <Button className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white w-full rounded-xl">
+              <Button className="bg-gradient-to-r from-primary to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white w-full rounded-xl">
                 Sign in
               </Button>
             </div>

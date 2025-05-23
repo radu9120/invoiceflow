@@ -23,7 +23,7 @@ function FloatingPaths({ position }: { position: number }) {
   return (
     <div className="absolute inset-0 pointer-events-none">
       <svg
-        className="w-full h-full text-blue-500/30"
+        className="w-full h-full text-primary/30"
         viewBox="0 0 696 316"
         fill="none"
       >
@@ -281,9 +281,9 @@ export default function Testimonials() {
           >
             <Button
               className="rounded-xl px-8 py-6 text-lg font-medium 
-              bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600
+              bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-primary-dark hover:to-cyan-600
               text-white transition-all duration-300 
-              hover:-translate-y-0.5 shadow-lg hover:shadow-xl shadow-blue-500/20"
+              hover:-translate-y-0.5 shadow-lg hover:shadow-xl shadow-primary/20"
             >
               Join Thousands of Happy Customers
             </Button>
