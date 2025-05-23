@@ -86,7 +86,7 @@ export default function BackgroundPaths({
                       damping: 25,
                     }}
                     className="inline-block text-transparent bg-clip-text 
-                                        bg-gradient-to-r from-neutral-900 to-neutral-700/80 
+                                        bg-gradient-to-r from-neutral-900 to-primary-text/80 
                                         dark:from-white dark:to-white/80"
                   >
                     {letter}
@@ -107,7 +107,7 @@ export default function BackgroundPaths({
                             bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100 
                             text-black dark:text-white transition-all duration-300 
                             group-hover:-translate-y-0.5 border border-black/10 dark:border-white/10
-                            hover:shadow-md dark:hover:shadow-neutral-800/50"
+                            hover:shadow-md dark:hover:shadow-header-text/50"
             >
               <span className="opacity-90 group-hover:opacity-100 transition-opacity">
                 Discover Excellence

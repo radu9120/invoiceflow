@@ -2,7 +2,7 @@
 
 @theme {
   --color-primary: #3b82f6;        /* blue-500 */
-  --color-primary-dark: #1d4ed8;   /* blue-700 */
+  --color-primary-dark: #1d4ed8;   /* blue-700*/
   --color-accent: #06b6d4;         /* cyan-500 */
   --color-header-text: #1f2937;    /* neutral-800 */
   --color-primary-text: #374151;   /* neutral-700 */
@@ -35,8 +35,8 @@
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent : oklch(0.97 0 0);
+  --accent -foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
@@ -50,17 +50,17 @@
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-accent : oklch(0.97 0 0);
+  --sidebar-accent -foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0); */
 
-  --color-primary: #3b82f6;        /* blue-500 */
-  --color-primary-dark: #1d4ed8;   /* blue-700 */
-  --color-accent: #06b6d4;         /* cyan-500 */
-  --color-header-text: #1f2937;    /* neutral-800 */
-  --color-primary-text: #374151;   /* neutral-700 */
-  --color-secondary-text: #6b7280; /* neutral-500 */
+  --color-primary: #3b82f6;        /* primary */
+  --color-primary-dark: #1d4ed8;   /* primary-dark */
+  --color-accent : #06b6d4;         /* accent */
+  --color-header-text: #1f2937;    /* header-text */
+  --color-primary-text: #374151;   /* primary-text */
+  --color-secondary-text: #6b7280; /* secondary-text */
   --color-indigo: #4f46e5;           /* indigo-600 */
 
 

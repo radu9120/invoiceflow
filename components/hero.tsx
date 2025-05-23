@@ -74,19 +74,19 @@ export default function Hero() {
               className="md:w-5/12"
             >
               <div className="inline-block mb-4 px-4 py-1.5 bg-blue-100 border border-blue-200 rounded-full shadow-sm">
-                <span className="text-blue-700 font-medium text-sm">
+                <span className="text-primary-dark font-medium text-sm">
                   Invoicing made simple
                 </span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 text-neutral-800 leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 text-header-text leading-tight">
                 Get paid
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500 ml-3">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-accent ml-3">
                   faster
                 </span>
               </h1>
 
-              <p className="text-lg md:text-xl text-neutral-700 mb-8 md:mb-10 max-w-lg">
+              <p className="text-lg md:text-xl text-primary-text mb-8 md:mb-10 max-w-lg">
                 Create professional invoices in seconds and automate your
                 payment process.
               </p>
@@ -98,8 +98,8 @@ export default function Hero() {
                   "14-day free trial",
                 ].map((feature, i) => (
                   <div key={i} className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-blue-500 mr-2 shrink-0" />
-                    <span className="text-neutral-700 text-base font-medium">
+                    <CheckCircle className="h-5 w-5 text-primary mr-2 shrink-0" />
+                    <span className="text-primary-text text-base font-medium">
                       {feature}
                     </span>
                   </div>
@@ -109,8 +109,8 @@ export default function Hero() {
               <div className="flex flex-col sm:flex-row gap-4 mb-8 md:mb-10">
                 <Button
                   className="rounded-xl px-6 md:px-8 py-6 md:py-7 text-base md:text-lg font-medium
-                  bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600
-                  text-white shadow-md hover:shadow-lg hover:shadow-blue-500/20"
+                  bg-gradient-to-r from-blue-600 to-accent hover:from-primary-dark hover:to-cyan-600
+                  text-white shadow-md hover:shadow-lg hover:shadow-primary/20"
                 >
                   Start free trial
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -120,7 +120,7 @@ export default function Hero() {
                   variant="outline"
                   className="rounded-xl px-6 md:px-8 py-6 md:py-7 text-base md:text-lg font-medium
                   border border-neutral-200 hover:border-neutral-300 bg-white
-                  text-neutral-700 hover:bg-blue-50/50"
+                  text-primary-text hover:bg-blue-50/50"
                 >
                   Watch demo
                 </Button>
@@ -159,7 +159,7 @@ export default function Hero() {
                     <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                     <div className="w-3 h-3 rounded-full bg-green-400"></div>
                   </div>
-                  <div className="mx-4 flex-1 bg-neutral-50 rounded-md text-sm text-neutral-500 px-4 py-1 text-center overflow-hidden">
+                  <div className="mx-4 flex-1 bg-neutral-50 rounded-md text-sm text-secondary-text px-4 py-1 text-center overflow-hidden">
                     app.invoiceflow.com/dashboard
                   </div>
                 </div>
@@ -168,7 +168,7 @@ export default function Hero() {
                 <div className="bg-white">
                   {/* App header */}
                   <div className="bg-neutral-50 p-4 border-b border-neutral-100 flex justify-between items-center">
-                    <div className="text-base font-medium text-neutral-800">
+                    <div className="text-base font-medium text-header-text">
                       Dashboard
                     </div>
                     <div className="flex space-x-3">
@@ -186,7 +186,7 @@ export default function Hero() {
                     <div className="grid grid-cols-3 gap-4 mb-4">
                       {["Paid", "Due", "Overdue"].map((label, i) => (
                         <div key={i} className="bg-neutral-50 p-3 rounded-md">
-                          <div className="text-sm text-neutral-500">
+                          <div className="text-sm text-secondary-text">
                             {label}
                           </div>
                           <div
@@ -207,10 +207,10 @@ export default function Hero() {
                     {/* Recent invoices */}
                     <div>
                       <div className="flex justify-between items-center mb-3">
-                        <div className="text-sm font-medium text-neutral-700">
+                        <div className="text-sm font-medium text-primary-text">
                           Recent Invoices
                         </div>
-                        <div className="text-sm text-blue-500">View all</div>
+                        <div className="text-sm text-primary">View all</div>
                       </div>
 
                       {[
@@ -238,10 +238,10 @@ export default function Hero() {
                           className="flex items-center justify-between py-3 border-b border-neutral-100"
                         >
                           <div>
-                            <div className="text-sm font-medium text-neutral-800">
+                            <div className="text-sm font-medium text-header-text">
                               {inv.id}
                             </div>
-                            <div className="text-sm text-neutral-500">
+                            <div className="text-sm text-secondary-text">
                               {inv.client}
                             </div>
                           </div>
@@ -255,7 +255,7 @@ export default function Hero() {
                                   ? "text-green-600"
                                   : inv.status === "sent"
                                   ? "text-blue-600"
-                                  : "text-neutral-500"
+                                  : "text-secondary-text"
                               }`}
                             >
                               {inv.status.charAt(0).toUpperCase() +
@@ -291,7 +291,7 @@ export default function Hero() {
                     <p className="font-medium text-sm text-neutral-900">
                       Invoice Sent
                     </p>
-                    <p className="text-sm text-neutral-500">
+                    <p className="text-sm text-secondary-text">
                       INV-2320 • Globex
                     </p>
                   </div>
@@ -307,7 +307,7 @@ export default function Hero() {
                     <p className="font-medium text-sm text-neutral-900">
                       Payment Received
                     </p>
-                    <p className="text-sm text-neutral-500">
+                    <p className="text-sm text-secondary-text">
                       $2,400.00 • Acme Co
                     </p>
                   </div>

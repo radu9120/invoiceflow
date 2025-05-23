@@ -82,7 +82,7 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-lg text-neutral-700 max-w-2xl mx-auto"
+            className="text-lg text-primary-text max-w-2xl mx-auto"
           >
             Everything you need to streamline your invoicing process and get
             paid faster
@@ -105,7 +105,7 @@ export default function Features() {
                 {feature.title}
               </h3>
 
-              <p className="text-neutral-700">{feature.description}</p>
+              <p className="text-primary-text">{feature.description}</p>
             </motion.div>
           ))}
         </div>

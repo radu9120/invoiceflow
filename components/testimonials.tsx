@@ -309,7 +309,7 @@ export default function Testimonials() {
 
                       {/* Text with proper padding */}
                       <div className="md:pt-6 md:pl-6">
-                        <p className="text-base md:text-xl text-neutral-700 italic leading-relaxed">
+                        <p className="text-base md:text-xl text-primary-text italic leading-relaxed">
                           "{testimonials[activeIndex].quote}"
                         </p>
                       </div>
@@ -367,8 +367,8 @@ export default function Testimonials() {
             <Button
 
               className="rounded-xl px-6 py-4 md:px-8 md:py-6 text-base md:text-lg font-medium 
-              bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600
-              text-white transition-all duration-300 shadow-lg hover:shadow-xl shadow-blue-500/20"
+              bg-gradient-to-r from-blue-600 to-accent hover:from-primary-dark hover:to-cyan-600
+              text-white transition-all duration-300 shadow-lg hover:shadow-xl shadow-primary/20"
             >
               Join Thousands of Happy Customers
             </Button>

@@ -50,25 +50,25 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             <Link
               href="#features"
-              className="text-neutral-700 hover:text-blue-600 transition-colors"
+              className="text-primary-text hover:text-blue-600 transition-colors"
             >
               Features
             </Link>
             <Link
               href="#pricing"
-              className="text-neutral-700 hover:text-blue-600 transition-colors"
+              className="text-primary-text hover:text-blue-600 transition-colors"
             >
               Pricing
             </Link>
             <Link
               href="#testimonials"
-              className="text-neutral-700 hover:text-blue-600 transition-colors"
+              className="text-primary-text hover:text-blue-600 transition-colors"
             >
               Testimonials
             </Link>
             <Link
               href="#contact"
-              className="text-neutral-700 hover:text-blue-600 transition-colors"
+              className="text-primary-text hover:text-blue-600 transition-colors"
             >
               Contact
             </Link>
@@ -79,7 +79,7 @@ export default function Navbar() {
             <div className="hidden md:block">
               <SignedOut>
                 <SignInButton>
-                  <Button className=" bg-gradient-to-r from-primary to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white rounded-xl">
+                  <Button className=" bg-gradient-to-r from-primary to-cyan-400 hover:from-blue-600 hover:to-accent text-white rounded-xl">
                     Sign in
                   </Button>
                 </SignInButton>
@@ -117,33 +117,33 @@ export default function Navbar() {
             <div className="flex flex-col space-y-4">
               <Link
                 href="#features"
-                className="text-neutral-700 hover:text-blue-600 transition-colors"
+                className="text-primary-text hover:text-blue-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Features
               </Link>
               <Link
                 href="#pricing"
-                className="text-neutral-700 hover:text-blue-600 transition-colors"
+                className="text-primary-text hover:text-blue-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Pricing
               </Link>
               <Link
                 href="#testimonials"
-                className="text-neutral-700 hover:text-blue-600 transition-colors"
+                className="text-primary-text hover:text-blue-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Testimonials
               </Link>
               <Link
                 href="#contact"
-                className="text-neutral-700 hover:text-blue-600 transition-colors"
+                className="text-primary-text hover:text-blue-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
               </Link>
-              <Button className="bg-gradient-to-r from-primary to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white w-full rounded-xl">
+              <Button className="bg-gradient-to-r from-primary to-cyan-400 hover:from-blue-600 hover:to-accent text-white w-full rounded-xl">
                 Sign in
               </Button>
             </div>

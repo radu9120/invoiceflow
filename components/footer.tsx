@@ -34,7 +34,7 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl p-8 md:p-12 shadow-xl relative overflow-hidden"
+            className="bg-gradient-to-r from-blue-600 to-accent rounded-2xl p-8 md:p-12 shadow-xl relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
@@ -81,7 +81,7 @@ export default function Footer() {
                 initial={{ rotate: -10 }}
                 animate={{ rotate: 0 }}
                 transition={{ duration: 0.5 }}
-                className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center"
+                className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center"
               >
                 <Image
                   src="/logo.png"
