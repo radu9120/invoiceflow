@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { SectionTitle } from "./ui/SectionTitle";
+import { PricingTable } from "@clerk/nextjs";
 
 const pricingPlans = [
   {
@@ -64,8 +65,9 @@ export default function Pricing() {
           highlightedText="Pricing"
           description="Choose the plan that works best for your business."
         />
+        <PricingTable/>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {pricingPlans.map((plan, index) => (
             <motion.div
               key={index}
@@ -119,7 +121,7 @@ export default function Pricing() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );

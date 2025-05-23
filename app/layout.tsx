@@ -31,7 +31,7 @@ export default function RootLayout({
     
       <html lang="en">
         <body className={inter.className}>
-          <ClerkProvider>
+          <ClerkProvider appearance={{ variables: { colorPrimary: '#3b82f6'}}}>
             {" "}
             <Analytics />
             <Navbar/>
