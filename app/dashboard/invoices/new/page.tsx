@@ -1,3 +1,4 @@
+import InvoiceForm from "@/components/InvoiceForm"
 import Bounded from "@/components/ui/bounded"
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
@@ -12,6 +13,7 @@ const NewInvoice = async() => {
             <Bounded>
                 <article>
                     <h1>Invoice Generator</h1>
+                    <InvoiceForm/>
                 </article>
             </Bounded>
         </main>
