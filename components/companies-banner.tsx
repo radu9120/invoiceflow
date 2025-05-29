@@ -29,7 +29,7 @@ const companies = [
 
 export default function CompanyBanner() {
   return (
-    <div className="py-8 md:py-16">
+    <div>
       <div className="flex items-center justify-center gap-8 md:gap-12 lg:gap-16 flex-wrap">
         {companies.map((company, index) => (
           <motion.div

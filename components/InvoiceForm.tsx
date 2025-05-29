@@ -125,6 +125,31 @@ const InvoiceForm = () => {
                                 </FormItem>
                             )}
                         />
+                        
+                    </div>
+                    
+                    <div className="flex justify-end ">
+                        <div className="w-[300px] space-y-6  ">
+                            <h2 className="text-4xl">Invoice</h2>
+                            <FormField
+                                control={form.control}
+                                name="invoice_number"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Invoice number</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="shadcn" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        
+                    </div>
+                </div>
+                <div className="grid grid-cols-2">
+                    <div className="space-y-4 w-[300px]">
                         <h2>FROM</h2>
                         <FormField
                             control={form.control}
@@ -191,30 +216,11 @@ const InvoiceForm = () => {
                                 </FormItem>
                             )}
                         />
+                    
                     </div>
                     
-                    <div className="flex justify-end ">
-                        <div className="w-[300px] space-y-6  ">
-                            <h2 className="text-4xl">Invoice</h2>
-                            <FormField
-                                control={form.control}
-                                name="invoice_number"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Invoice number</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="shadcn" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        
-                    </div>
-                </div>
-                <div className="grid grid-cols-2">
-                    <div className="space-y-4 w-[300px]">
+                    <div className="flex justify-end">                    
+                        <div className="space-y-4 w-[300px]">
                         <h2>BILL TO</h2>
                         <FormField
                             control={form.control}
@@ -269,34 +275,38 @@ const InvoiceForm = () => {
                             )}
                         />
                     </div>
-                    <div className="space-y-4 w-[300px]">
-                        <FormField
-                            control={form.control}
-                            name="date"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Date</FormLabel>
-                                    <FormControl>
-                                        {/* <Input type="date" placeholder='date' {...field} /> */}
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="date"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Date</FormLabel>
-                                    <FormControl>
-                                        {/* <Input type="date" placeholder='date' {...field} /> */}
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
+                    </div>                        
+                </div>
+                <div className="flex gap-6">
+                    <FormField
+                        control={form.control}
+                        name="date"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Date</FormLabel>
+                                <FormControl>
+                                    {/* <Input type="date" placeholder='date' {...field} /> */}
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="date"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Due Date</FormLabel>
+                                <FormControl>
+                                    {/* <Input type="date" placeholder='date' {...field} /> */}
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                <div>
+                    
                 </div>
 
                 <Button type="submit">Submit</Button>
