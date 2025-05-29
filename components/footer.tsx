@@ -106,8 +106,8 @@ export default function Footer() {
               Resources
             </h3>
             {[
-              { name: "Help Center", href: "#" },
-              { name: "Contact Us", href: "#contact" },
+              { name: "Help Center", href: "/help" },
+              { name: "Contact Us", href: "/contact" },
               { name: "Privacy Policy", href: "/privacy-policy" },
               { name: "Cookie Policy", href: "/cookies" },
               { name: "Sitemap", href: "#" },
