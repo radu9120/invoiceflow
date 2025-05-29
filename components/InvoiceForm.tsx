@@ -1,6 +1,17 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { minLength } from "zod/v4";
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 
 
 const modulesSchema = z.object({
@@ -28,7 +39,30 @@ const formSchema = z.object({
 })
 
 const InvoiceForm = () => {
-    const form = useForm<z.infer<typeof formSchema>>
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+                invoice_number: '',
+                company_details: '<p></p>',
+                bill_to: '<p></p>',
+                date: '',
+                due_date: '',
+                items: [{
+                        description: '',
+                        unit_price: 0,
+                        quantity: 0,
+                        amount: 0,
+                }],
+                subtotal: 0,
+                tax: undefined,
+                discount: undefined,
+                shipping: undefined,
+                total: 0,
+                notes: '<p></p>',
+                bank_details: '<p></p>',
+                logo: '',
+        }
+    })
 
     return(
         <div></div>
