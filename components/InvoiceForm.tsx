@@ -1,17 +1,18 @@
+"use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button"
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useForm } from "react-hook-form";
 
 const phoneType = z.string().regex(/^\+?[0-9\s-]{7,15}$/, "Invalid phone number").optional()
 
@@ -104,25 +105,200 @@ const InvoiceForm = () => {
         console.log(values)
     }
 
+    const today = new Date();
+    
     return(
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="invoice_number"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Username</FormLabel>
-                            <FormControl>
-                                <Input placeholder="shadcn" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                This is your public display name.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 lg:w-2/3 mx-auto">
+                <div className="grid grid-cols-2">
+                    <div className="space-y-4 w-[300px]">
+                        
+                        <FormField
+                            control={form.control}
+                            name="logo"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input className="w-[150px] h-[100px]" type="file" placeholder="Add your logo" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <h2>FROM</h2>
+                        <FormField
+                            control={form.control}
+                            name="company_details.name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    
+                                    <FormControl>
+                                        <Input placeholder="Company/Name" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="company_details.email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    
+                                    <FormControl>
+                                        <Input placeholder="email@company.com" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="company_details.address"
+                            render={({ field }) => (
+                                <FormItem>
+                                    
+                                    <FormControl>
+                                        <Input placeholder="123 Business Street" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="company_details.phone"
+                            render={({ field }) => (
+                                <FormItem>
+                                    
+                                    <FormControl>
+                                        <Input placeholder="+44 1234 567890" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="company_details.vat"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>VAT Number</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="123456789" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    
+                    <div className="flex justify-end ">
+                        <div className="w-[300px] space-y-6  ">
+                            <h2 className="text-4xl">Invoice</h2>
+                            <FormField
+                                control={form.control}
+                                name="invoice_number"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Invoice number</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="shadcn" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        
+                    </div>
+                </div>
+                <div className="grid grid-cols-2">
+                    <div className="space-y-4 w-[300px]">
+                        <h2>BILL TO</h2>
+                        <FormField
+                            control={form.control}
+                            name="bill_to.name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    
+                                    <FormControl>
+                                        <Input placeholder="Company/Name" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="bill_to.email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    
+                                    <FormControl>
+                                        <Input placeholder="email@company.com" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="bill_to.address"
+                            render={({ field }) => (
+                                <FormItem>
+                                    
+                                    <FormControl>
+                                        <Input placeholder="123 Business Street" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="bill_to.phone"
+                            render={({ field }) => (
+                                <FormItem>
+                                    
+                                    <FormControl>
+                                        <Input placeholder="+44 1234 567890" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <div className="space-y-4 w-[300px]">
+                        <FormField
+                            control={form.control}
+                            name="date"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Date</FormLabel>
+                                    <FormControl>
+                                        {/* <Input type="date" placeholder='date' {...field} /> */}
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="date"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Date</FormLabel>
+                                    <FormControl>
+                                        {/* <Input type="date" placeholder='date' {...field} /> */}
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                </div>
+
                 <Button type="submit">Submit</Button>
             </form>
         </Form>
