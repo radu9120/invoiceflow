@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionTitle } from "./ui/SectionTitle";
-
+import Image from "next/image";
 function FloatingPaths({ position }: { position: number }) {
   // Keep existing FloatingPaths code
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -61,9 +61,8 @@ const testimonials = [
     author: "Sarah Johnson",
     position: "CFO, TechStart Inc.",
     rating: 5,
-    image: "/placeholder.svg?height=100&width=100",
+    image: "/reviews/sarah-johnson.jpg",
     company: "TechStart Inc.",
-    companyLogo: "/placeholder.svg?height=40&width=120",
   },
   {
     quote:
@@ -71,9 +70,8 @@ const testimonials = [
     author: "Michael Chen",
     position: "Freelance Designer",
     rating: 5,
-    image: "/placeholder.svg?height=100&width=100",
+    image: "/reviews/michael-chen.jpg",
     company: "Chen Design Studio",
-    companyLogo: "/placeholder.svg?height=40&width=120",
   },
   {
     quote:
@@ -81,9 +79,8 @@ const testimonials = [
     author: "Emma Rodriguez",
     position: "Owner, Bright Ideas Consulting",
     rating: 4,
-    image: "/placeholder.svg?height=100&width=100",
+    image: "/reviews/emma-rodriguez.jpg",
     company: "Bright Ideas Consulting",
-    companyLogo: "/placeholder.svg?height=40&width=120",
   },
   {
     quote:
@@ -91,9 +88,8 @@ const testimonials = [
     author: "David Wilson",
     position: "Director, Wilson Accounting",
     rating: 5,
-    image: "/placeholder.svg?height=100&width=100",
+    image: "/reviews/david-wilson.jpg",
     company: "Wilson Accounting",
-    companyLogo: "/placeholder.svg?height=40&width=120",
   },
 ];
 
@@ -249,13 +245,16 @@ export default function Testimonials() {
                     {/* Keep all your existing card content */}
                     <div className="md:col-span-4 flex flex-col items-center md:items-start">
                       <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden mb-3 md:mb-4 border-4 border-white shadow-lg">
-                        <img
+                        <Image
+                          width={200}
+                          height={200}
                           src={
                             testimonials[activeIndex].image ||
                             "/placeholder.svg"
                           }
                           alt={testimonials[activeIndex].author}
                           className="w-full h-full object-cover"
+                          quality={80}
                         />
                       </div>
 
@@ -277,17 +276,6 @@ export default function Testimonials() {
                             }`}
                           />
                         ))}
-                      </div>
-
-                      <div className="p-2 md:p-3 bg-neutral-50 rounded-lg border border-neutral-200 w-full max-w-[180px] md:max-w-[200px]">
-                        <img
-                          src={
-                            testimonials[activeIndex].companyLogo ||
-                            "/placeholder.svg"
-                          }
-                          alt={testimonials[activeIndex].company}
-                          className="w-full h-auto"
-                        />
                       </div>
                     </div>
 
@@ -365,7 +353,6 @@ export default function Testimonials() {
           {/* CTA section - better spacing */}
           <div className="mt-10 md:mt-16 text-center">
             <Button
-
               className="rounded-xl px-6 py-4 md:px-8 md:py-6 text-base md:text-lg font-medium 
               bg-gradient-to-r from-blue-600 to-accent hover:from-primary-dark hover:to-cyan-600
               text-white transition-all duration-300 shadow-lg hover:shadow-xl shadow-primary/20"

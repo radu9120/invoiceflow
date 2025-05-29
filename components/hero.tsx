@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import Bounded from "./ui/bounded";
 import CompanyBanner from "./companies-banner";
+import { useState, useEffect } from "react";
 
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 18 }, (_, i) => ({
@@ -51,6 +52,40 @@ function FloatingPaths({ position }: { position: number }) {
 }
 
 export default function Hero() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
+
+  const invoices = [
+    {
+      id: "INV-2321",
+      client: "Acme Co",
+      amount: "$2,400",
+      status: "paid",
+    },
+    {
+      id: "INV-2320",
+      client: "Globex",
+      amount: "$1,800",
+      status: "sent",
+    },
+    {
+      id: "INV-2319",
+      client: "Initech",
+      amount: "$3,600",
+      status: "draft",
+    },
+  ];
+
   return (
     <div className="relative w-full min-h-[100vh] overflow-hidden flex items-center">
       {/* Background elements OUTSIDE of Bounded */}
@@ -116,7 +151,7 @@ export default function Hero() {
                   bg-gradient-to-r from-blue-600 to-accent hover:from-primary-dark hover:to-cyan-600
                   text-white shadow-md hover:shadow-lg hover:shadow-primary/20"
                 >
-                  Start free trial
+                  Start free now
                   <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
                 </Button>
 
@@ -203,7 +238,7 @@ export default function Hero() {
                       ))}
                     </div>
 
-                    {/* Recent invoices - show fewer on mobile */}
+                    {/* Recent invoices - show fewer on mobile using state */}
                     <div>
                       <div className="flex justify-between items-center mb-2 md:mb-3">
                         <div className="text-xs md:text-sm font-medium text-primary-text">
@@ -214,59 +249,38 @@ export default function Hero() {
                         </div>
                       </div>
 
-                      {[
-                        {
-                          id: "INV-2321",
-                          client: "Acme Co",
-                          amount: "$2,400",
-                          status: "paid",
-                        },
-                        {
-                          id: "INV-2320",
-                          client: "Globex",
-                          amount: "$1,800",
-                          status: "sent",
-                        },
-                        {
-                          id: "INV-2319",
-                          client: "Initech",
-                          amount: "$3,600",
-                          status: "draft",
-                        },
-                      ]
-                        .slice(0, window.innerWidth < 768 ? 2 : 3)
-                        .map((inv, i) => (
-                          <div
-                            key={i}
-                            className="flex items-center justify-between py-2 md:py-3 border-b border-neutral-100"
-                          >
-                            <div>
-                              <div className="text-xs md:text-sm font-medium text-header-text">
-                                {inv.id}
-                              </div>
-                              <div className="text-xs md:text-sm text-secondary-text">
-                                {inv.client}
-                              </div>
+                      {invoices.slice(0, isMobile ? 2 : 3).map((inv, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-between py-2 md:py-3 border-b border-neutral-100"
+                        >
+                          <div>
+                            <div className="text-xs md:text-sm font-medium text-header-text">
+                              {inv.id}
                             </div>
-                            <div className="text-right">
-                              <div className="text-xs md:text-sm font-medium">
-                                {inv.amount}
-                              </div>
-                              <div
-                                className={`text-xs md:text-sm ${
-                                  inv.status === "paid"
-                                    ? "text-green-600"
-                                    : inv.status === "sent"
-                                    ? "text-blue-600"
-                                    : "text-secondary-text"
-                                }`}
-                              >
-                                {inv.status.charAt(0).toUpperCase() +
-                                  inv.status.slice(1)}
-                              </div>
+                            <div className="text-xs md:text-sm text-secondary-text">
+                              {inv.client}
                             </div>
                           </div>
-                        ))}
+                          <div className="text-right">
+                            <div className="text-xs md:text-sm font-medium">
+                              {inv.amount}
+                            </div>
+                            <div
+                              className={`text-xs md:text-sm ${
+                                inv.status === "paid"
+                                  ? "text-green-600"
+                                  : inv.status === "sent"
+                                  ? "text-blue-600"
+                                  : "text-secondary-text"
+                              }`}
+                            >
+                              {inv.status.charAt(0).toUpperCase() +
+                                inv.status.slice(1)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
