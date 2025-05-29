@@ -49,7 +49,7 @@ export default function Navbar() {
               initial={{ rotate: -10, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center overflow-hidden"
+              className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center overflow-hidden"
             >
               <Image
                 src="/logo.png"
@@ -63,7 +63,7 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-xl font-bold text-neutral-900"
+              className="text-xl font-bold text-header-text"
             >
               InvoiceFlow
             </motion.span>
@@ -78,25 +78,25 @@ export default function Navbar() {
           >
             <Link
               href="#features"
-              className="text-primary-text hover:text-blue-600 transition-colors font-medium"
+              className="text-primary-text hover:text-primary transition-colors font-medium"
             >
               Features
             </Link>
             <Link
               href="#pricing"
-              className="text-primary-text hover:text-blue-600 transition-colors font-medium"
+              className="text-primary-text hover:text-primary transition-colors font-medium"
             >
               Pricing
             </Link>
             <Link
               href="#testimonials"
-              className="text-primary-text hover:text-blue-600 transition-colors font-medium"
+              className="text-primary-text hover:text-primary transition-colors font-medium"
             >
               Testimonials
             </Link>
             <Link
-              href="#contact"
-              className="text-primary-text hover:text-blue-600 transition-colors font-medium"
+              href="/contact"
+              className="text-primary-text hover:text-primary transition-colors font-medium"
             >
               Contact
             </Link>
@@ -115,13 +115,13 @@ export default function Navbar() {
                 <SignInButton>
                   <Button
                     variant="ghost"
-                    className="text-primary-text hover:text-blue-600 hover:bg-blue-50"
+                    className="text-primary-text hover:text-primary hover:bg-blue-50"
                   >
                     Sign in
                   </Button>
                 </SignInButton>
                 <SignUpButton>
-                  <Button className="bg-gradient-to-r from-primary to-cyan-400 hover:from-blue-600 hover:to-accent text-white rounded-xl px-6">
+                  <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary-dark hover:to-cyan-500 text-white rounded-xl px-6">
                     Get Started
                   </Button>
                 </SignUpButton>
@@ -186,28 +186,28 @@ export default function Navbar() {
                   {/* Navigation Links */}
                   <Link
                     href="#features"
-                    className="px-4 py-3 text-primary-text hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                    className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
                     onClick={closeMenu}
                   >
                     Features
                   </Link>
                   <Link
                     href="#pricing"
-                    className="px-4 py-3 text-primary-text hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                    className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
                     onClick={closeMenu}
                   >
                     Pricing
                   </Link>
                   <Link
                     href="#testimonials"
-                    className="px-4 py-3 text-primary-text hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                    className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
                     onClick={closeMenu}
                   >
                     Testimonials
                   </Link>
                   <Link
                     href="#contact"
-                    className="px-4 py-3 text-primary-text hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                    className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
                     onClick={closeMenu}
                   >
                     Contact
@@ -219,7 +219,7 @@ export default function Navbar() {
                       <SignInButton>
                         <Button
                           variant="outline"
-                          className="w-full py-3 text-base font-medium border-blue-200 text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                          className="w-full py-3 text-base font-medium border-blue-200 text-primary hover:bg-blue-50 transition-all duration-200"
                           onClick={closeMenu}
                         >
                           Sign In
@@ -227,7 +227,7 @@ export default function Navbar() {
                       </SignInButton>
                       <SignUpButton>
                         <Button
-                          className="w-full py-3 text-base font-medium bg-gradient-to-r from-primary to-cyan-400 hover:from-blue-600 hover:to-accent text-white rounded-xl transition-all duration-200"
+                          className="w-full py-3 text-base font-medium bg-gradient-to-r from-primary to-accent hover:from-primary-dark hover:to-cyan-500 text-white rounded-xl transition-all duration-200"
                           onClick={closeMenu}
                         >
                           Get Started Free
@@ -240,7 +240,7 @@ export default function Navbar() {
                     <div className="pt-3 mt-3 border-t border-blue-100">
                       <Link
                         href="/dashboard"
-                        className="block px-4 py-3 text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                        className="block px-4 py-3 text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
                         onClick={closeMenu}
                       >
                         Dashboard
