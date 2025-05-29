@@ -7,12 +7,13 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
-} from '@clerk/nextjs'
+} from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import CookieBanner from "@/components/cookie-banner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,18 +29,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    
-      <html lang="en">
-        <body className={inter.className}>
-          <ClerkProvider appearance={{ variables: { colorPrimary: '#3b82f6'}}}>
-            {" "}
-            <Analytics />
-            <Navbar/>
-            {children}
-            <Footer/>
-          </ClerkProvider>
-        </body>
-      </html>
-
+    <html lang="en">
+      <body className={inter.className}>
+        <ClerkProvider appearance={{ variables: { colorPrimary: "#3b82f6" } }}>
+          {" "}
+          <Analytics />
+          <Navbar />
+          {children}
+          <Footer />
+          <CookieBanner />
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

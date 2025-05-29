@@ -7,7 +7,6 @@ import { MenuIcon, XIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import {
-  ClerkProvider,
   SignInButton,
   SignUpButton,
   SignedIn,
@@ -33,28 +32,23 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
       className={`sticky top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? "bg-white/95 backdrop-blur-md border-b border-neutral-200"
           : "bg-gradient-to-br from-blue-50 via-white to-white border-b border-blue-100"
       }`}
-      style={{
-        background: scrolled
-          ? "rgba(255, 255, 255, 0.95)"
-          : "linear-gradient(to bottom right, rgb(239 246 255), rgb(255 255 255), rgb(255 255 255))",
-      }}
     >
       <div className="container mx-auto px-4 md:px-6 py-3 md:py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <motion.div
-              initial={{ rotate: -10 }}
-              animate={{ rotate: 0 }}
-              transition={{ duration: 0.5 }}
+              initial={{ rotate: -10, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
               className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center overflow-hidden"
             >
               <Image
@@ -65,13 +59,23 @@ export default function Navbar() {
                 className="object-contain"
               />
             </motion.div>
-            <span className="text-xl font-bold text-neutral-900">
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-xl font-bold text-neutral-900"
+            >
               InvoiceFlow
-            </span>
+            </motion.span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="hidden md:flex items-center space-x-8"
+          >
             <Link
               href="#features"
               className="text-primary-text hover:text-blue-600 transition-colors font-medium"
@@ -96,10 +100,15 @@ export default function Navbar() {
             >
               Contact
             </Link>
-          </div>
+          </motion.div>
 
           {/* Desktop Auth & Mobile Menu Button */}
-          <div className="flex items-center space-x-3">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="flex items-center space-x-3"
+          >
             {/* Desktop Authentication */}
             <div className="hidden md:flex items-center space-x-3">
               <SignedOut>
@@ -148,7 +157,7 @@ export default function Navbar() {
                 )}
               </motion.div>
             </Button>
-          </div>
+          </motion.div>
         </div>
 
         {/* Mobile Navigation Menu */}

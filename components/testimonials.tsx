@@ -224,7 +224,7 @@ export default function Testimonials() {
                 <div className="hidden md:block">
                   <button
                     onClick={handlePrev}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 w-12 h-12 rounded-full bg-white/90 shadow-lg border border-blue-100 hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center justify-center"
+                    className="absolute cursor-pointer left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 w-12 h-12 rounded-full bg-white/90 shadow-lg border border-blue-100 hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center justify-center"
                     aria-label="Previous testimonial"
                   >
                     <ChevronLeft className="h-6 w-6 text-blue-600" />
@@ -232,7 +232,7 @@ export default function Testimonials() {
 
                   <button
                     onClick={handleNext}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-20 w-12 h-12 rounded-full bg-white/90 shadow-lg border border-blue-100 hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center justify-center"
+                    className="absolute right-0 cursor-pointer  top-1/2 -translate-y-1/2 translate-x-1/2 z-20 w-12 h-12 rounded-full bg-white/90 shadow-lg border border-blue-100 hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center justify-center"
                     aria-label="Next testimonial"
                   >
                     <ChevronRight className="h-6 w-6 text-blue-600" />
