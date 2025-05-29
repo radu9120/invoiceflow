@@ -20,7 +20,7 @@ export default function Footer() {
       id="contact"
       className="relative bg-gradient-to-b from-white to-blue-50 pt-24 pb-12 overflow-hidden"
     >
-      {/* Decorative blurs - improved positioning */}
+      {/* Decorative blurs - improved positioninggg */}
       <div className="absolute -top-32 right-0 w-96 h-96 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
       <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-cyan-200 rounded-full opacity-20 blur-3xl"></div>
 
