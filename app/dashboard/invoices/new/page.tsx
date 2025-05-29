@@ -1,3 +1,4 @@
+import Bounded from "@/components/ui/bounded"
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 
@@ -7,11 +8,12 @@ const NewInvoice = async() => {
     if (!userId) redirect('/sign-in')
 
     return(
-        <main className="min-lg:w-1/3 min-md:w-2/3 items-center justify-center ">
-            <article>
-                <h1>Invoice Generator</h1>
-            </article>
-
+        <main>
+            <Bounded>
+                <article>
+                    <h1>Invoice Generator</h1>
+                </article>
+            </Bounded>
         </main>
     )
 }
