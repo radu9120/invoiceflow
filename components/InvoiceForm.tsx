@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form";
+import InvoiceItems from "./InvoiceItems";
 
 const phoneType = z.string().regex(/^\+?[0-9\s-]{7,15}$/, "Invalid phone number").optional()
 
@@ -109,7 +110,7 @@ const InvoiceForm = () => {
     
     return(
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 lg:w-2/3 mx-auto">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 lg:max-w-4xl w-full bg-white p-16 border border-gray-200 shadow-2xl mx-auto ">
                 <div className="grid grid-cols-2">
                     <div className="space-y-4 w-[300px]">
                         
@@ -138,7 +139,7 @@ const InvoiceForm = () => {
                                     <FormItem>
                                         <FormLabel>Invoice number</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="shadcn" {...field} />
+                                            <Input placeholder="ex: INV001" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -305,8 +306,36 @@ const InvoiceForm = () => {
                         )}
                     />
                 </div>
-                <div>
-                    
+                <div className="space-y-1">
+                    <div className="grid grid-cols-7 gap-1 border-t border-b ">
+                        <div className="col-span-3 w-full px-4">
+                            <h4 className=""> Item description</h4>
+                        </div>
+                        <div className="w-full px-4">
+                            <h4 className=""> Unit price</h4>
+                        </div>
+                        <div className="w-full px-4">
+                            <h4 className=""> Quanity</h4>
+                        </div>
+                        <div className="w-full px-4">
+                            <h4 className=""> Tax</h4>
+                        </div>
+                        <div className="w-full px-4">
+                            <h4 className=""> Ammount</h4>
+                        </div>                   
+                    </div>
+                    <FormField
+                        control={form.control}
+                        name="items"
+                        render={() => (
+                            <FormItem>
+                                <FormControl>
+                                    <InvoiceItems />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                        />
                 </div>
 
                 <Button type="submit">Submit</Button>
