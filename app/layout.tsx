@@ -14,7 +14,7 @@ import { Analytics } from "@vercel/analytics/next";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CookieBanner from "@/components/cookie-banner";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -38,6 +38,7 @@ export default function RootLayout({
           {children}
           <Footer />
           <CookieBanner />
+          <SpeedInsights />
         </ClerkProvider>
       </body>
     </html>
