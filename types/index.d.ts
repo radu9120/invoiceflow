@@ -1,5 +1,4 @@
 interface CreateInvoiceHistory {
-    created_at: string;
     invoice_number: string;
     company_details: string;
     bill_to: string;

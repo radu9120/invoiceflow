@@ -147,12 +147,12 @@ export default function Navbar() {
                     variant="ghost"
                     className="text-primary-text hover:text-primary hover:bg-blue-50"
                   >
-                    Sign in
+                    Log in
                   </Button>
                 </SignInButton>
                 <SignUpButton>
                   <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary-dark hover:to-cyan-500 text-white rounded-xl px-6">
-                    Get Started
+                    Sign up
                   </Button>
                 </SignUpButton>
               </SignedOut>
