@@ -33,6 +33,19 @@ export interface Company {
   status: string;
   created_at: string;
   author: string;
+  // Add these properties to the base Company interface
+  plan: "free" | "pro" | "enterprise";
+  invoices: number;
+  clients: number;
+  revenue: string;
+}
+
+// Extended interface for dashboard usage i need this
+export interface CompanyWithStats extends Company {
+  plan: "free" | "pro" | "enterprise";
+  invoices: number;
+  clients: number;
+  revenue: string;
 }
 
 export interface InvoiceItem {

@@ -2,6 +2,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 import { CreateBusiness } from "@/schemas/invoiceSchema";
+import { redirect } from "next/navigation";
 
 export const createBusiness = async (formData: CreateBusiness) => {
   const { userId: author } = await auth();
@@ -22,7 +23,7 @@ export const getUserBusinesses = async () => {
   const { userId: author } = await auth();
 
   if (!author) {
-    throw new Error("User not authenticated");
+    redirect("/sign-in");
   }
 
   const supabase = createSupabaseClient();
