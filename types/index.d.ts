@@ -1,4 +1,3 @@
-
 interface CreateInvoiceHistory {
   invoice_number: string;
   company_details: string;
@@ -34,11 +33,6 @@ export interface Company {
   status: string;
   created_at: string;
   author: string;
-  // Add these properties to the base Company interface
-  plan: "free" | "pro" | "enterprise";
-  invoices: number;
-  clients: number;
-  revenue: string;
 }
 
 // Extended interface for dashboard usage i need this
@@ -75,7 +69,6 @@ export interface Invoice {
   notes: string;
 }
 
-
 export interface DashboardStats {
   totalInvoices: number;
   paidInvoices: number;
@@ -88,14 +81,14 @@ export interface DashboardStats {
 }
 
 interface GetAllClients {
-    limit?: number;
-    page?: number;
-    searchTerm?: string;
-    business_id: number
+  limit?: number;
+  page?: number;
+  searchTerm?: string;
+  business_id: number;
 }
 
-interface SearchParams{
-  searchTerm?: string
+interface SearchParams {
+  searchTerm?: string;
 }
 
 interface ClientType {
