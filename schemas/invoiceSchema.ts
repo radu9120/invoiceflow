@@ -21,7 +21,10 @@ export const billToSchema = z.object({
   email: z.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format"),
   address: z.string().min(1, { message: "Quantity is required" }),
   phone: phoneType,
+  business_id: z.coerce.number().min(1, { message: "Business is required" }),
 });
+
+export type CreateClient = z.infer<typeof billToSchema>;
 
 export const companySchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),

@@ -1,3 +1,4 @@
+
 interface CreateInvoiceHistory {
   invoice_number: string;
   company_details: string;
@@ -61,14 +62,6 @@ export interface Invoice {
   notes: string;
 }
 
-export interface Client {
-  id: string;
-  name: string;
-  email: string;
-  totalInvoices: number;
-  totalRevenue: number;
-  status: "active" | "inactive";
-}
 
 export interface DashboardStats {
   totalInvoices: number;
@@ -79,4 +72,25 @@ export interface DashboardStats {
   monthlyRevenue: number;
   totalClients: number;
   activeClients: number;
+}
+
+interface GetAllClients {
+    limit?: number;
+    page?: number;
+    searchTerm?: string;
+    business_id: number
+}
+
+interface SearchParams{
+  searchTerm?: string
+}
+
+interface ClientType {
+  id: number;
+  name: string;
+  email: string;
+  address: string;
+  phone: string;
+  invoices?: number;
+  totalPaid?: string;
 }
