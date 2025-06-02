@@ -82,10 +82,7 @@ export default function DashboardClient({
     const newCompany: Company = {
       id: newBusiness.id,
       name: newBusiness.name,
-      plan: "free",
-      invoices: 0,
-      clients: 0,
-      revenue: "$0",
+
       status: "active",
       created_at: newBusiness.created_at,
       email: newBusiness.email,
