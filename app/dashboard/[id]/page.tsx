@@ -1387,7 +1387,7 @@ export default function CompanyDashboard({
                   Company Information
                 </h4>
                 <div className="text-sm text-secondary-text space-y-1">
-                  <p>• Company ID: {company.id}</p>
+                  <p>• Company ID: {company.name}</p>
                   <p>• Created: {new Date().toLocaleDateString()}</p>
                   <p>• Status: {company.status}</p>
                   <p>• Total Invoices: {invoices.length}</p>

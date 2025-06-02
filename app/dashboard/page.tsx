@@ -20,6 +20,7 @@ import {
   AlertTriangle,
   CheckCircle,
 } from "lucide-react";
+import { BussinesForm } from "@/components/busineses/business-form";
 
 // TypeScript Types
 interface Company {
@@ -74,16 +75,6 @@ const Dashboard = () => {
       }, 1000);
     }
   }, [isLoaded, isSignedIn, router]);
-
-  // Clear the "just created" highlight after 3 seconds
-  useEffect(() => {
-    if (justCreated) {
-      const timer = setTimeout(() => {
-        setJustCreated(null);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [justCreated]);
 
   // Show loading while checking auth
   if (!isLoaded || !isSignedIn || loading) {
@@ -429,7 +420,7 @@ const Dashboard = () => {
       {/* New Company Modal */}
       {isNewCompanyModalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full">
+          <div className="bg-white rounded-xl shadow-2xl max-w-4xl p-6 w-full">
             <div className="flex items-center justify-between p-6 border-b border-blue-100">
               <div>
                 <h2 className="text-xl font-bold text-header-text">
@@ -448,92 +439,7 @@ const Dashboard = () => {
                 <X className="h-5 w-5" />
               </Button>
             </div>
-
-            <div className="p-6">
-              {/* Free Plan Warning */}
-              {userPlan === "free" && companies.length >= 1 && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                  <div className="flex items-start gap-3">
-                    <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5" />
-                    <div>
-                      <h4 className="font-medium text-red-800 mb-1">
-                        Company Limit Reached
-                      </h4>
-                      <p className="text-sm text-red-700">
-                        Free plan allows only 1 company. Upgrade to Pro to
-                        create unlimited companies.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-secondary-text mb-2">
-                  Company Name *
-                </label>
-                <Input
-                  value={newCompanyName}
-                  onChange={(e) => setNewCompanyName(e.target.value)}
-                  className="w-full"
-                  placeholder="Enter company name"
-                  autoFocus
-                  disabled={userPlan === "free" && companies.length >= 1}
-                />
-              </div>
-
-              <div className="bg-blue-50 rounded-lg p-4 mb-6">
-                <h4 className="font-medium text-primary mb-2">
-                  {userPlan === "free"
-                    ? "Free Plan Includes:"
-                    : `${
-                        userPlan.charAt(0).toUpperCase() + userPlan.slice(1)
-                      } Plan Includes:`}
-                </h4>
-                <ul className="text-sm text-secondary-text space-y-1">
-                  {userPlan === "free" ? (
-                    <>
-                      <li>• 1 company</li>
-                      <li>• Up to 1 invoice</li>
-                      <li>• Basic client management</li>
-                      <li>• Email support</li>
-                    </>
-                  ) : (
-                    <>
-                      <li>• Unlimited companies</li>
-                      <li>• Unlimited invoices</li>
-                      <li>• Advanced client management</li>
-                      <li>• Priority support</li>
-                    </>
-                  )}
-                </ul>
-              </div>
-
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsNewCompanyModalOpen(false)}
-                  className="flex-1 border-blue-200"
-                >
-                  Cancel
-                </Button>
-                {userPlan === "free" && companies.length >= 1 ? (
-                  <Button className="flex-1 bg-gradient-to-r from-primary to-accent text-white">
-                    <Crown className="h-4 w-4 mr-2" />
-                    Upgrade to Pro
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={createCompany}
-                    disabled={!newCompanyName.trim()}
-                    className="flex-1 bg-gradient-to-r from-primary to-accent text-white"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create Company
-                  </Button>
-                )}
-              </div>
-            </div>
+            <BussinesForm />
           </div>
         </div>
       )}
