@@ -76,30 +76,60 @@ export default function Navbar() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="hidden md:flex items-center space-x-8"
           >
-            <Link
-              href="#features"
-              className="text-primary-text hover:text-primary transition-colors font-medium"
-            >
-              Features
-            </Link>
-            <Link
-              href="#pricing"
-              className="text-primary-text hover:text-primary transition-colors font-medium"
-            >
-              Pricing
-            </Link>
-            <Link
-              href="#testimonials"
-              className="text-primary-text hover:text-primary transition-colors font-medium"
-            >
-              Testimonials
-            </Link>
-            <Link
-              href="/contact"
-              className="text-primary-text hover:text-primary transition-colors font-medium"
-            >
-              Contact
-            </Link>
+            {/* Show different links based on authentication status */}
+            <SignedOut>
+              <Link
+                href="#features"
+                className="text-primary-text hover:text-primary transition-colors font-medium"
+              >
+                Features
+              </Link>
+              <Link
+                href="#pricing"
+                className="text-primary-text hover:text-primary transition-colors font-medium"
+              >
+                Pricing
+              </Link>
+              <Link
+                href="#testimonials"
+                className="text-primary-text hover:text-primary transition-colors font-medium"
+              >
+                Testimonials
+              </Link>
+              <Link
+                href="/contact"
+                className="text-primary-text hover:text-primary transition-colors font-medium"
+              >
+                Contact
+              </Link>
+            </SignedOut>
+
+            <SignedIn>
+              <Link
+                href="/dashboard"
+                className="text-primary-text hover:text-primary transition-colors font-medium"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/dashboard/clients"
+                className="text-primary-text hover:text-primary transition-colors font-medium"
+              >
+                Clients
+              </Link>
+              <Link
+                href="/dashboard/invoices"
+                className="text-primary-text hover:text-primary transition-colors font-medium"
+              >
+                Invoices
+              </Link>
+              <Link
+                href="/dashboard/settings"
+                className="text-primary-text hover:text-primary transition-colors font-medium"
+              >
+                Settings
+              </Link>
+            </SignedIn>
           </motion.div>
 
           {/* Desktop Auth & Mobile Menu Button */}
@@ -183,35 +213,68 @@ export default function Navbar() {
                 className="py-4 px-2"
               >
                 <div className="flex flex-col space-y-1">
-                  {/* Navigation Links */}
-                  <Link
-                    href="#features"
-                    className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
-                    onClick={closeMenu}
-                  >
-                    Features
-                  </Link>
-                  <Link
-                    href="#pricing"
-                    className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
-                    onClick={closeMenu}
-                  >
-                    Pricing
-                  </Link>
-                  <Link
-                    href="#testimonials"
-                    className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
-                    onClick={closeMenu}
-                  >
-                    Testimonials
-                  </Link>
-                  <Link
-                    href="#contact"
-                    className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
-                    onClick={closeMenu}
-                  >
-                    Contact
-                  </Link>
+                  {/* Mobile Navigation Links - Different for auth states */}
+                  <SignedOut>
+                    <Link
+                      href="#features"
+                      className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                      onClick={closeMenu}
+                    >
+                      Features
+                    </Link>
+                    <Link
+                      href="#pricing"
+                      className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                      onClick={closeMenu}
+                    >
+                      Pricing
+                    </Link>
+                    <Link
+                      href="#testimonials"
+                      className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                      onClick={closeMenu}
+                    >
+                      Testimonials
+                    </Link>
+                    <Link
+                      href="/contact"
+                      className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                      onClick={closeMenu}
+                    >
+                      Contact
+                    </Link>
+                  </SignedOut>
+
+                  <SignedIn>
+                    <Link
+                      href="/dashboard"
+                      className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                      onClick={closeMenu}
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      href="/dashboard/clients"
+                      className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                      onClick={closeMenu}
+                    >
+                      Clients
+                    </Link>
+                    <Link
+                      href="/dashboard/invoices"
+                      className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                      onClick={closeMenu}
+                    >
+                      Invoices
+                    </Link>
+                    <Link
+                      href="/dashboard/settings"
+                      className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                      onClick={closeMenu}
+                    >
+                      Settings
+                    </Link>
+                  </SignedIn>
 
                   {/* Mobile Authentication */}
                   <SignedOut>
@@ -235,18 +298,6 @@ export default function Navbar() {
                       </SignUpButton>
                     </div>
                   </SignedOut>
-
-                  <SignedIn>
-                    <div className="pt-3 mt-3 border-t border-blue-100">
-                      <Link
-                        href="/dashboard"
-                        className="block px-4 py-3 text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
-                        onClick={closeMenu}
-                      >
-                        Dashboard
-                      </Link>
-                    </div>
-                  </SignedIn>
                 </div>
               </motion.div>
             </motion.div>

@@ -11,24 +11,19 @@ const isProtectedRoute = createRouteMatcher([
 
 // Define public routes that don't require authentication
 const isPublicRoute = createRouteMatcher([
+  "/",
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/api/webhooks(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
-
-  // Redirect logged-in users from home page to dashboard
-  if (req.nextUrl.pathname === "/" && userId) {
-    return Response.redirect(new URL("/dashboard", req.url));
-  }
-
-  // Allow public routes to pass through
+  // Allow public routes to pass through (including home page)
   if (isPublicRoute(req)) return;
 
   // Protect all other routes
   if (isProtectedRoute(req)) {
+    const { userId } = await auth();
     if (!userId) {
       const url = new URL("/sign-in", req.url);
       return Response.redirect(url.toString());
