@@ -1,4 +1,4 @@
-import InvoiceForm from "@/components/InvoiceForm"
+import InvoiceForm from "@/components/Invoices/InvoiceForm"
 import Bounded from "@/components/ui/bounded"
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
