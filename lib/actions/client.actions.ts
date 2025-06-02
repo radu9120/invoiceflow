@@ -24,7 +24,7 @@ export const createClient = async (formData: CreateClient) => {
 export const getAllClients = async ({business_id, limit = 10, page = 1, searchTerm} : GetAllClients) => {
     const supabase = createSupabaseClient();
 
-    let query = supabase.from("Clients").select()
+    let query = supabase.from("Clients").select().eq('business_id', business_id)
 
     if (searchTerm) {
         query = query.ilike('name', `%${searchTerm}%`)
