@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Plus,
   Building,
@@ -21,6 +20,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { BussinesForm } from "@/components/busineses/business-form";
+import { getUserBusinesses } from "@/lib/actions/business.actions";
 
 // TypeScript Types
 interface Company {
@@ -31,14 +31,19 @@ interface Company {
   clients: number;
   revenue: string;
   status: "active" | "inactive";
-  createdAt: string;
+  created_at: string;
+  email: string;
+  address: string;
+  phone?: string;
+  vat?: number;
+  logo?: string;
+  author: string;
 }
 
 const Dashboard = () => {
   const { isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
   const [isNewCompanyModalOpen, setIsNewCompanyModalOpen] = useState(false);
-  const [newCompanyName, setNewCompanyName] = useState("");
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [userPlan, setUserPlan] = useState<"free" | "pro" | "enterprise">(
@@ -53,30 +58,48 @@ const Dashboard = () => {
     }
   }, [isLoaded, isSignedIn, router]);
 
-  // Load user's companies
+  // Load user's companies from Supabase
   useEffect(() => {
     if (isLoaded && isSignedIn) {
-      // Simulate loading companies - replace with actual API call
-      setTimeout(() => {
-        setCompanies([
-          // Start with empty array for new users
-          // {
-          //   id: "1",
-          //   name: "My Company",
-          //   plan: "free",
-          //   invoices: 0,
-          //   clients: 0,
-          //   revenue: "$0",
-          //   status: "active",
-          //   createdAt: "2024-06-02",
-          // },
-        ]);
-        setLoading(false);
-      }, 1000);
+      loadCompanies();
     }
-  }, [isLoaded, isSignedIn, router]);
+  }, [isLoaded, isSignedIn]);
 
-  // Show loading while checking auth
+  const loadCompanies = async () => {
+    try {
+      setLoading(true);
+      const businessData = await getUserBusinesses();
+
+      // Transform Supabase data to match your Company interface
+      const transformedCompanies: Company[] = businessData.map(
+        (business: any) => ({
+          id: business.id,
+          name: business.name,
+          plan: "free", // You might want to add this field to your Supabase table
+          invoices: 0, // You'll calculate this later when you add invoices
+          clients: 0, // You'll calculate this later when you add clients
+          revenue: "$0", // You'll calculate this later from paid invoices
+          status: business.status || "active",
+          created_at: business.created_at,
+          email: business.email,
+          address: business.address,
+          phone: business.phone,
+          vat: business.vat,
+          logo: business.logo,
+          author: business.author,
+        })
+      );
+
+      setCompanies(transformedCompanies);
+    } catch (error) {
+      console.error("Error loading companies:", error);
+      setCompanies([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Show loading while checking auth or loading data
   if (!isLoaded || !isSignedIn || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-white flex items-center justify-center">
@@ -115,37 +138,6 @@ const Dashboard = () => {
     }
   };
 
-  const createCompany = () => {
-    if (!newCompanyName.trim()) return;
-
-    // Check free plan limitations
-    if (userPlan === "free" && companies.length >= 1) {
-      alert("Free plan allows only 1 company. Please upgrade to create more.");
-      return;
-    }
-
-    const newCompany: Company = {
-      id: Date.now().toString(), // Better ID generation
-      name: newCompanyName,
-      plan: userPlan,
-      invoices: 0,
-      clients: 0,
-      revenue: "$0",
-      status: "active",
-      createdAt: new Date().toISOString().split("T")[0],
-    };
-
-    setCompanies([...companies, newCompany]);
-    setNewCompanyName("");
-    setIsNewCompanyModalOpen(false);
-
-    // Highlight the newly created company
-    setJustCreated(newCompany.id);
-
-    // Stay on dashboard - don't redirect
-    // User can click to go to company dashboard when ready
-  };
-
   const canCreateCompany = () => {
     if (userPlan === "free") {
       return companies.length < 1; // Free plan: max 1 company
@@ -162,6 +154,26 @@ const Dashboard = () => {
       return `${companies.length}/1`;
     }
     return `${companies.length}/∞`;
+  };
+
+  const handleCompanyCreated = async (newBusiness: any) => {
+    // Reload companies from Supabase to get the latest data
+    await loadCompanies();
+
+    // Close modal
+    setIsNewCompanyModalOpen(false);
+
+    // Set just created flag
+    setJustCreated(newBusiness.id);
+
+    // Clear the flag after 5 seconds
+    setTimeout(() => {
+      setJustCreated(null);
+    }, 5000);
+  };
+
+  const handleModalClose = () => {
+    setIsNewCompanyModalOpen(false);
   };
 
   return (
@@ -322,7 +334,7 @@ const Dashboard = () => {
 
                 <div className="flex items-center justify-between pt-4 border-t border-blue-100">
                   <span className="text-sm text-secondary-text">
-                    Created {company.createdAt}
+                    Created {new Date(company.created_at).toLocaleDateString()}
                   </span>
                   <div className="flex items-center gap-2">
                     <Button
@@ -433,7 +445,7 @@ const Dashboard = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setIsNewCompanyModalOpen(false)}
+                onClick={handleModalClose}
                 className="hover:bg-gray-100"
               >
                 <X className="h-5 w-5" />

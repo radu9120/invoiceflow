@@ -1,24 +1,82 @@
 interface CreateInvoiceHistory {
-    invoice_number: string;
-    company_details: string;
-    bill_to: string;
-    date: string;
-    due_date: string;
-    items: InvoiceItems[];
-    subtotal: string;
-    tax?: string;
-    discount?: string;
-    shipping?: string;
-    total: string;
-    notes: string;
-    bank_details: string;
-    logo: string;
-
+  invoice_number: string;
+  company_details: string;
+  bill_to: string;
+  date: string;
+  due_date: string;
+  items: InvoiceItems[];
+  subtotal: string;
+  tax?: string;
+  discount?: string;
+  shipping?: string;
+  total: string;
+  notes: string;
+  bank_details: string;
+  logo: string;
 }
 
 interface InvoiceItems {
-    description: string;
-    unit_price: string;
-    quantity: string;
-    amount: string;
+  description: string;
+  unit_price: string;
+  quantity: string;
+  amount: string;
+}
+
+export interface Company {
+  id: string;
+  name: string;
+  email: string;
+  address: string;
+  phone?: string;
+  vat?: number;
+  logo?: string;
+  status: string;
+  created_at: string;
+  author: string;
+}
+
+export interface InvoiceItem {
+  description: string;
+  quantity: number;
+  rate: number;
+  amount: number;
+}
+
+export interface Invoice {
+  id: string;
+  number: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  clientAddress: string;
+  amount: number;
+  status: "draft" | "sent" | "paid" | "overdue";
+  dueDate: string;
+  createdDate: string;
+  description: string;
+  items: InvoiceItem[];
+  subtotal: number;
+  tax: number;
+  total: number;
+  notes: string;
+}
+
+export interface Client {
+  id: string;
+  name: string;
+  email: string;
+  totalInvoices: number;
+  totalRevenue: number;
+  status: "active" | "inactive";
+}
+
+export interface DashboardStats {
+  totalInvoices: number;
+  paidInvoices: number;
+  pendingInvoices: number;
+  overdueInvoices: number;
+  totalRevenue: number;
+  monthlyRevenue: number;
+  totalClients: number;
+  activeClients: number;
 }
