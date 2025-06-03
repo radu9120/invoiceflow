@@ -7,7 +7,7 @@ export default async function Page({
   searchParams,
 }: {
   params: Promise<{ id: number }>;
-  searchParams: Promise<SearchParams>; // Make searchParams a Promise
+  searchParams: Promise<SearchParams>; // Make searchParams a Promise it was failing deployment because it was not awaited
 }) {
   const awaitedParams = await params;
   const filter = await searchParams; // Now this will work correctly

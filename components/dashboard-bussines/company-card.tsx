@@ -79,7 +79,7 @@ export default function CompanyCard({
                 <CheckCircle className="h-4 w-4 text-green-600" />
               )}
             </div>
-            {getPlanBadge(company.plan)}
+            {/* {getPlanBadge(company)} */}
           </div>
         </div>
         <ArrowRight
@@ -100,7 +100,7 @@ export default function CompanyCard({
             Invoices
           </span>
           <div className="text-lg font-bold text-header-text">
-            {company.invoices}
+            {/* {company.invoices} */}
           </div>
         </div>
 
@@ -112,7 +112,7 @@ export default function CompanyCard({
             Clients
           </span>
           <div className="text-lg font-bold text-header-text">
-            {company.clients}
+            {/* {company.clients} */}
           </div>
         </div>
 
@@ -124,7 +124,7 @@ export default function CompanyCard({
             Revenue
           </span>
           <div className="text-lg font-bold text-green-600">
-            {company.revenue}
+            {/* {company.revenue} */}
           </div>
         </div>
       </div>

@@ -51,7 +51,7 @@ export default function PlanLimitations({
             <div className="text-sm">
               <span className="font-medium">Total Invoices: </span>
               <span>
-                {companies.reduce((sum, c) => sum + c.invoices, 0)}
+                {/* {companies.reduce((sum, c) => sum + c.invoices, 0)} */}
                 {userPlan === "free" ? "/1" : ""}
               </span>
             </div>

@@ -1,10 +1,10 @@
 import { Building, FileText, Clock } from "lucide-react";
-import { Company, Invoice, Client } from "@/types";
+import { Company, Invoice } from "@/types";
 
 interface RecentActivityProps {
   company: Company;
   invoices: Invoice[];
-  clients: Client[];
+  // clients: Client[];
   formatCurrency: (amount: number) => string;
   formatDate: (dateString: string) => string;
 }
@@ -12,7 +12,7 @@ interface RecentActivityProps {
 export default function RecentActivity({
   company,
   invoices,
-  clients,
+  // clients,
   formatCurrency,
   formatDate,
 }: RecentActivityProps) {
@@ -22,7 +22,7 @@ export default function RecentActivity({
         Recent Activity
       </h2>
 
-      {invoices.length === 0 && clients.length === 0 ? (
+      {invoices.length === 0 && length === 0 ? (
         <div className="text-center py-8">
           <Clock className="h-12 w-12 mx-auto text-gray-400 mb-3" />
           <p className="text-secondary-text">

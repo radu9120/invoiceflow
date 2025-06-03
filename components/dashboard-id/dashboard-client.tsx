@@ -1,6 +1,6 @@
 "use client";
 
-import { Company, Invoice, Client, DashboardStats } from "@/types";
+import { Company, Invoice, DashboardStats } from "@/types";
 import { useState } from "react";
 import DashboardHeader from "./dashboard-header";
 import StatsGrid from "./stats-grid";
@@ -17,7 +17,7 @@ interface DashboardClientProps {
 
 export default function DashboardClient({ company }: DashboardClientProps) {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [clients, setClients] = useState<Client[]>([]);
+  // const [clients, setClients] = useState<Client[]>([]);
   const [userPlan] = useState<"free" | "pro" | "enterprise">("free");
   const [stats, setStats] = useState<DashboardStats>({
     totalInvoices: 0,
@@ -93,7 +93,7 @@ export default function DashboardClient({ company }: DashboardClientProps) {
         <RecentActivity
           company={company}
           invoices={invoices}
-          clients={clients}
+          // clients={clients}
           formatCurrency={formatCurrency}
           formatDate={formatDate}
         />
