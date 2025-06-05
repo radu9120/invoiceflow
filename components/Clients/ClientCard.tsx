@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from '../ui/button'
 import { DollarSign, Edit, Eye, FileText, Mail, MapPin, Phone, Plus, PlusIcon, Users } from 'lucide-react'
 import CustomModal from '../ModalsForms/CustomModal'
+import InvoiceForm from '../Invoices/InvoiceForm'
 
 export default function ClientCard({client}:{client : any}) {
     return (
@@ -95,13 +96,13 @@ export default function ClientCard({client}:{client : any}) {
                 </CustomModal>
                 <CustomModal 
                     heading={'Invoice'}
-                    description={'Create invoice'}
+                    description={'Make changes to your invoice'}
                     openBtnLabel={'Invoice'}
                     btnVariant={'primary'}
                     btnIcon={PlusIcon}
 
                 >
-                    <div></div>
+                    <InvoiceForm/>
                 </CustomModal>
             </div>
         </div>

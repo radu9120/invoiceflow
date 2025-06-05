@@ -107,7 +107,6 @@ export const ClientForm = ({ business_id }:{ business_id: number }) => {
 
             
                 <div className="py-6">
-
                     <div className="flex gap-3">
                         <Button
                             variant="outline"
@@ -129,5 +128,5 @@ export const ClientForm = ({ business_id }:{ business_id: number }) => {
                 </div>
             </form>
         </Form>
-  );
+    );
 };
