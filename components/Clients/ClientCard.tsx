@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from '../ui/button'
-import { DollarSign, Edit, Eye, FileText, Mail, MapPin, Phone, Plus, Users } from 'lucide-react'
+import { DollarSign, Edit, Eye, FileText, Mail, MapPin, Phone, Plus, PlusIcon, Users } from 'lucide-react'
+import CustomModal from '../ModalsForms/CustomModal'
 
 export default function ClientCard({client}:{client : any}) {
     return (
@@ -82,23 +83,26 @@ export default function ClientCard({client}:{client : any}) {
             </div>
 
             <div className="flex gap-2">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 border-blue-200"
-                    // onClick={() => openEditModal(client)}
+                <CustomModal 
+                    heading={'Edit Client'}
+                    description={'Edit client'}
+                    openBtnLabel={'Edit'}
+                    btnVariant={'secondary'}
+                    btnIcon={Edit}
+                    className='w-full'
                 >
-                    <Edit className="h-4 w-4 mr-2" />
-                    Edit
-                </Button>
-                <Button
-                    size="sm"
-                    className="bg-gradient-to-r from-primary to-accent text-white"
-                    // onClick={() => openNewInvoiceModal(client)}
+                    <div></div>
+                </CustomModal>
+                <CustomModal 
+                    heading={'Invoice'}
+                    description={'Create invoice'}
+                    openBtnLabel={'Invoice'}
+                    btnVariant={'primary'}
+                    btnIcon={PlusIcon}
+
                 >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Invoice
-                </Button>
+                    <div></div>
+                </CustomModal>
             </div>
         </div>
     )

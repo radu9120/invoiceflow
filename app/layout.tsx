@@ -35,7 +35,10 @@ export default function RootLayout({
           {" "}
           <Analytics />
           <Navbar />
-          {children}
+          <div id="root">
+            {children}
+          </div>
+          <div id="modal-root"></div>
           <Footer />
           <CookieBanner />
           <SpeedInsights />
