@@ -22,7 +22,7 @@ interface InvoiceItems {
   amount: string;
 }
 
-export interface Company {
+interface Company {
   id: string;
   name: string;
   email: string;
@@ -97,6 +97,7 @@ interface ClientType {
   email: string;
   address: string;
   phone: string;
+  business_id: number;
   invoices?: number;
   totalPaid?: string;
 }

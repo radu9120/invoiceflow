@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Building, Settings, Crown } from "lucide-react";
+import { ArrowLeft, Plus, Building, Settings, Crown, PlusIcon } from "lucide-react";
 import { Company } from "@/types";
 import PlanBadge from "./plan-badge";
+import CustomModal from "../ModalsForms/CustomModal";
+import InvoiceForm from "../Invoices/InvoiceForm";
 
 interface DashboardHeaderProps {
   company: Company;
@@ -50,7 +52,21 @@ export default function DashboardHeader({
         </div>
 
         <div className="flex items-center gap-3">
-          <Button
+          <CustomModal heading={"Invoice"} description={"Create invoice"} openBtnLabel={"Create Invoice"} btnVariant={"primary"} btnIcon={PlusIcon}>
+            <InvoiceForm company_data={
+              {
+                address: company.address,
+                email: company.email,
+                name: company.name,
+                logo: company.logo,
+                phone: company.phone,
+                vat: company.vat,
+              }
+            }>
+              
+            </InvoiceForm>
+          </CustomModal>
+          {/* <Button
             onClick={onCreateInvoice}
             disabled={!canCreateInvoice}
             className={`${
@@ -61,7 +77,7 @@ export default function DashboardHeader({
           >
             <Plus className="h-4 w-4 mr-2" />
             Create Invoice
-          </Button>
+          </Button> */}
           <Button
             onClick={onOpenSettings}
             variant="outline"

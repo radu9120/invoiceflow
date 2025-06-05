@@ -32,7 +32,7 @@ export const companySchema = z.object({
   address: z.string().min(1, { message: "Quantity is required" }),
   phone: phoneType,
   vat: z.coerce.number().optional(),
-  logo: z.instanceof(File).optional(),
+  logo: z.string().optional(),
 });
 
 export type CreateBusiness = z.infer<typeof companySchema>;
@@ -44,7 +44,7 @@ export const formSchema = z.object({
     .min(1, { message: "Invoice description is required." }),
   company_details: companySchema,
   bill_to: billToSchema,
-  date: z.coerce.date({ required_error: "Invoice date is required." }),
+  issue_date: z.coerce.date({ required_error: "Invoice date is required." }),
   due_date: z.coerce.date({ required_error: "Due date is required." }),
   items: z.array(itemSchema).min(1, { message: "Min 1 item is required." }),
   subtotal: z.coerce.number(),
@@ -55,6 +55,7 @@ export const formSchema = z.object({
   bank_details: z.string().min(1, { message: "Bank details are required." }),
   logo: z.string().min(1, { message: "Logo is required." }),
   currency: z.string().min(1, { message: "Logo is required." }),
+  client_id: z.number()
 });
 
 export type CreateInvoice = z.infer<typeof formSchema>;

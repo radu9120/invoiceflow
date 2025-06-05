@@ -16,30 +16,40 @@ import { useForm, useWatch } from "react-hook-form";
 import InvoiceItems from "./InvoiceItems";
 import { Textarea } from "../ui/textarea";
 import { createInvoice } from "@/lib/actions/invoice.actions";
-import { CreateBusiness, formSchema } from "@/schemas/invoiceSchema";
+import { CreateBusiness, CreateClient, formSchema } from "@/schemas/invoiceSchema";
 import { redirect } from "next/navigation"
 import { useEffect } from "react";
+import { ClientType } from "@/types";
 
 
-const InvoiceForm = () => {
+const InvoiceForm = ({
+    company_data,
+    client_data,
+}:{
+    company_data: CreateBusiness;
+    client_data?: ClientType;
+}) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             invoice_number: 'INV0001',
-            company_details: {
+            company_details: company_data
+            // {
+            //     name: '',
+            //     email: '',
+            //     address: '',
+            //     phone: '',
+            //     vat: undefined,
+            // }
+            ,
+            bill_to: client_data || {
                 name: '',
                 email: '',
                 address: '',
                 phone: '',
-                vat: undefined,
+                business_id: undefined,
             },
-            bill_to: {
-                name: '',
-                email: '',
-                address: '',
-                phone: '',
-            },
-            date: new Date(), // or '2025-06-01' (ISO string)
+            issue_date: new Date(), // or '2025-06-01' (ISO string)
             due_date: new Date(), // or some other default
             items: [{
                     description: '',
@@ -54,6 +64,7 @@ const InvoiceForm = () => {
             notes: '',
             bank_details: '',
             currency: 'British pound',
+            client_id: client_data?.id || undefined,
         }
     })
 
@@ -192,7 +203,7 @@ const InvoiceForm = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <FormField
                                     control={form.control}
-                                    name="date"
+                                    name="issue_date"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel className="block text-sm font-medium text-secondary-text ">Issue Date</FormLabel>
@@ -343,6 +354,22 @@ const InvoiceForm = () => {
                     </div>
                     
                 </div>
+                {/* bank details */}
+                <div className="mb-8">
+                    <FormField
+                        control={form.control}
+                        name="bank_details"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Bank details</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="Bank details or payment method" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
 
                 {/* Notes */}
                 <div className="mb-8">
@@ -353,7 +380,7 @@ const InvoiceForm = () => {
                             <FormItem>
                                 <FormLabel>Notes</FormLabel>
                                 <FormControl>
-                                    <Textarea placeholder="Add any additional notes, bank details, or payment terms..." {...field} />
+                                    <Textarea placeholder="Add any additional notes or payment terms..." {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
