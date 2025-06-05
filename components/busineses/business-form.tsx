@@ -30,7 +30,7 @@ export const BussinesForm = () => {
       address: "",
       phone: "",
       vat: undefined,
-      logo: undefined,
+      logo: '',
     },
   });
   const onSubmit = async (values: z.infer<typeof companySchema>) => {

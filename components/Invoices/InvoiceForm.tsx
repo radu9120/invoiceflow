@@ -55,8 +55,10 @@ const InvoiceForm = ({
                     description: '',
                     unit_price: 0,
                     quantity: 0,
+                    tax: 0 ,
                     amount: 0,
             }],
+            description: '',
             subtotal: 0,
             discount: 0,
             shipping: 0,
@@ -91,6 +93,7 @@ const InvoiceForm = ({
     }, [items, discount, shipping]);
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        console.log("Submitting invoice with values:", values)
         const invoice = await createInvoice(values)
 
         if (invoice) {
@@ -102,6 +105,9 @@ const InvoiceForm = ({
     }
 
     const today = new Date();
+
+    console.log(form.formState.errors);
+
     
     return(
         <Form {...form}>

@@ -32,7 +32,7 @@ export const companySchema = z.object({
   address: z.string().min(1, { message: "Quantity is required" }),
   phone: phoneType,
   vat: z.coerce.number().optional(),
-  logo: z.string().optional(),
+  logo: z.string().optional() || undefined,
 });
 
 export type CreateBusiness = z.infer<typeof companySchema>;
@@ -51,9 +51,9 @@ export const formSchema = z.object({
   discount: z.coerce.number().optional(),
   shipping: z.coerce.number().optional(),
   total: z.coerce.number(),
-  notes: z.string().min(1, { message: "Notes are required." }),
-  bank_details: z.string().min(1, { message: "Bank details are required." }),
-  logo: z.string().min(1, { message: "Logo is required." }),
+  notes: z.string().optional(),
+  bank_details: z.string().optional(),
+  logo: z.string().optional(),
   currency: z.string().min(1, { message: "Logo is required." }),
   client_id: z.number()
 });
