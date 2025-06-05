@@ -22,7 +22,7 @@ export default function RecentActivity({
         Recent Activity
       </h2>
 
-      {invoices.length === 0 && length === 0 ? (
+      {invoices.length === 0 ? (
         <div className="text-center py-8">
           <Clock className="h-12 w-12 mx-auto text-gray-400 mb-3" />
           <p className="text-secondary-text">
