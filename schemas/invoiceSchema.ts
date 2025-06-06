@@ -56,7 +56,8 @@ export const formSchema = z.object({
   bank_details: z.string().optional(),
   logo: z.string().optional(),
   currency: z.string().min(1, { message: "Logo is required." }),
-  client_id: z.number()
+  client_id: z.number(),
+  business_id: z.number(),
 });
 
 export type CreateInvoice = z.infer<typeof formSchema>;

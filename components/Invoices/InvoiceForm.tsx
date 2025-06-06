@@ -16,7 +16,7 @@ import { useForm, useWatch } from "react-hook-form";
 import InvoiceItems from "./InvoiceItems";
 import { Textarea } from "../ui/textarea";
 import { createInvoice } from "@/lib/actions/invoice.actions";
-import { CreateBusiness, CreateClient, formSchema } from "@/schemas/invoiceSchema";
+import { formSchema } from "@/schemas/invoiceSchema";
 import { redirect } from "next/navigation"
 import { useEffect } from "react";
 import { BusinessType, ClientType } from "@/types";
@@ -66,6 +66,7 @@ const InvoiceForm = ({
             bank_details: '',
             currency: 'British pound',
             client_id: client_data?.id || undefined,
+            business_id: company_data.id
         }
     })
 

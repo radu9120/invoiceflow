@@ -1,28 +1,19 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Building, Settings, Crown, PlusIcon, CrownIcon, SettingsIcon } from "lucide-react";
-import { Company } from "@/types";
-import PlanBadge from "./plan-badge";
-import CustomModal from "../ModalsForms/CustomModal";
-import InvoiceForm from "../Invoices/InvoiceForm";
-import CustomButton from "../ui/CustomButton";
+import { ArrowLeft, Building, CrownIcon, PlusIcon, SettingsIcon } from 'lucide-react'
+import Link from 'next/link'
+import React from 'react'
+import CustomButton from '../ui/CustomButton';
 
-interface DashboardHeaderProps {
-  company: Company;
-  userPlan: "free" | "pro" | "enterprise";
-  canCreateInvoice: boolean;
-  onOpenSettings: () => void;
-  formatDate: (dateString: string) => string;
-}
-
-export default function DashboardHeader({
-  company,
+export default function BusinessBashboard({
+  business,
   userPlan,
-  onOpenSettings,
-  formatDate,
-}: DashboardHeaderProps) {
+}:{
+  business: {id: any;
+    name: any;
+    email: any;};
+  userPlan: string
+}) {
   return (
-    <div className="mb-8">
+    <div className='space-y-6'>
       <Link
         href="/dashboard"
         className="inline-flex items-center text-primary hover:text-primary-dark mb-4 transition-colors"
@@ -30,29 +21,26 @@ export default function DashboardHeader({
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to Companies
       </Link>
-
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
             <Building className="h-8 w-8 text-white" />
           </div>
           <div className="space-y-2">
-            <div className="flex items-center gap-3 ">
+            <div className="">
               <h1 className="text-3xl md:text-4xl font-bold text-header-text">
-                {company.name}
+                {business.name}
               </h1>
-              <PlanBadge plan={userPlan} />
             </div>
             <p className="text-secondary-text">
-              {company.email}
+              {business.email}
             </p>
           </div>
         </div>
-
         <div className="flex items-center gap-3">
-          <CustomButton label={"Create Invoice"} icon={PlusIcon} variant={"primary"} href={`/dashboard/${company.id}/invoices/new?business_id=${company.id}`}/>
+          <CustomButton label={"Create Invoice"} icon={PlusIcon} variant={"primary"} href={`/dashboard/${business.id}/invoices/new?business_id=${business.id}`}/>
           <CustomButton
-            onClick={onOpenSettings}
+            // onClick={onOpenSettings}
             variant="secondary"
             label="Settings"
             icon={SettingsIcon}
@@ -68,5 +56,5 @@ export default function DashboardHeader({
         </div>
       </div>
     </div>
-  );
+  )
 }

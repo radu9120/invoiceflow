@@ -1,4 +1,5 @@
 import ClientManagement from "@/components/Clients/ClientManagement";
+import Bounded from "@/components/ui/bounded";
 import { getAllClients } from "@/lib/actions/client.actions";
 import { SearchParams } from "@/types";
 
@@ -19,7 +20,10 @@ export default async function Page({
 
   return (
     <main>
-      <ClientManagement clients={clients} business_id={awaitedParams.id} />
+      <Bounded className="">
+        <ClientManagement clients={clients} business_id={awaitedParams.id} />
+      </Bounded>
+      
     </main>
   );
 }

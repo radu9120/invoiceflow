@@ -8,7 +8,6 @@ import QuickActions from "./quick-actions";
 import PlanLimitations from "./plan-limitation";
 import InvoicesTable from "./invoice-table";
 import RecentActivity from "./recent-activity";
-import CreateInvoiceModal from "./create-invoice-modal";
 import SettingsModal from "./settings-modal";
 import { getInvoicesByAuthor } from "@/lib/actions/invoice.actions";
 
@@ -31,8 +30,6 @@ export default function DashboardClient({ company }: DashboardClientProps) {
     activeClients: 0,
   });
 
-  const [isCreateInvoiceModalOpen, setIsCreateInvoiceModalOpen] =
-    useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
   // Fetch invoices when component mounts
@@ -72,7 +69,7 @@ export default function DashboardClient({ company }: DashboardClientProps) {
 
       const totalRevenue = invoices
         .filter((inv) => inv.status === "paid")
-        .reduce((sum, inv) => sum + (inv.amount || 0), 0);
+        .reduce((sum, inv) => sum + (inv.total || 0), 0);
 
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
@@ -86,7 +83,7 @@ export default function DashboardClient({ company }: DashboardClientProps) {
             invDate.getFullYear() === currentYear
           );
         })
-        .reduce((sum, inv) => sum + (inv.amount || 0), 0);
+        .reduce((sum, inv) => sum + (inv.total || 0), 0);
 
       setStats({
         totalInvoices,
@@ -125,13 +122,13 @@ export default function DashboardClient({ company }: DashboardClientProps) {
     });
   };
 
-  const handleCreateInvoice = () => {
-    if (canCreateInvoice()) {
-      setIsCreateInvoiceModalOpen(true);
-    } else {
-      alert("Free plan allows only 1 invoice. Please upgrade to create more.");
-    }
-  };
+  // const handleCreateInvoice = () => {
+  //   if (canCreateInvoice()) {
+  //     setIsCreateInvoiceModalOpen(true);
+  //   } else {
+  //     alert("Free plan allows only 1 invoice. Please upgrade to create more.");
+  //   }
+  // };
 
   // Show loading state while fetching data
   if (loading) {
@@ -152,7 +149,6 @@ export default function DashboardClient({ company }: DashboardClientProps) {
           company={company}
           userPlan={userPlan}
           canCreateInvoice={canCreateInvoice()}
-          onCreateInvoice={handleCreateInvoice}
           onOpenSettings={() => setIsSettingsModalOpen(true)}
           formatDate={formatDate}
         />
@@ -166,7 +162,6 @@ export default function DashboardClient({ company }: DashboardClientProps) {
         <InvoicesTable
           invoices={invoices}
           canCreateInvoice={canCreateInvoice()}
-          onCreateInvoice={handleCreateInvoice}
           formatCurrency={formatCurrency}
           formatDate={formatDate}
         />
@@ -179,7 +174,7 @@ export default function DashboardClient({ company }: DashboardClientProps) {
         />
       </div>
 
-      <CreateInvoiceModal
+      {/* <CreateInvoiceModal
         isOpen={isCreateInvoiceModalOpen}
         onClose={() => setIsCreateInvoiceModalOpen(false)}
         userPlan={userPlan}
@@ -191,7 +186,7 @@ export default function DashboardClient({ company }: DashboardClientProps) {
             totalInvoices: prev.totalInvoices + 1,
           }));
         }}
-      />
+      /> */}
 
       <SettingsModal
         isOpen={isSettingsModalOpen}

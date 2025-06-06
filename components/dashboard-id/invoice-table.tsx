@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   FileText,
   Plus,
-  Filter,
-  Search,
   Eye,
   Download,
   MoreVertical,
@@ -13,13 +11,15 @@ import {
   Send,
   AlertTriangle,
   Edit,
+  FilterIcon,
+  SearchIcon,
 } from "lucide-react";
 import { Invoice } from "@/types";
+import CustomButton from "../ui/CustomButton";
 
 interface InvoicesTableProps {
   invoices: Invoice[];
   canCreateInvoice: boolean;
-  onCreateInvoice: () => void;
   formatCurrency: (amount: number) => string;
   formatDate: (dateString: string) => string;
 }
@@ -62,7 +62,6 @@ const getStatusBadge = (status: string) => {
 export default function InvoicesTable({
   invoices,
   canCreateInvoice,
-  onCreateInvoice,
   formatCurrency,
   formatDate,
 }: InvoicesTableProps) {
@@ -71,14 +70,8 @@ export default function InvoicesTable({
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-header-text">All Invoices</h2>
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" className="border-blue-200">
-            <Filter className="h-4 w-4 mr-2" />
-            Filter
-          </Button>
-          <Button variant="outline" size="sm" className="border-blue-200">
-            <Search className="h-4 w-4 mr-2" />
-            Search
-          </Button>
+          <CustomButton label={"Filter"} icon={FilterIcon} variant={"secondary"}/>
+          <CustomButton label={"Search"} icon={SearchIcon} variant={"secondary"}/>
         </div>
       </div>
 
@@ -93,8 +86,6 @@ export default function InvoicesTable({
             your business.
           </p>
           <Button
-            onClick={onCreateInvoice}
-            disabled={!canCreateInvoice}
             className={`${
               canCreateInvoice
                 ? "bg-gradient-to-r from-primary to-accent text-white"
@@ -146,7 +137,7 @@ export default function InvoicesTable({
                       </p>
                     </div>
                   </td>
-                  <td className="py-4 px-4">
+                  {/* <td className="py-4 px-4">
                     <div>
                       <p className="font-medium text-header-text">
                         {invoice.clientName}
@@ -155,10 +146,10 @@ export default function InvoicesTable({
                         {invoice.clientEmail}
                       </p>
                     </div>
-                  </td>
+                  </td> */}
                   <td className="py-4 px-4">
                     <p className="font-semibold text-header-text">
-                      {formatCurrency(invoice.amount)}
+                      {formatCurrency(invoice.total)}
                     </p>
                   </td>
                   <td className="py-4 px-4">

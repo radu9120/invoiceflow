@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 import { CreateBusiness } from "@/schemas/invoiceSchema";
 import { redirect } from "next/navigation";
+import { BusinessDashboardPageProps } from "@/types";
 
 export const createBusiness = async (formData: CreateBusiness) => {
   const { userId: author } = await auth();
@@ -90,3 +91,28 @@ export const updateBusiness = async (
 
   return data;
 };
+
+export const getBusiness = async ({ business_id } : BusinessDashboardPageProps) => {
+  const supabase = createSupabaseClient();
+
+  let query = supabase.from("Businesses").select('id, name, email').eq('id', business_id).single();
+
+  const { data: business, error } = await query;
+
+  if (error) throw new Error(error.message);
+
+  return business;
+}
+
+
+export const getBusinessStats = async ({ business_id } : BusinessDashboardPageProps) => {
+  const supabase = createSupabaseClient();
+
+  const { data: businessStats, error } = await supabase.rpc('get_business_stats', { p_business_id: business_id })
+  if (error) throw new Error(error.message);
+
+  return businessStats ? businessStats[0] : null
+}
+
+
+

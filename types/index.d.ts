@@ -1,20 +1,3 @@
-interface CreateInvoiceHistory {
-  invoice_number: string;
-  company_details: string;
-  bill_to: string;
-  date: string;
-  due_date: string;
-  items: InvoiceItems[];
-  subtotal: string;
-  tax?: string;
-  discount?: string;
-  shipping?: string;
-  total: string;
-  notes: string;
-  bank_details: string;
-  logo: string;
-}
-
 interface InvoiceItems {
   description: string;
   unit_price: string;
@@ -30,43 +13,15 @@ interface Company {
   phone?: string;
   vat?: number;
   logo?: string;
-  status: string;
   created_at: string;
   author: string;
 }
 
 // Extended interface for dashboard usage i need this
-export interface CompanyWithStats extends Company {
-  plan: "free" | "pro" | "enterprise";
+export interface CompanyWithStats {
   invoices: number;
   clients: number;
   revenue: string;
-}
-
-export interface InvoiceItem {
-  description: string;
-  quantity: number;
-  rate: number;
-  amount: number;
-}
-
-export interface Invoice {
-  id: string;
-  number: string;
-  clientName: string;
-  clientEmail: string;
-  clientPhone: string;
-  clientAddress: string;
-  amount: number;
-  status: "draft" | "sent" | "paid" | "overdue";
-  dueDate: string;
-  createdDate: string;
-  description: string;
-  items: InvoiceItem[];
-  subtotal: number;
-  tax: number;
-  total: number;
-  notes: string;
 }
 
 export interface DashboardStats {
@@ -111,4 +66,66 @@ interface BusinessType {
   address: string;
   phone?: string;
   vat?: number
+}
+
+interface NewInvoicePageProps {
+    searchParams: {
+        business_id?: string
+        client_id?: string
+        from?: string
+    }
+}
+
+
+interface BusinessStatistics {
+  statistic: {
+    total_invoices: number;
+    total_paid_amount: string;
+    total_overdue_invoices: number;
+    total_clients: number;
+    total_paid_invoices: number;
+    total_pending_invoices: number;
+    total_paid_amount_current_month: string;
+
+  }
+}
+
+interface BusinessParams {
+    business_id: number
+    name?: string;
+    searchTerm?: string;
+    page?: number;
+    limit?: number;
+
+}
+
+interface BusinessDashboardPageProps {
+  business_id: number
+  name?: string;
+  searchTerm?: string;
+  page?: number;
+  limit?: number;
+}
+
+
+export interface InvoiceItem {
+  description: string;
+  quantity: number;
+  rate: number;
+  tax: number;
+  amount: number;
+}
+
+export interface Invoice {
+  id: string;
+  number: string;
+  bill_to: ClientType
+  status: "draft" | "sent" | "paid" | "overdue";
+  dueDate: string;
+  createdDate: string;
+  description: string;
+  items: InvoiceItem[];
+  subtotal: number;
+  total: number;
+  notes: string;
 }
