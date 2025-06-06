@@ -22,6 +22,7 @@ import { useEffect } from "react";
 import { BusinessType, ClientType } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 import Link from "next/link";
+import CustomButton from '../ui/CustomButton';
 
 
 const InvoiceForm = ({
@@ -171,7 +172,7 @@ const InvoiceForm = ({
                                                     business_id: selectedClient.business_id,
                                                 });
                                                 }
-                                                field.onChange(value);
+                                                field.onChange(Number(value));
                                             }}
                                             defaultValue={String(field.value)} // ensure it's a string
                                             >
@@ -448,10 +449,9 @@ const InvoiceForm = ({
                         />
                     </div>
                     
-                </div>
-                
+                </div>               
 
-                <Button type="submit">Submit</Button>
+                <CustomButton type="submit" label={"Submit"}  variant={"primary"}/>
             </form>
         </Form>
     )
