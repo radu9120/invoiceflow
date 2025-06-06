@@ -103,3 +103,12 @@ interface ClientType {
   phone?: string;
   business_id: number;
 }
+
+interface BusinessType {
+  id: number;
+  name: string;
+  email: string;
+  address: string;
+  phone?: string;
+  vat?: number
+}

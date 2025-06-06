@@ -19,8 +19,9 @@ import { createInvoice } from "@/lib/actions/invoice.actions";
 import { CreateBusiness, CreateClient, formSchema } from "@/schemas/invoiceSchema";
 import { redirect } from "next/navigation"
 import { useEffect } from "react";
-import { ClientType } from "@/types";
+import { BusinessType, ClientType } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import Link from "next/link";
 
 
 const InvoiceForm = ({
@@ -28,7 +29,7 @@ const InvoiceForm = ({
     client_data,
     clients,
 }:{
-    company_data: CreateBusiness;
+    company_data: BusinessType;
     client_data?: ClientType ;
     clients?: ClientType[]
 }) => {
@@ -217,10 +218,14 @@ const InvoiceForm = ({
                                         
                                     </div>
                                 )}
-
                             </div>
                         ):(
-                            <div></div>
+                            <div className="text-sm text-muted-foreground">
+                                <p>No clients found for this business.</p>
+                                <Button variant="link" className="px-0 mt-2" asChild>
+                                    <Link href={`/dashboard/${company_data.id}/clients`}>+ Create a new client</Link>
+                                </Button>
+                            </div>
                         )}
                     </div>
                     {/* Invoice Information */}
@@ -316,7 +321,42 @@ const InvoiceForm = ({
                         )}
                     />
                 </div>
-                <div className="flex justify-end ">
+                <div className="flex w-full gap-6">
+                    <div className="flex-1 space-y-6 ">
+                        {/* bank details */}
+                        <div className="">
+                            <FormField
+                                control={form.control}
+                                name="bank_details"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Bank details</FormLabel>
+                                        <FormControl>
+                                            <Textarea className="min-h-32" placeholder="Bank details or payment method" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        {/* Notes */}
+                        <div className="">
+                            <FormField
+                                control={form.control}
+                                name="notes"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Notes</FormLabel>
+                                        <FormControl>
+                                            <Textarea className="min-h-28" placeholder="Add any additional notes or payment terms..." {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </div>
                     <div className="flex flex-col gap-4 w-40">
                         <FormField
                             control={form.control}
@@ -409,39 +449,7 @@ const InvoiceForm = ({
                     </div>
                     
                 </div>
-                {/* bank details */}
-                <div className="mb-8">
-                    <FormField
-                        control={form.control}
-                        name="bank_details"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Bank details</FormLabel>
-                                <FormControl>
-                                    <Textarea placeholder="Bank details or payment method" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-
-                {/* Notes */}
-                <div className="mb-8">
-                    <FormField
-                        control={form.control}
-                        name="notes"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Notes</FormLabel>
-                                <FormControl>
-                                    <Textarea placeholder="Add any additional notes or payment terms..." {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
+                
 
                 <Button type="submit">Submit</Button>
             </form>
