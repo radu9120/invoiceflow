@@ -87,6 +87,10 @@ interface GetAllClients {
   business_id: number;
 }
 
+interface GetClient {
+  client_id: number;
+}
+
 interface SearchParams {
   searchTerm?: string;
 }
@@ -96,8 +100,6 @@ interface ClientType {
   name: string;
   email: string;
   address: string;
-  phone: string;
+  phone?: string;
   business_id: number;
-  invoices?: number;
-  totalPaid?: string;
 }

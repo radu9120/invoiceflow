@@ -20,14 +20,17 @@ import { CreateBusiness, CreateClient, formSchema } from "@/schemas/invoiceSchem
 import { redirect } from "next/navigation"
 import { useEffect } from "react";
 import { ClientType } from "@/types";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 
 
 const InvoiceForm = ({
     company_data,
     client_data,
+    clients,
 }:{
     company_data: CreateBusiness;
-    client_data?: ClientType;
+    client_data?: ClientType ;
+    clients?: ClientType[]
 }) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -42,13 +45,7 @@ const InvoiceForm = ({
             //     vat: undefined,
             // }
             ,
-            bill_to: client_data || {
-                name: '',
-                email: '',
-                address: '',
-                phone: '',
-                business_id: undefined,
-            },
+            bill_to: client_data,
             issue_date: new Date(), // or '2025-06-01' (ISO string)
             due_date: new Date(), // or some other default
             items: [{
@@ -74,6 +71,7 @@ const InvoiceForm = ({
     const discount = Number(useWatch({ control: form.control, name: "discount" })) || 0;
     const shipping = Number(useWatch({ control: form.control, name: "shipping" })) || 0;
     const total = Number(useWatch({ control: form.control, name: "total" })) || 0;
+    const bill_to = useWatch({ control: form.control, name: "bill_to" })
 
 
     // Automatically calculate totals
@@ -119,60 +117,111 @@ const InvoiceForm = ({
                         <h3 className="text-lg font-semibold text-header-text mb-4">
                             Client Information
                         </h3>
-                        <div className="space-y-4">
-                            <FormField
-                                control={form.control}
-                                name="bill_to.name"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="block text-sm font-medium text-secondary-text ">Client Name</FormLabel>
+                        {client_data ? (
+                            <div className="space-y-4">
+                                <div className="">
+                                    <p>
+                                        <span className="block text-sm font-medium text-secondary-text ">Name:</span>                                        
+                                        {client_data.name}
+                                    </p>
+                                </div>
+                                <div className="">
+                                    <p>
+                                        <span className="block text-sm font-medium text-secondary-text ">Email:</span>                                        
+                                        {client_data.email}
+                                    </p>
+                                </div>
+                                <div className="">
+                                    <p>
+                                        <span className="block text-sm font-medium text-secondary-text ">Phone:</span>                                        
+                                        {client_data.phone}
+                                    </p>
+                                </div>
+                                <div className="">
+                                    <p>
+                                        <span className="block text-sm font-medium text-secondary-text ">Address:</span>                                        
+                                        {client_data.address}
+                                    </p>
+                                </div>
+                                
+                            </div>
+                        ): clients && clients.length > 0 ? (
+                            <div>
+                                <FormField
+                                    control={form.control}
+                                    name="client_id"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel className="block text-sm font-medium text-secondary-text">
+                                            Select Client
+                                        </FormLabel>
                                         <FormControl>
-                                            <Input className="w-full" {...field} />
+                                            <Select
+                                            onValueChange={(value) => {
+                                                const selectedClient = clients.find((client) => client.id === Number(value));
+                                                if (selectedClient) {
+                                                form.setValue("client_id", selectedClient.id);
+                                                form.setValue("bill_to", {
+                                                    name: selectedClient.name,
+                                                    email: selectedClient.email,
+                                                    address: selectedClient.address,
+                                                    phone: selectedClient.phone,
+                                                    id: selectedClient.id,
+                                                    business_id: selectedClient.business_id,
+                                                });
+                                                }
+                                                field.onChange(value);
+                                            }}
+                                            defaultValue={String(field.value)} // ensure it's a string
+                                            >
+                                            <SelectTrigger className="w-full" />
+                                            <SelectContent>
+                                                {clients.map((client) => (
+                                                <SelectItem key={client.id} value={String(client.id)}>
+                                                    {client.name} — {client.email}
+                                                </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                            </Select>
                                         </FormControl>
                                         <FormMessage />
-                                    </FormItem>
+                                        </FormItem>
+                                    )}
+                                />
+                                {bill_to && (
+                                    <div className="space-y-4">
+                                        <div className="">
+                                            <p>
+                                                <span className="block text-sm font-medium text-secondary-text ">Name:</span>                                        
+                                                {bill_to.name}
+                                            </p>
+                                        </div>
+                                        <div className="">
+                                            <p>
+                                                <span className="block text-sm font-medium text-secondary-text ">Email:</span>                                        
+                                                {bill_to.email}
+                                            </p>
+                                        </div>
+                                        <div className="">
+                                            <p>
+                                                <span className="block text-sm font-medium text-secondary-text ">Phone:</span>                                        
+                                                {bill_to.phone}
+                                            </p>
+                                        </div>
+                                        <div className="">
+                                            <p>
+                                                <span className="block text-sm font-medium text-secondary-text ">Address:</span>                                        
+                                                {bill_to.address}
+                                            </p>
+                                        </div>
+                                        
+                                    </div>
                                 )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="bill_to.email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="block text-sm font-medium text-secondary-text ">Email</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="email@company.com" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="bill_to.phone"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="block text-sm font-medium text-secondary-text ">Phone</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="+44 1234 567890" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            /> 
-                            <FormField
-                                control={form.control}
-                                name="bill_to.address"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="block text-sm font-medium text-secondary-text ">Address</FormLabel>
-                                        <FormControl>
-                                            <Textarea placeholder="123 Business Street" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
+
+                            </div>
+                        ):(
+                            <div></div>
+                        )}
                     </div>
                     {/* Invoice Information */}
                     <div>

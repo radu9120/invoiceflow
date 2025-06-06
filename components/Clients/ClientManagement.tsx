@@ -23,12 +23,14 @@ import {
     Calendar,
     Building,
     PlusIcon,
+    FilterIcon,
 } from "lucide-react";
 import { ClientForm } from "@/components/Clients/ClientForm";
 import ClientCard from "@/components/Clients/ClientCard";
 import { useState } from "react";
 import { ClientType } from "@/types";
 import CustomModal from "../ModalsForms/CustomModal";
+import CustomButton from "../ui/CustomButton";
 
 export default function ClientManagement({clients, business_id}:{clients: ClientType[]; business_id: number}) {
     const [isAddClientModalOpen, setIsAddClientModalOpen] = useState(false);
@@ -82,10 +84,7 @@ export default function ClientManagement({clients, business_id}:{clients: Client
                             className="pl-10 pr-4 py-2 border-blue-200 focus:ring-primary"
                         />
                         </div>
-                        <Button variant="outline" className="border-blue-200">
-                        <Filter className="h-4 w-4 mr-2" />
-                            Filter
-                        </Button>
+                        <CustomButton label={"Filter"} icon={FilterIcon} variant={"secondary"}/>
                     </div>
                     <CustomModal 
                         openBtnLabel="Add Client" 

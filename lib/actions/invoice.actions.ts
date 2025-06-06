@@ -18,6 +18,7 @@ export const createInvoice = async (formData: CreateInvoice) => {
   return data[0];
 };
 
+//incorect, invoices must be selected by business id => clients id
 export const getInvoicesByAuthor = async () => {
   const { userId: author } = await auth();
   const supabase = createSupabaseClient();

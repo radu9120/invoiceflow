@@ -2,7 +2,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 import { CreateClient } from "@/schemas/invoiceSchema";
-import { GetAllClients } from "@/types";
+import { GetAllClients, GetClient } from "@/types";
 
 
 export const createClient = async (formData: CreateClient) => {
@@ -37,4 +37,29 @@ export const getAllClients = async ({business_id, limit = 10, page = 1, searchTe
     if (error) throw new Error(error.message);
 
     return clients;
+}
+
+export const getClients = async ({business_id} : GetAllClients) => {
+    const supabase = createSupabaseClient();
+
+    let query = supabase.from("Clients").select().eq('business_id', business_id)
+
+    const { data: clients, error } = await query;
+
+    if (error) throw new Error(error.message);
+
+    return clients;
+}
+
+
+export const getClient = async ({client_id} : GetClient) => {
+  const supabase = createSupabaseClient();
+
+  let query = supabase.from("Clients").select().eq('id', client_id).single();
+
+  const { data: client, error } = await query;
+
+  if (error) throw new Error(error.message);
+
+  return client;
 }

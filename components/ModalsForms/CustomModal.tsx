@@ -36,7 +36,7 @@ export default function CustomModal({
         <div className={className}>
             <Button
                 size='sm'
-                variant={btnVariant === 'primary' ? 'default' : 'outline'}
+                variant={btnVariant}
                 onClick={openAddClientModal}
                 className={`${
                         btnVariant === 'primary' 

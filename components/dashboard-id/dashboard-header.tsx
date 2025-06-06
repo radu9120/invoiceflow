@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Building, Settings, Crown, PlusIcon } from "lucide-react";
+import { ArrowLeft, Plus, Building, Settings, Crown, PlusIcon, CrownIcon, SettingsIcon } from "lucide-react";
 import { Company } from "@/types";
 import PlanBadge from "./plan-badge";
 import CustomModal from "../ModalsForms/CustomModal";
 import InvoiceForm from "../Invoices/InvoiceForm";
+import CustomButton from "../ui/CustomButton";
 
 interface DashboardHeaderProps {
   company: Company;
@@ -52,7 +53,8 @@ export default function DashboardHeader({
         </div>
 
         <div className="flex items-center gap-3">
-          <CustomModal heading={"Invoice"} description={"Create invoice"} openBtnLabel={"Create Invoice"} btnVariant={"primary"} btnIcon={PlusIcon}>
+          <CustomButton label={"Create Invoice"} icon={PlusIcon} variant={"primary"} href={`/dashboard/${company.id}/invoices/new?business_id=${company.id}`}/>
+          {/* <CustomModal heading={"Invoice"} description={"Create invoice"} openBtnLabel={"Create Invoice"} btnVariant={"primary"} btnIcon={PlusIcon}>
             <InvoiceForm company_data={
               {
                 address: company.address,
@@ -65,7 +67,7 @@ export default function DashboardHeader({
             }>
               
             </InvoiceForm>
-          </CustomModal>
+          </CustomModal> */}
           {/* <Button
             onClick={onCreateInvoice}
             disabled={!canCreateInvoice}
@@ -78,19 +80,19 @@ export default function DashboardHeader({
             <Plus className="h-4 w-4 mr-2" />
             Create Invoice
           </Button> */}
-          <Button
+          <CustomButton
             onClick={onOpenSettings}
-            variant="outline"
-            className="border-blue-200"
-          >
-            <Settings className="h-4 w-4 mr-2" />
-            Settings
-          </Button>
+            variant="secondary"
+            label="Settings"
+            icon={SettingsIcon}
+          />
           {userPlan === "free" && (
-            <Button className="bg-gradient-to-r from-primary to-accent text-white">
-              <Crown className="h-4 w-4 mr-2" />
-              Upgrade
-            </Button>
+            <CustomButton
+              // onClick={Updrade}
+              variant="primary"
+              label="Upgrade"
+              icon={CrownIcon}
+            />
           )}
         </div>
       </div>

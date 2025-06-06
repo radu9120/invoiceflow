@@ -32,13 +32,13 @@ export default function ClientCard({client}:{client : any}) {
                         </span> */}
                     </div>
                 </div>
-                <Button
+                {/* <Button
                     variant="ghost"
                     size="sm"
                     
                 >
                     <Eye className="h-4 w-4" />
-                </Button>
+                </Button> */}
             </div>
 
             <div className="space-y-3 mb-6">
