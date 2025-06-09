@@ -13,9 +13,9 @@ interface Company {
 interface DashboardBusinessStats {
   id: number,
   name: string;
-  totalInvoices: number;
-  totalRevenue: number;
-  totalClients: number;
+  totalinvoices: number;
+  totalrevenue: number;
+  totalclients: number;
   created_on: string;
 }
 

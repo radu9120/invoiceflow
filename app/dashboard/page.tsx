@@ -1,19 +1,32 @@
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import { getUserBusinesses } from "@/lib/actions/business.actions";
-import DashboardClient from "@/components/dashboard-bussines/dashboard";
+import { notFound, redirect } from "next/navigation";
+import { getDashboardStats } from "@/lib/actions/business.actions";
+import { DashboardBusinessStats } from "@/types";
+import Bounded from "@/components/ui/bounded";
+import DashboardHeader from "@/components/Dashboard/DashboardHeader";
+import BusinessGrid from "@/components/Dashboard/BusinessGrid";
+import BusinessAvailabilty from "@/components/Dashboard/BusinessAvailability";
 
-export default async function Dashboard() {
-  const { userId } = await auth()
-  if (!userId) redirect('/sign-in')
+export default async function Page() {
+    const { userId } = await auth()
+    if (!userId) redirect('/sign-in')
 
-  let businessData
+    let dashboardData: DashboardBusinessStats[] = []
 
-  try {
-    const businessData = await getUserBusinesses();
-    return <DashboardClient initialBusinesses={businessData} />;
-  } catch (error) {
-    console.error("Error loading businesses:", error);
-    return <DashboardClient initialBusinesses={[]} />;
-  }
+    try {
+        dashboardData = await getDashboardStats();
+    } catch (error) {
+        console.error("Error loading businesses:", error);
+        return notFound();
+    }
+
+    return(
+        <main>
+            <Bounded>
+                <DashboardHeader userPlan={"free"} totalBusinesses={dashboardData.length}/>
+                <BusinessGrid dashboardData={dashboardData}/>
+                <BusinessAvailabilty userPlan={"free"} companiesLengh={dashboardData.length} totalInvoices={dashboardData.reduce((acc, item) => acc + Number(item.totalinvoices), 0)}/>
+            </Bounded>
+        </main>
+    )
 }

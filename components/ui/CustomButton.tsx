@@ -4,13 +4,14 @@ import { LucideIcon, Loader } from "lucide-react"; // Import Loader icon
 import { Button } from "./button";
 
 type ButtonProps = {
-  label: string;
+  label?: string;
   target?: "_blank";
   href?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   variant:
     | "primary"
     | "secondary"
+    | "ghost"
   type?: "button" | "submit" | "reset";
   children?: React.ReactNode;
   disabled?: boolean;
@@ -38,6 +39,7 @@ const CustomButton: React.FC<ButtonProps> = ({
         secondary: `
             ''
         `,
+        ghost: ""
     };
 
     // Apply styles based on the variant prop
@@ -49,14 +51,14 @@ const CustomButton: React.FC<ButtonProps> = ({
             variant={variant}
         >
             <Link
-            href={href}
-            target={target}
-            className={`flex flex-row items-center gap-2 ${styles}`}
-            passHref
+                href={href}
+                target={target}
+                className={`flex flex-row items-center gap-2 ${styles}`}
+                passHref
             >
-            {children}
-            {Icon && <Icon className="h-4 w-4" />}
-            <p className="text-sm ">{label}</p>
+                {children}
+                {Icon && <Icon className="h-4 w-4" />}
+                <p className="text-sm ">{label}</p>
             </Link>
         </Button>
         );
@@ -75,7 +77,10 @@ const CustomButton: React.FC<ButtonProps> = ({
             )}
             {children}
             {Icon && <Icon className="h-4 w-4" />}
-            <p className="text-sm ">{label}</p>
+            {label && (
+                <p className="text-sm ">{label}</p>
+            )}
+            
 
         </Button>
         );
@@ -92,7 +97,9 @@ const CustomButton: React.FC<ButtonProps> = ({
                 )}
                 {Icon && <Icon className="h-4 w-4" />}
                 {children}
-                <p className="text-sm">{label}</p>
+                {label && (
+                <p className="text-sm ">{label}</p>
+            )}
             </Button>
     );
 };

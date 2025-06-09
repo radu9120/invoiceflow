@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { LucideIcon, Plus, X } from "lucide-react";
 import ModalPortal from "../ui/ModalPortal";
+import CustomButton from "../ui/CustomButton";
 
 
 export default function CustomModal({
@@ -14,39 +15,36 @@ export default function CustomModal({
     btnVariant,    
     btnIcon: Icon,
     className,
+    disabled,
 }:{
     heading: string;
     description: string;
     children: React.ReactNode;
-    openBtnLabel: string;
-    btnVariant: 'primary' | 'secondary';
+    openBtnLabel?: string;
+    btnVariant: 'primary' | 'secondary' | 'ghost';
     btnIcon: LucideIcon;
-    className?: string
+    className?: string;
+    disabled?: boolean;
 }) {
     const [isAddClientModalOpen, setIsAddClientModalOpen] = useState(false);
     
-        const openAddClientModal = (): void => {
-            setIsAddClientModalOpen(true);
-        };
-    
-        const closeAddClientModal = (): void => {
-        setIsAddClientModalOpen(false);
-        }
+    const openAddClientModal = (): void => {
+        setIsAddClientModalOpen(true);
+    };
+
+    const closeAddClientModal = (): void => {
+    setIsAddClientModalOpen(false);
+    }
+
     return (
         <div className={className}>
-            <Button
-                size='sm'
+            <CustomButton
                 variant={btnVariant}
-                onClick={openAddClientModal}
-                className={`${
-                        btnVariant === 'primary' 
-                        ? 'bg-gradient-to-r  from-primary to-accent hover:from-primary-dark  text-white'
-                        : 'w-full flex-1 border-blue-200 '
-                    }`}
-            >
-                <Icon className="h-4 w-4 mr-2" />
-                {openBtnLabel}
-            </Button>
+                onClick={openAddClientModal} 
+                label={openBtnLabel}
+                icon={Icon}
+                disabled={disabled}
+            />
             {isAddClientModalOpen && (
                 <ModalPortal>
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">

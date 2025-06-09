@@ -11,6 +11,7 @@ import QuickActions from '@/components/Business/QuickActions'
 import InvoiceTable from '@/components/Business/InvoiceTable'
 import RecentActivity from '@/components/Business/RecentActivity'
 import { getRecentBusinessActivity } from '@/lib/actions/userActivity.actions'
+import InvoiceAvailability from '@/components/Business/InvoiceAvailability'
 
 
 
@@ -26,8 +27,7 @@ export default async function Page({ searchParams } : {searchParams : Promise<Bu
     // const business_id = searchVars.business_id
     // const name = searchVars.name
 
-    console.log('business_id', business_id)
-    console.log(name)
+
     if (!business_id || !name) return notFound()
 
     let business;
@@ -78,6 +78,7 @@ export default async function Page({ searchParams } : {searchParams : Promise<Bu
                 <BusinessBashboard business={business} userPlan={userPlan}/>
                 <BusinessStats statistic={businessStats}/>
                 <QuickActions companyId={business_id} />
+                <InvoiceAvailability userPlan={'free'} invoicesLength={0}/>
                 <InvoiceTable invoices={invoices} business_id={business_id}/>
                 {recentActivities.length > 0 && (
                     <RecentActivity recentActivities={recentActivities}/>

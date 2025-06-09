@@ -4,18 +4,20 @@ import { Crown } from "lucide-react";
 
 interface PlanLimitationsProps {
   userPlan: "free" | "pro" | "enterprise";
-  companies: Company[];
+  companiesLengh: number;
+  totalInvoices: number
 }
 
-export default function PlanLimitations({
+export default function BusinessAvailabilty({
   userPlan,
-  companies,
+  companiesLengh,
+  totalInvoices
 }: PlanLimitationsProps) {
   const getCompanyLimitText = () => {
     if (userPlan === "free") {
-      return `${companies.length}/1`;
+      return `${companiesLengh}/1`;
     }
-    return `${companies.length}/∞`;
+    return `${companiesLengh}/∞`;
   };
 
   return (
@@ -40,7 +42,7 @@ export default function PlanLimitations({
               <span className="font-medium">Companies: </span>
               <span
                 className={
-                  userPlan === "free" && companies.length >= 1
+                  userPlan === "free" && companiesLengh >= 1
                     ? "text-red-600 font-semibold"
                     : ""
                 }
@@ -51,7 +53,7 @@ export default function PlanLimitations({
             <div className="text-sm">
               <span className="font-medium">Total Invoices: </span>
               <span>
-                {/* {companies.reduce((sum, c) => sum + c.invoices, 0)} */}
+                {totalInvoices}
                 {userPlan === "free" ? "/1" : ""}
               </span>
             </div>

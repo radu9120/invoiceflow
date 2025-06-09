@@ -6,14 +6,14 @@ interface PlanLimitationsProps {
   invoicesLength: number;
 }
 
-export default function PlanLimitations({
+export default function InvoiceAvailability({
   userPlan,
   invoicesLength,
 }: PlanLimitationsProps) {
   if (userPlan !== "free") return null;
 
   return (
-    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-8">
+    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
       <div className="flex items-start gap-4">
         <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
           <Crown className="h-5 w-5 text-yellow-600" />
