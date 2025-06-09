@@ -1,14 +1,10 @@
 'use client'
-import { Button } from '../ui/button'
-import { DollarSign, Edit, Eye, FileText, Mail, MapPin, Phone, Plus, PlusIcon, Users } from 'lucide-react'
+import { DollarSign, Edit, FileText, Mail, MapPin, Phone, PlusIcon, Users } from 'lucide-react'
 import CustomModal from '../ModalsForms/CustomModal'
-import InvoiceForm from '../Invoices/InvoiceForm'
-import InvoiceById from '../Invoices/InvoiceWrapper'
-import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import InvoiceByBusinessClient from '../Invoices/InvoiceWrapper'
 
 export default function ClientCard({client}:{client : any}) {
-    const { id } = useParams();
+
     return (
         <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all">
             <div className="flex items-start justify-between mb-4">
@@ -106,7 +102,7 @@ export default function ClientCard({client}:{client : any}) {
                     btnIcon={PlusIcon}
 
                 >
-                    <InvoiceById company_id={id} client={client}/>
+                    <InvoiceByBusinessClient company_id={client.business_id} client={client}/>
                 </CustomModal>
             </div>
         </div>

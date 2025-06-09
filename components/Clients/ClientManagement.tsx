@@ -5,23 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
     ArrowLeft,
-    Plus,
     Search,
-    Filter,
     Users,
-    Mail,
-    MapPin,
     FileText,
     DollarSign,
-    MoreHorizontal,
-    Edit,
-    Trash2,
-    X,
-    Eye,
-    Phone,
-    Save,
-    Calendar,
-    Building,
     PlusIcon,
     FilterIcon,
 } from "lucide-react";

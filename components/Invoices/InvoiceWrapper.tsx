@@ -5,14 +5,12 @@ import { redirect } from "next/navigation";
 import InvoiceForm from "./InvoiceForm";
 import { ParamValue } from "next/dist/server/request/params";
 import { useEffect, useState } from "react";
-import { CreateBusiness } from "@/schemas/invoiceSchema";
-import { PostgrestError } from "@supabase/supabase-js";
-import { ClientType } from "@/types";
+import { BusinessType, ClientType } from "@/types";
 
 export default function InvoiceByBusinessClient({ company_id, client }: { company_id: ParamValue; client: ClientType }) {
     const id = String(company_id);
 
-    const [companyDetails, setCompanyDetails] = useState<CreateBusiness | null>(null);
+    const [companyDetails, setCompanyDetails] = useState<BusinessType | null>(null);
     const [error, setError] = useState(false);
 
     useEffect(() => {
