@@ -19,10 +19,10 @@ export default function BusinessStats({statistic} : BusinessStatistics) {
                     <h3 className="font-semibold text-header-text">Total Invoices</h3>
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-green-600 font-medium">
-                            0 paid
+                            {statistic.total_paid_invoices} paid
                         </span>
                         <span className="text-sm text-secondary-text">
-                            • 4 pending
+                            • {statistic.total_pending_invoices} pending
                         </span>
                     </div>
                 </div>                
@@ -57,11 +57,11 @@ export default function BusinessStats({statistic} : BusinessStatistics) {
                 </div>
                 <div className='space-y-1'>
                     <h3 className="font-semibold text-header-text">Total Clients</h3>
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                         <span className="text-sm text-green-600 font-medium">
                             {statistic.total_clients} active
                         </span>
-                    </div>
+                    </div> */}
                 </div> 
             </Card>
             <Card>

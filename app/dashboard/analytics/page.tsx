@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -6,7 +5,6 @@ import {
   TrendingUp,
   DollarSign,
   FileText,
-  Users,
   Calendar,
   Download,
   BarChart3,

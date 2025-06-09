@@ -4,11 +4,10 @@ import { getUserBusinesses } from "@/lib/actions/business.actions";
 import DashboardClient from "@/components/dashboard-bussines/dashboard";
 
 export default async function Dashboard() {
-  const { userId } = await auth();
+  const { userId } = await auth()
+  if (!userId) redirect('/sign-in')
 
-  if (!userId) {
-    redirect("/sign-in");
-  }
+  let businessData
 
   try {
     const businessData = await getUserBusinesses();

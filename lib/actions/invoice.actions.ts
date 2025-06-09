@@ -2,7 +2,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 import { CreateInvoice } from "@/schemas/invoiceSchema";
-import { BusinessDashboardPageProps, GetAllClients } from "@/types";
+import { BusinessDashboardPageProps } from "@/types";
 import { createActivity } from "./userActivity.actions";
 import { redirect } from "next/navigation";
 

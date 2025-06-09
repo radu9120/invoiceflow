@@ -10,32 +10,23 @@ interface Company {
   author: string;
 }
 
-// Extended interface for dashboard usage i need this
-export interface CompanyWithStats {
-  invoices: number;
-  clients: number;
-  revenue: string;
-}
-
-export interface DashboardStats {
+interface DashboardBusinessStats {
+  id: number,
+  name: string;
   totalInvoices: number;
-  paidInvoices: number;
-  pendingInvoices: number;
-  overdueInvoices: number;
   totalRevenue: number;
-  monthlyRevenue: number;
   totalClients: number;
-  activeClients: number;
+  created_on: string;
 }
 
-interface GetAllClients {
+interface GetAllClientsParams {
   limit?: number;
   page?: number;
   searchTerm?: string;
   business_id: number;
 }
 
-interface GetClient {
+interface GetClientParam {
   client_id: number;
 }
 

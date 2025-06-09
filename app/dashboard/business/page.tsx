@@ -16,7 +16,7 @@ import { getRecentBusinessActivity } from '@/lib/actions/userActivity.actions'
 
 export default async function Page({ searchParams } : {searchParams : Promise<BusinessDashboardPageProps>}) {
     const { userId } = await auth()
-        if (!userId) redirect('/sign-in')
+    if (!userId) redirect('/sign-in')
 
     
     const userPlan = 'free'

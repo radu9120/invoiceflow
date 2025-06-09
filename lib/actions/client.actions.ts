@@ -2,7 +2,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 import { CreateClient } from "@/schemas/invoiceSchema";
-import { GetAllClients, GetClient } from "@/types";
+import { GetAllClientsParams, GetClientParam } from "@/types";
 import { redirect } from "next/navigation";
 import { createActivity } from "./userActivity.actions";
 
@@ -35,7 +35,7 @@ export const createClient = async (formData: CreateClient) => {
 };
 
 
-export const getAllClients = async ({business_id, limit = 10, page = 1, searchTerm} : GetAllClients) => {
+export const getAllClients = async ({business_id, limit = 10, page = 1, searchTerm} : GetAllClientsParams) => {
     const supabase = createSupabaseClient();
 
     let query = supabase.from("Clients").select().eq('business_id', business_id)
@@ -53,7 +53,7 @@ export const getAllClients = async ({business_id, limit = 10, page = 1, searchTe
     return clients;
 }
 
-export const getClients = async ({business_id} : GetAllClients) => {
+export const getClients = async ({business_id} : GetAllClientsParams) => {
     const supabase = createSupabaseClient();
 
     let query = supabase.from("Clients").select().eq('business_id', business_id)
@@ -66,7 +66,7 @@ export const getClients = async ({business_id} : GetAllClients) => {
 }
 
 
-export const getClient = async ({client_id} : GetClient) => {
+export const getClient = async ({client_id} : GetClientParam) => {
   const supabase = createSupabaseClient();
 
   let query = supabase.from("Clients").select().eq('id', client_id).single();
