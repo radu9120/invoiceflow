@@ -7,6 +7,8 @@ import { notFound, redirect } from "next/navigation"
 import { getBusinessStats } from '../../../lib/actions/business.actions';
 import { getInvoicesList } from '@/lib/actions/invoice.actions'
 import BusinessStats from '@/components/Business/BusinessStats'
+import QuickActions from '@/components/Business/QuickActions'
+
 
 
 export default async function Page({ searchParams } : {searchParams : Promise<BusinessParams>}) {
@@ -56,6 +58,7 @@ export default async function Page({ searchParams } : {searchParams : Promise<Bu
             <Bounded>
                 <BusinessBashboard business={business} userPlan={userPlan}/>
                 <BusinessStats statistic={businessStats}/>
+                <QuickActions companyId={business_id} />
             </Bounded>
         </main>
     )

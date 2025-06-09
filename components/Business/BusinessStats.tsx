@@ -15,7 +15,7 @@ export default function BusinessStats({statistic} : BusinessStatistics) {
                         {statistic.total_invoices}
                     </span>
                 </div>
-                <div className=''>
+                <div className='space-y-1'>
                     <h3 className="font-semibold text-header-text">Total Invoices</h3>
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-green-600 font-medium">
@@ -36,7 +36,7 @@ export default function BusinessStats({statistic} : BusinessStatistics) {
                         {statistic.total_paid_amount}
                     </span>
                 </div>
-                <div className=''>
+                <div className='space-y-1'>
                     <h3 className="font-semibold text-header-text">Total Revenue</h3>
                     <div className="flex items-center gap-2">
                         <TrendingUp className="h-4 w-4 text-green-600" />
@@ -55,7 +55,7 @@ export default function BusinessStats({statistic} : BusinessStatistics) {
                         {statistic.total_clients}
                     </span>
                 </div>
-                <div className=''>
+                <div className='space-y-1'>
                     <h3 className="font-semibold text-header-text">Total Clients</h3>
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-green-600 font-medium">
@@ -73,7 +73,7 @@ export default function BusinessStats({statistic} : BusinessStatistics) {
                         {statistic.total_overdue_invoices}
                     </span>
                 </div>
-                <div className=''>
+                <div className='space-y-1'>
                     <h3 className="font-semibold text-header-text">Overdue Invoices</h3>
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-red-600 font-medium">

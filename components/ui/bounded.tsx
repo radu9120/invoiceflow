@@ -15,7 +15,7 @@ export default function Bounded({
 }: BoundedProps) {
   return (
     <Comp className={clsx("min-h-screen bg-gradient-to-br from-blue-50 via-white to-white", className)} {...restProps}>
-      <div className="container mx-auto px-4 md:px-6 py-8 space-y-6">
+      <div className="container mx-auto px-4 md:px-6 py-8 space-y-8">
         {children}
       </div>
     </Comp>
