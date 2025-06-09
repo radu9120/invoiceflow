@@ -123,3 +123,18 @@ interface InvoiceListItem {
   due_date: string;
 
 }
+
+interface UserActivityLog {
+  user_id: string;
+  business_id?: number;
+  action: 'Created invoice' | 'Updated invoice content' | 'Updated invoice status' | 'Created Business instance' | 'Updated business details';
+  target_type: 'invoice' | 'business' | 'client';
+  target_name?: string;
+  metadata?: { from: string; to: string};
+  created_at?: string;
+}
+
+interface GetBusinessActivityProps {
+  business_id: number;
+  limit?: number;
+}

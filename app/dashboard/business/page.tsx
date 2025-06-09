@@ -1,7 +1,7 @@
 import BusinessBashboard from '@/components/Business/BusinessBashboard'
 import Bounded from '@/components/ui/bounded'
 import { getBusiness } from '@/lib/actions/business.actions'
-import { BusinessDashboardPageProps } from '@/types'
+import { BusinessDashboardPageProps, UserActivityLog } from '@/types'
 import { auth } from "@clerk/nextjs/server"
 import { notFound, redirect } from "next/navigation"
 import { getBusinessStats } from '../../../lib/actions/business.actions';
@@ -9,6 +9,8 @@ import { getInvoicesList } from '@/lib/actions/invoice.actions'
 import BusinessStats from '@/components/Business/BusinessStats'
 import QuickActions from '@/components/Business/QuickActions'
 import InvoiceTable from '@/components/Business/InvoiceTable'
+import RecentActivity from '@/components/Business/RecentActivity'
+import { getRecentBusinessActivity } from '@/lib/actions/userActivity.actions'
 
 
 
@@ -60,6 +62,16 @@ export default async function Page({ searchParams } : {searchParams : Promise<Bu
         return notFound();
     }
 
+    let recentActivities: UserActivityLog[] = [];
+
+    try {
+        recentActivities = await getRecentBusinessActivity({ business_id: business_id });
+    } catch (error) {
+        console.error("Failed to load activity log:", error);
+        // return notFound();
+    }
+
+
     return (
         <main>
             <Bounded>
@@ -67,6 +79,9 @@ export default async function Page({ searchParams } : {searchParams : Promise<Bu
                 <BusinessStats statistic={businessStats}/>
                 <QuickActions companyId={business_id} />
                 <InvoiceTable invoices={invoices} business_id={business_id}/>
+                {recentActivities.length > 0 && (
+                    <RecentActivity recentActivities={recentActivities}/>
+                )}                
             </Bounded>
         </main>
     )

@@ -3,9 +3,13 @@ import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 import { CreateInvoice } from "@/schemas/invoiceSchema";
 import { BusinessDashboardPageProps, GetAllClients } from "@/types";
+import { createActivity } from "./userActivity.actions";
+import { redirect } from "next/navigation";
 
 export const createInvoice = async (formData: CreateInvoice) => {
   const { userId: author } = await auth();
+  if (!author) redirect('/sign-in')
+
   const supabase = createSupabaseClient();
 
   const { data, error } = await supabase
@@ -16,7 +20,17 @@ export const createInvoice = async (formData: CreateInvoice) => {
   if (error || !data)
     throw new Error(error?.message || "Failed to create an invoice");
 
-  return data[0];
+  const invoice = data[0]
+
+  await createActivity({
+    user_id: author,
+    business_id: formData.business_id, // assuming this exists in the invoice schema
+    action: "Created invoice",
+    target_type: "invoice",
+    target_name: formData.invoice_number,    
+  });
+
+  return invoice;
 };
 
 //incorect, invoices must be selected by business id => clients id

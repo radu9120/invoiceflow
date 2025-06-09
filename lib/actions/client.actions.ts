@@ -3,10 +3,14 @@ import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 import { CreateClient } from "@/schemas/invoiceSchema";
 import { GetAllClients, GetClient } from "@/types";
+import { redirect } from "next/navigation";
+import { createActivity } from "./userActivity.actions";
 
 
 export const createClient = async (formData: CreateClient) => {
   const { userId: author } = await auth();
+  if (!author) redirect('/sign-in')
+    
   const supabase = createSupabaseClient();
 
   const { data, error } = await supabase
@@ -16,6 +20,16 @@ export const createClient = async (formData: CreateClient) => {
 
   if (error || !data)
     throw new Error(error?.message || "Failed to create a client");
+
+  const client = data[0]
+
+  await createActivity({
+    user_id: author,
+    business_id: formData.business_id, // assuming this exists in the invoice schema
+    action: "Created Business instance",
+    target_type: "client",
+    target_name: formData.name,    
+  });
 
   return data[0];
 };

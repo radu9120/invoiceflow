@@ -4,9 +4,12 @@ import { createSupabaseClient } from "@/lib/supabase";
 import { CreateBusiness } from "@/schemas/invoiceSchema";
 import { redirect } from "next/navigation";
 import { BusinessDashboardPageProps } from "@/types";
+import { createActivity } from "./userActivity.actions";
 
 export const createBusiness = async (formData: CreateBusiness) => {
   const { userId: author } = await auth();
+  if (!author) redirect('/sign-in')
+
   const supabase = createSupabaseClient();
 
   const { data, error } = await supabase
@@ -17,7 +20,17 @@ export const createBusiness = async (formData: CreateBusiness) => {
   if (error || !data)
     throw new Error(error?.message || "Failed to create a business");
 
-  return data[0];
+  const business = data[0]
+
+  await createActivity({
+    user_id: author,
+    business_id: business.id, // assuming this exists in the invoice schema
+    action: "Created Business instance",
+    target_type: "business",
+    target_name: formData.name,    
+  });
+
+  return business;
 };
 
 export const getUserBusinesses = async () => {
