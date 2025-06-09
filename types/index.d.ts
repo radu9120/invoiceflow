@@ -1,10 +1,3 @@
-interface InvoiceItems {
-  description: string;
-  unit_price: string;
-  quantity: string;
-  amount: string;
-}
-
 interface Company {
   id: string;
   name: string;
@@ -90,21 +83,13 @@ interface BusinessStatistics {
   }
 }
 
-interface BusinessParams {
-    business_id: number
-    name?: string;
-    searchTerm?: string;
-    page?: number;
-    limit?: number;
-
-}
-
 interface BusinessDashboardPageProps {
   business_id: number
   name?: string;
   searchTerm?: string;
   page?: number;
   limit?: number;
+  filter?: string;
 }
 
 
@@ -128,4 +113,13 @@ export interface Invoice {
   subtotal: number;
   total: number;
   notes: string;
+}
+
+interface InvoiceListItem {
+  id: string;
+  invoice_number: string;
+  total: number;
+  status: string;
+  due_date: string;
+
 }

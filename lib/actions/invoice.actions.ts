@@ -40,7 +40,7 @@ export const getInvoicesByAuthor = async () => {
 export const getInvoicesList = async ({business_id, limit = 5, page = 1, searchTerm} : BusinessDashboardPageProps) => {
   const supabase = createSupabaseClient();
 
-  let query = supabase.from("Invoices").select().eq('business_id', business_id)
+  let query = supabase.from("Invoices").select("id, invoice_number, total, status, due_date").eq('business_id', business_id)
 
   if (searchTerm) {
       query = query.ilike('name', `%${searchTerm}%`)

@@ -1,26 +1,28 @@
 import BusinessBashboard from '@/components/Business/BusinessBashboard'
 import Bounded from '@/components/ui/bounded'
 import { getBusiness } from '@/lib/actions/business.actions'
-import { BusinessDashboardPageProps, BusinessParams } from '@/types'
+import { BusinessDashboardPageProps } from '@/types'
 import { auth } from "@clerk/nextjs/server"
 import { notFound, redirect } from "next/navigation"
 import { getBusinessStats } from '../../../lib/actions/business.actions';
 import { getInvoicesList } from '@/lib/actions/invoice.actions'
 import BusinessStats from '@/components/Business/BusinessStats'
 import QuickActions from '@/components/Business/QuickActions'
+import InvoiceTable from '@/components/Business/InvoiceTable'
 
 
 
-export default async function Page({ searchParams } : {searchParams : Promise<BusinessParams>}) {
+export default async function Page({ searchParams } : {searchParams : Promise<BusinessDashboardPageProps>}) {
     const { userId } = await auth()
         if (!userId) redirect('/sign-in')
 
     
     const userPlan = 'free'
-    const filter = await searchParams;
+    const searchVars = await searchParams;
+    const { business_id, name, page = "1", searchTerm = "", filter = "" } = await searchVars;
 
-    const business_id = filter.business_id
-    const name = filter.name
+    // const business_id = searchVars.business_id
+    // const name = searchVars.name
 
     console.log('business_id', business_id)
     console.log(name)
@@ -47,7 +49,12 @@ export default async function Page({ searchParams } : {searchParams : Promise<Bu
     let invoices;
 
     try {
-        invoices = await getInvoicesList({business_id: Number(business_id)})
+        invoices = await getInvoicesList({
+            business_id: Number(business_id),
+            page: Number(page),
+            searchTerm,
+            filter,
+        })
     } catch (err) {
         console.error("Error fetching invoices:", err);
         return notFound();
@@ -59,6 +66,7 @@ export default async function Page({ searchParams } : {searchParams : Promise<Bu
                 <BusinessBashboard business={business} userPlan={userPlan}/>
                 <BusinessStats statistic={businessStats}/>
                 <QuickActions companyId={business_id} />
+                <InvoiceTable invoices={invoices} business_id={business_id}/>
             </Bounded>
         </main>
     )

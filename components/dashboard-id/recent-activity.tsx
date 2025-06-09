@@ -58,7 +58,7 @@ export default function RecentActivity({
                   Invoice #{invoice.number} created
                 </p>
                 <p className="text-sm text-secondary-text">
-                  {formatCurrency(invoice.amount)} • {invoice.clientName} •{" "}
+                  {formatCurrency(invoice.total)} •{" "}
                   {formatDate(invoice.createdDate)}
                 </p>
               </div>
