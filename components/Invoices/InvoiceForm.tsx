@@ -98,7 +98,7 @@ const InvoiceForm = ({
         const invoice = await createInvoice(values)
 
         if (invoice) {
-            redirect(`/invoices/${invoice.id}`)
+            redirect(`/dashboard/invoices/${invoice.id}`)
         } else {
             console.log('Failed to create an invoice')
             redirect(`/dashboard`)
