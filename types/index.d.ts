@@ -40,7 +40,9 @@ interface GetClient {
 }
 
 interface SearchParams {
+  business_id: number;
   searchTerm?: string;
+
 }
 
 interface ClientType {

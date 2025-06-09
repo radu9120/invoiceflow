@@ -281,7 +281,7 @@ export default function Navbar() {
                     <div className="pt-3 mt-3 border-t border-blue-100 space-y-2">
                       <SignInButton>
                         <Button
-                          variant="outline"
+                          variant="secondary"
                           className="w-full py-3 text-base font-medium border-blue-200 text-primary hover:bg-blue-50 transition-all duration-200"
                           onClick={closeMenu}
                         >

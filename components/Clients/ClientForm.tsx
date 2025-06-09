@@ -36,7 +36,7 @@ export const ClientForm = ({ business_id }:{ business_id: number }) => {
         const client = await createClient(values);
 
         if (client) {
-            redirect(`/dashboard/${business_id}/clients`);
+            redirect(`/dashboard/clients?business_id=${business_id}`);
         } else {
             console.log("Failed to create a business");
             redirect(`/dashboard`);
@@ -109,7 +109,7 @@ export const ClientForm = ({ business_id }:{ business_id: number }) => {
                 <div className="py-6">
                     <div className="flex gap-3">
                         <Button
-                            variant="outline"
+                            variant="secondary"
                             //   onClick={() => setIsNewCompanyModalOpen(false)}
                             className="flex-1 border-blue-200"
                         >

@@ -178,14 +178,13 @@ export default function SettingsModal({
             <div className="text-sm text-secondary-text space-y-1">
               <p>• Company ID: {company.id}</p>
               <p>• Created: {formatDate(company.created_at)}</p>
-              <p>• Status: {company.status}</p>
               <p>• Total Invoices: {invoicesLength}</p>
             </div>
           </div>
 
           <div className="flex gap-3 mt-6">
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={onClose}
               className="flex-1 border-blue-200"
             >

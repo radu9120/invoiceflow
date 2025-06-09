@@ -37,7 +37,7 @@ export const BussinesForm = () => {
     const business = await createBusiness(values);
 
     if (business) {
-      redirect(`/dashboard/${business.id}`);
+      redirect(`/dashboard/business?business_id=${business.id}&name=${business.name}`);
     } else {
       console.log("Failed to create a business");
       redirect(`/dashboard`);
@@ -188,7 +188,7 @@ export const BussinesForm = () => {
 
           <div className="flex gap-3">
             <Button
-              variant="outline"
+              variant="secondary"
               //   onClick={() => setIsNewCompanyModalOpen(false)}
               className="flex-1 border-blue-200"
             >

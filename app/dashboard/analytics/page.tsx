@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -15,9 +13,23 @@ import {
   PieChart,
   TrendingDown,
 } from "lucide-react";
+import { SearchParams } from "@/types";
+import { redirect } from "next/navigation";
 
-export default function AnalyticsPage() {
-  const [selectedPeriod, setSelectedPeriod] = useState("30");
+export default async function AnalyticsPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>; // Make searchParams a Promise it was failing deployment because it was not awaited
+}) {
+
+  const searchVal = await searchParams;
+  const business_id = searchVal.business_id
+
+  if (!business_id) redirect('/dashboard')
+  
+  
+
+  // const [selectedPeriod, setSelectedPeriod] = useState("30");
 
   // Dummy data for charts
   const revenueData = [
@@ -90,7 +102,7 @@ export default function AnalyticsPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div className="flex items-center gap-3">
             <Calendar className="h-5 w-5 text-secondary-text" />
-            <select
+            {/* <select
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
               className="p-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-primary-text"
@@ -99,9 +111,9 @@ export default function AnalyticsPage() {
               <option value="30">Last 30 days</option>
               <option value="90">Last 3 months</option>
               <option value="365">Last year</option>
-            </select>
+            </select> */}
           </div>
-          <Button variant="outline" className="border-blue-200">
+          <Button variant="secondary" className="border-blue-200">
             <Download className="h-4 w-4 mr-2" />
             Export Report
           </Button>

@@ -38,7 +38,7 @@ export default function BusinessBashboard({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <CustomButton label={"Create Invoice"} icon={PlusIcon} variant={"primary"} href={`/dashboard/${business.id}/invoices/new?business_id=${business.id}`}/>
+          <CustomButton label={"Create Invoice"} icon={PlusIcon} variant={"primary"} href={`/dashboard/invoices/new?business_id=${business.id}`}/>
           <CustomButton
             // onClick={onOpenSettings}
             variant="secondary"

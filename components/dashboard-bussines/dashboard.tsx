@@ -83,7 +83,7 @@ export default function DashboardClient({
       id: newBusiness.id,
       name: newBusiness.name,
 
-      status: "active",
+
       created_at: newBusiness.created_at,
       email: newBusiness.email,
       address: newBusiness.address,
@@ -118,7 +118,7 @@ export default function DashboardClient({
         <CompaniesGrid
           companies={companies}
           justCreated={justCreated}
-          onSelectCompany={(id) => router.push(`/dashboard/${id}`)}
+          onSelectCompany={(id, name) => router.push(`/dashboard/business?business_id=${id}&name=${name}`)}
         />
 
         <PlanLimitations userPlan={userPlan} companies={companies} />

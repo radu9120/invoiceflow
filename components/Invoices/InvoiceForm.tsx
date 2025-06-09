@@ -225,7 +225,7 @@ const InvoiceForm = ({
                             <div className="text-sm text-muted-foreground">
                                 <p>No clients found for this business.</p>
                                 <Button variant="link" className="px-0 mt-2" asChild>
-                                    <Link href={`/dashboard/${company_data.id}/clients`}>+ Create a new client</Link>
+                                    <Link href={`/dashboard/clients?business_id=${company_data.id}`}>+ Create a new client</Link>
                                 </Button>
                             </div>
                         )}

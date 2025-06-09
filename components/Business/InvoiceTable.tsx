@@ -146,7 +146,7 @@ export default function InvoiceTable({ invoices, business_id }:{ invoices: Invoi
                     Create your first invoice to start tracking payments and managing
                     your business.
                   </p>
-                  <CustomButton label={"Create Your First Invoice"} icon={PlusIcon} variant={"primary"} href={`/dashboard/${business_id}/invoices/new?business_id=${business_id}`}/>
+                  <CustomButton label={"Create Your First Invoice"} icon={PlusIcon} variant={"primary"} href={`/dashboard/invoices/new?business_id=${business_id}`}/>
               </div>
             )}
           </div>

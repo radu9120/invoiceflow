@@ -6,7 +6,7 @@ import CompanyCard from "./company-card";
 interface CompaniesGridProps {
   companies: Company[];
   justCreated: string | null;
-  onSelectCompany: (id: string) => void;
+  onSelectCompany: (id: string, name: string) => void;
 }
 
 export default function CompaniesGrid({
@@ -24,13 +24,13 @@ export default function CompaniesGrid({
         <p className="text-secondary-text mb-6">
           Create your first company to start managing invoices and clients.
         </p>
-        <Button
+        {/* <Button
           onClick={() => onSelectCompany("new")}
           className="bg-gradient-to-r from-primary to-accent text-white"
         >
           <Plus className="h-4 w-4 mr-2" />
           Create Your First Company
-        </Button>
+        </Button> */}
       </div>
     );
   }
@@ -42,7 +42,7 @@ export default function CompaniesGrid({
           key={company.id}
           company={company}
           isJustCreated={justCreated === company.id}
-          onSelect={() => onSelectCompany(company.id)}
+          onSelect={() => onSelectCompany(company.id, company.name)}
         />
       ))}
     </div>
