@@ -7,11 +7,13 @@ import BusinessForm from "./BusinessForm";
 import { useEffect, useState } from "react";
 import { BusinessType } from "@/types";
 import { getBusinessById, updateBusiness } from "@/lib/actions/business.actions";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 
 
 type CompanyFormData = z.infer<typeof companySchema>
 export const UpdateBusiness = ({ businessId }: { businessId: number }) => {
+    const router = useRouter(); // ADD THIS LINE
 
     const userPlan = "free"; // This should be fetched from user context or state
 
@@ -131,7 +133,7 @@ export const UpdateBusiness = ({ businessId }: { businessId: number }) => {
 
             if (updated) {
                 console.log("Business updated successfully!", updated);
-                redirect(`/dashboard/business?business_id=${updated.id}&name=${updated.name}`);
+                
             } else {
                 console.error("Failed to update business: No data returned.");
                 setError("Failed to update business. Please try again.");

@@ -1,7 +1,10 @@
+'use client'
 import { ArrowLeft, Building, CrownIcon, PlusIcon, SettingsIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 import CustomButton from '../ui/CustomButton';
+import CustomModal from '../ModalsForms/CustomModal';
+import { UpdateBusiness } from './Forms/UpdateBusiness';
 
 export default function BusinessDashboard({
   business,
@@ -39,12 +42,16 @@ export default function BusinessDashboard({
         </div>
         <div className="flex items-center gap-3">
           <CustomButton label={"Create Invoice"} icon={PlusIcon} variant={"primary"} href={`/dashboard/invoices/new?business_id=${business.id}`}/>
-          <CustomButton
-            // onClick={onOpenSettings}
-            variant="secondary"
-            label="Settings"
-            icon={SettingsIcon}
-          />
+          <CustomModal 
+              heading={'Business details'} 
+              description={'Update content'} 
+              openBtnLabel={'Settings'} 
+              btnVariant={'ghost'} 
+              btnIcon={SettingsIcon}
+              
+          >
+              <UpdateBusiness businessId={business.id}/>
+          </CustomModal>
           {userPlan === "free" && (
             <CustomButton
               // onClick={Updrade}
