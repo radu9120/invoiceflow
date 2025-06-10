@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 import { CreateBusiness } from "@/schemas/invoiceSchema";
 import { redirect } from "next/navigation";
-import { BusinessDashboardPageProps, DashboardBusinessStats } from "@/types";
+import { BusinessDashboardPageProps, BusinessType, DashboardBusinessStats } from "@/types";
 import { createActivity } from "./userActivity.actions";
 
 export const createBusiness = async (formData: CreateBusiness) => {
@@ -12,22 +12,22 @@ export const createBusiness = async (formData: CreateBusiness) => {
 
   const supabase = createSupabaseClient();
 
-  const { data, error } = await supabase
+  const { data: business, error } = await supabase
     .from("Businesses")
     .insert({ ...formData, author })
-    .select();
+    .select()
+    .single()
 
-  if (error || !data)
+  if (error || !business)
     throw new Error(error?.message || "Failed to create a business");
 
-  const business = data[0]
 
   await createActivity({
     user_id: author,
     business_id: business.id, // assuming this exists in the invoice schema
     action: "Created Business instance",
     target_type: "business",
-    target_name: formData.name,    
+    target_name: formData.name,
   });
 
   return business;
@@ -55,11 +55,11 @@ export const getUserBusinesses = async () => {
   return data || [];
 };
 
-export const getBusinessById = async (businessId: string) => {
+export const getBusinessById = async (businessId: number) => {
   const { userId: author } = await auth();
 
   if (!author) {
-    throw new Error("User not authenticated");
+    redirect("/sign-in");
   }
 
   const supabase = createSupabaseClient();
@@ -68,39 +68,55 @@ export const getBusinessById = async (businessId: string) => {
     .from("Businesses")
     .select("*")
     .eq("id", businessId)
-    .eq("author", author)
     .single();
 
   if (error) {
     throw new Error(error.message || "Failed to fetch business");
   }
 
-  return data;
+  return data as BusinessType;
 };
 
 export const updateBusiness = async (
-  businessId: string,
-  updateData: Partial<CreateBusiness>
+  businessId: number,
+  formData: Partial<CreateBusiness>
 ) => {
   const { userId: author } = await auth();
 
   if (!author) {
-    throw new Error("User not authenticated");
+    redirect('/sign-in');
   }
 
   const supabase = createSupabaseClient();
 
   const { data, error } = await supabase
     .from("Businesses")
-    .update(updateData)
+    .update(formData)
     .eq("id", businessId)
-    .eq("author", author)
     .select()
     .single();
 
-  if (error || !data) {
-    throw new Error(error?.message || "Failed to update business");
+  if (error) {
+    console.error("Supabase error updating business:", error.message);
+    throw new Error(error.message || "Failed to update business.");
   }
+
+  if (!data) {
+    // This could happen if the businessId or author didn't match an existing record
+    console.warn(`No business found or updated for ID: ${businessId}.`);
+    throw new Error("Business not found or user not authorized to update it.");
+  }
+
+  const updatedBusiness: BusinessType = data
+
+  await createActivity({
+    user_id: author,
+    business_id: updatedBusiness.id,
+    action: "Updated business details",
+    target_type: "business",
+    // Use the potentially new name from formData, or fallback to existing if not updated
+    target_name: formData.name || updatedBusiness.name,
+  });
 
   return data;
 };

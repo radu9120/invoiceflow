@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowRight, Building, DollarSign, FileText, Settings, SettingsIcon, Users } from 'lucide-react'
 import CustomModal from '../ModalsForms/CustomModal'
 import timestamptzConvert from '../ui/timestamptzConvert';
+import { UpdateBusiness } from '../Business/Forms/UpdateBusiness'
 
 export default function BusinessCard({ company } : { company: DashboardBusinessStats }) {
     return (
@@ -88,7 +89,7 @@ export default function BusinessCard({ company } : { company: DashboardBusinessS
                         btnVariant={'ghost'} 
                         btnIcon={SettingsIcon}
                     >
-                        <p>Update business</p>
+                        <UpdateBusiness businessId={company.id}/>
                     </CustomModal>
                 </div>
             </CardFooter>

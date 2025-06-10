@@ -17,7 +17,7 @@ export default function InvoiceByBusinessClient({ company_id, client }: { compan
         if (!id) return;
 
         async function fetchCompany() {
-            const company = await getBusinessById(id);
+            const company = await getBusinessById(Number(id));
             if (!company || company instanceof Error) {
                 setError(true);
                 return;

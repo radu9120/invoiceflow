@@ -52,6 +52,7 @@ interface BusinessType {
   address: string;
   phone?: string;
   vat?: number
+  logo?: string
 }
 
 interface NewInvoicePageProps {

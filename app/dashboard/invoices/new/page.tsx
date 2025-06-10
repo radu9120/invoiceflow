@@ -19,7 +19,7 @@ export default async function NewInvoice({
 
   if (!businessId) return notFound();
 
-  const business = await getBusinessById(businessId);
+  const business = await getBusinessById(Number(businessId));
   if (!business) return notFound();
 
   // const client = clientId ? await getClient({client_id: Number(clientId)}) : null

@@ -1,4 +1,4 @@
-import BusinessBashboard from '@/components/Business/BusinessBashboard'
+import BusinessDashboard from '@/components/Business/BusinessDashboard'
 import Bounded from '@/components/ui/bounded'
 import { getBusiness } from '@/lib/actions/business.actions'
 import { BusinessDashboardPageProps, UserActivityLog } from '@/types'
@@ -75,7 +75,7 @@ export default async function Page({ searchParams } : {searchParams : Promise<Bu
     return (
         <main>
             <Bounded>
-                <BusinessBashboard business={business} userPlan={userPlan}/>
+                <BusinessDashboard business={business} userPlan={userPlan}/>
                 <BusinessStats statistic={businessStats}/>
                 <QuickActions companyId={business_id} />
                 <InvoiceAvailability userPlan={'free'} invoicesLength={0}/>

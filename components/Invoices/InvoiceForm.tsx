@@ -112,8 +112,8 @@ const InvoiceForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Client Information */}
           <div>
             <h3 className="text-lg font-semibold text-header-text mb-4">
@@ -351,7 +351,7 @@ const InvoiceForm = ({
             </div>
           </div>
         </div>
-        <div className="mb-8">
+        <div>
           <FormField
             control={form.control}
             name="items"

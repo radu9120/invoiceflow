@@ -20,7 +20,7 @@ export default async function InvoiceSuccessPage({ searchParams }: PageProps) {
   try {
     const [allInvoices, businessData] = await Promise.all([
       getInvoicesByAuthor(),
-      getBusinessById(business_id),
+      getBusinessById(Number(business_id)),
     ]);
 
     const invoice = allInvoices.find(

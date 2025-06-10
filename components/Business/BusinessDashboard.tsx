@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import CustomButton from '../ui/CustomButton';
 
-export default function BusinessBashboard({
+export default function BusinessDashboard({
   business,
   userPlan,
 }:{

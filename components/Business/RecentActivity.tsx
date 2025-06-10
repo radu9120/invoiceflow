@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, CardContent, CardHeader } from '../ui/card'
 import { UserActivityLog } from '@/types'
 import { Building, FileText } from 'lucide-react'
+import timestamptzConvert from '../ui/timestamptzConvert'
 
 export default function RecentActivity({ recentActivities } : { recentActivities: UserActivityLog[]}) {
   return (
@@ -41,7 +42,7 @@ export default function RecentActivity({ recentActivities } : { recentActivities
                             {activity.action}{' '}{activity.target_name}
                         </p>
                         <p className="text-sm text-secondary-text">
-                            • {activity.created_at}
+                            • {activity.created_at && timestamptzConvert(activity.created_at)}
                         </p>
                     </div>
 
