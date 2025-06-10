@@ -155,7 +155,7 @@ export default function Hero() {
               </Button>
 
               <Button
-                variant="outline"
+                variant="secondary"
                 className="rounded-xl px-6 md:px-8 py-4 md:py-7 text-base md:text-lg font-medium
                   border border-neutral-200 hover:border-neutral-300 bg-white
                   text-primary-text hover:bg-blue-50/50"

@@ -122,7 +122,7 @@ export default function CookieBanner() {
 
               <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   onClick={() => setShowSettings(true)}
                   className="border-neutral-300 text-neutral-700 hover:bg-neutral-50"
@@ -131,7 +131,7 @@ export default function CookieBanner() {
                   Customize
                 </Button>
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   onClick={rejectAll}
                   className="border-neutral-300 text-neutral-700 hover:bg-neutral-50"
@@ -279,7 +279,7 @@ export default function CookieBanner() {
 
               <div className="flex gap-2 pt-2">
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   onClick={rejectAll}
                   className="flex-1"

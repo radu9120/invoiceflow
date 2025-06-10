@@ -1,7 +1,7 @@
 'use client'
 import { AlertTriangle, PlusIcon } from "lucide-react";
 import CustomModal from "../ModalsForms/CustomModal";
-import { BussinesForm } from "../busineses/business-form";
+import { BussinesForm } from "../Business/business-form";
 
 export default function DashboardHeader({userPlan, totalBusinesses}:{userPlan: string; totalBusinesses: number}) {
     const limitReach = true

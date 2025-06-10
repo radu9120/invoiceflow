@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter } from '../ui/card'
 import Link from 'next/link'
 import { ArrowRight, Building, DollarSign, FileText, Settings, SettingsIcon, Users } from 'lucide-react'
 import CustomModal from '../ModalsForms/CustomModal'
+import timestamptzConvert from '../ui/timestamptzConvert';
 
 export default function BusinessCard({ company } : { company: DashboardBusinessStats }) {
     return (
@@ -77,7 +78,7 @@ export default function BusinessCard({ company } : { company: DashboardBusinessS
             </CardContent>
             <CardFooter className="flex items-center justify-between pt-4 border-t border-blue-100">
                 <span className="text-sm text-secondary-text">
-                    Created {company.created_on}
+                    Created on {" "}{timestamptzConvert(company.created_on)}
                 </span>
                 <div className="flex items-center gap-2">
                     <CustomModal 

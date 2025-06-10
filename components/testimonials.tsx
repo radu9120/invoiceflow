@@ -6,6 +6,7 @@ import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionTitle } from "./ui/SectionTitle";
 import Image from "next/image";
+
 function FloatingPaths({ position }: { position: number }) {
   // Keep existing FloatingPaths code
   const paths = Array.from({ length: 36 }, (_, i) => ({
