@@ -22,11 +22,13 @@ import { redirect } from "next/navigation";
 export default function BusinessForm({
     form,
     onSubmit,
-    submitButtonText = 'Submit'
+    submitButtonText = 'Submit',
+    onFileChange
 }: {
     form: UseFormReturn<z.infer<typeof companySchema>>;
     onSubmit: (values: z.infer<typeof companySchema>) => Promise<void>; // Expects an async function
     submitButtonText?: string; // Optional custom text for the submit button
+    onFileChange: (file: File | null) => void;
 }) {
 
     const userPlan = 'free'
@@ -115,7 +117,11 @@ export default function BusinessForm({
                             max={1}
                             onChange={(e) => {
                                 if (e.target.files && e.target.files[0]) {
-                                field.onChange(e.target.files[0]);
+                                    onFileChange(e.target.files[0])
+                                    field.onChange('')
+                                } else {
+                                    onFileChange(null); // No file selected, clear the state in parent
+                                    field.onChange(''); // Clear the form's 'logo' field
                                 }
                             }}
                             />

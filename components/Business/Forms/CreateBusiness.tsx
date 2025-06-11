@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { companySchema } from "@/schemas/invoiceSchema";
 import BusinessForm from "./BusinessForm";
 import { createBusiness } from "@/lib/actions/business.actions";
-import { redirect } from "next/navigation";
 import { useState } from "react";
 import { uploadFileAndGetUrl } from "@/lib/actions/logo.action";
 
@@ -49,21 +48,22 @@ export const CreateBusiness = () => {
       const business = await createBusiness(finalValues);
 
       if (business) {
-          redirect(`/dashboard/business?business_id=${business.id}&name=${business.name}`);
+        console.log('success, created business with logo', business)
+          // redirect(`/dashboard/business?business_id=${business.id}&name=${business.name}`);
       } else {
           console.log("Failed to create a business");
-          redirect(`/dashboard`);
+          // redirect(`/dashboard`);
       }
     } catch (error: any) {
       console.error("Error during logo upload or business creation:", error);
       // Provide user feedback about the error
       alert(`Error: ${error.message || "Something went wrong during business creation."}`);
-      redirect(`/dashboard?error=${encodeURIComponent(error.message || "failed_to_create_business")}`);
+      // redirect(`/dashboard?error=${encodeURIComponent(error.message || "failed_to_create_business")}`);
     } finally {
       setIsUploading(false); // Stop loading indicator
     }
   }
   
 
-  return <BusinessForm form={form} onSubmit={handleCreateSubmit} submitButtonText="Create Business"/>
+  return <BusinessForm form={form} onSubmit={handleCreateSubmit} submitButtonText="Create Business" onFileChange={setSelectedFile} />
 };
