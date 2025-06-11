@@ -16,14 +16,34 @@ import { useForm } from "react-hook-form";
 import { Textarea } from "../ui/textarea";
 import { AlertTriangle, Plus } from "lucide-react";
 import { billToSchema } from "@/schemas/invoiceSchema";
-import { createBusiness } from "@/lib/actions/business.actions";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/actions/client.actions";
+import { redirect } from "next/navigation";
 
-export const ClientForm = ({ business_id }: { business_id: number }) => {
+interface ClientFormProps {
+  business_id: number;
+  defaultValues?: {
+    id?: number;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    business_id: number;
+  };
+  onSubmit?: (values: z.infer<typeof billToSchema>) => Promise<void>;
+  submitButtonText?: string;
+  isSubmitting?: boolean;
+}
+
+export const ClientForm = ({
+  business_id,
+  defaultValues,
+  onSubmit,
+  submitButtonText = "Save Client",
+  isSubmitting = false,
+}: ClientFormProps) => {
   const form = useForm<z.infer<typeof billToSchema>>({
     resolver: zodResolver(billToSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       name: "",
       email: "",
       address: "",
@@ -32,27 +52,28 @@ export const ClientForm = ({ business_id }: { business_id: number }) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof billToSchema>) => {
-    const client = await createClient(values);
-
-    if (client) {
-      redirect(`/dashboard/clients?business_id=${business_id}`);
+  const handleSubmit = async (values: z.infer<typeof billToSchema>) => {
+    if (onSubmit) {
+      // If onSubmit is provided, use it (for editing)
+      await onSubmit(values);
     } else {
-      console.log("Failed to create a client");
-      redirect(`/dashboard`);
+      // Default behavior for creating new clients
+      const client = await createClient(values);
+      if (client) {
+        redirect(`/dashboard/clients?business_id=${business_id}`);
+      } else {
+        console.log("Failed to create a client");
+        redirect(`/dashboard`);
+      }
     }
   };
-
-  // console.log("Form valid:", form.formState.isValid);
-  // console.log("Form errors:", form.formState.errors);
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="space-y-6 w-full mt-8"
       >
-        {/* FIXED: Removed conflicting CSS classes */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
@@ -61,7 +82,11 @@ export const ClientForm = ({ business_id }: { business_id: number }) => {
               <FormItem>
                 <FormLabel>Company/Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Company/Name" {...field} />
+                  <Input
+                    placeholder="Company/Name"
+                    {...field}
+                    disabled={isSubmitting}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -74,7 +99,11 @@ export const ClientForm = ({ business_id }: { business_id: number }) => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Email" {...field} />
+                  <Input
+                    placeholder="Email"
+                    {...field}
+                    disabled={isSubmitting}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -89,7 +118,7 @@ export const ClientForm = ({ business_id }: { business_id: number }) => {
             <FormItem>
               <FormLabel>Phone</FormLabel>
               <FormControl>
-                <Input placeholder="Phone" {...field} />
+                <Input placeholder="Phone" {...field} disabled={isSubmitting} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -103,7 +132,11 @@ export const ClientForm = ({ business_id }: { business_id: number }) => {
             <FormItem>
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Textarea placeholder="Address" {...field} />
+                <Textarea
+                  placeholder="Address"
+                  {...field}
+                  disabled={isSubmitting}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -116,16 +149,17 @@ export const ClientForm = ({ business_id }: { business_id: number }) => {
               type="button"
               variant="secondary"
               className="flex-1 border-blue-200"
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
             <Button
               type="submit"
               className="flex-1 bg-gradient-to-r from-primary to-accent text-white"
-              disabled={!form.formState.isValid || form.formState.isSubmitting}
+              disabled={!form.formState.isValid || isSubmitting}
             >
               <Plus className="h-4 w-4 mr-2" />
-              Save Client
+              {isSubmitting ? "Saving..." : submitButtonText}
             </Button>
           </div>
         </div>

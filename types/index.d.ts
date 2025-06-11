@@ -11,7 +11,7 @@ interface Company {
 }
 
 interface DashboardBusinessStats {
-  id: number,
+  id: number;
   name: string;
   totalinvoices: number;
   totalrevenue: number;
@@ -33,7 +33,6 @@ interface GetClientParam {
 interface SearchParams {
   business_id: number;
   searchTerm?: string;
-
 }
 
 interface ClientType {
@@ -51,18 +50,17 @@ interface BusinessType {
   email: string;
   address: string;
   phone?: string;
-  vat?: number
-  logo?: url | ''
+  vat?: number;
+  logo?: url | "";
 }
 
 interface NewInvoicePageProps {
-    searchParams: {
-        business_id?: string
-        client_id?: string
-        from?: string
-    }
+  searchParams: {
+    business_id?: string;
+    client_id?: string;
+    from?: string;
+  };
 }
-
 
 interface BusinessStatistics {
   statistic: {
@@ -73,19 +71,17 @@ interface BusinessStatistics {
     total_paid_invoices: number;
     total_pending_invoices: number;
     total_paid_amount_current_month: string;
-
-  }
+  };
 }
 
 interface BusinessDashboardPageProps {
-  business_id: number
+  business_id: number;
   name?: string;
   searchTerm?: string;
   page?: number;
   limit?: number;
   filter?: string;
 }
-
 
 export interface InvoiceItem {
   description: string;
@@ -98,7 +94,7 @@ export interface InvoiceItem {
 export interface Invoice {
   id: string;
   number: string;
-  bill_to: ClientType
+  bill_to: ClientType;
   status: "draft" | "sent" | "paid" | "overdue";
   dueDate: string;
   createdDate: string;
@@ -115,16 +111,23 @@ interface InvoiceListItem {
   total: number;
   status: string;
   due_date: string;
-
 }
 
 interface UserActivityLog {
   user_id: string;
   business_id?: number;
-  action: 'Created invoice' | 'Updated invoice content' | 'Updated invoice status' | 'Created Business instance' | 'Updated business details';
-  target_type: 'invoice' | 'business' | 'client';
+  action:
+    | "Created invoice"
+    | "Updated invoice content"
+    | "Updated invoice status"
+    | "Created Business instance"
+    | "Updated business details"
+    | "Created Client instance"
+    | "Updated Client instance";
+  target_type: "invoice" | "business" | "client";
   target_name?: string;
-  metadata?: { from: string; to: string};
+  target_id?: string; // This should match your database column
+  metadata?: { from: string; to: string };
   created_at?: string;
 }
 
