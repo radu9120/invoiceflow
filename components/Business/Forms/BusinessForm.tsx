@@ -271,24 +271,6 @@ export default function BusinessForm({
           </ul>
         </div>
 
-        {/* Free Plan Warning (if needed) */}
-        {userPlan === "free" && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
-              <div>
-                <h4 className="font-medium text-amber-800 mb-1">
-                  Free Plan Limitations
-                </h4>
-                <p className="text-sm text-amber-700">
-                  You can create 1 company on the free plan. Upgrade to Pro for
-                  unlimited companies and advanced features.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 pt-4">
           <Button
