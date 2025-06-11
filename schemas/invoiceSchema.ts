@@ -54,7 +54,6 @@ export const formSchema = z.object({
   total: z.coerce.number(),
   notes: z.string().optional(),
   bank_details: z.string().optional(),
-  logo: z.string().url("Invalid logo URL").optional().or(z.literal("")),
   currency: z.string().min(1, { message: "Logo is required." }),
   client_id: z.number(),
   business_id: z.number(),

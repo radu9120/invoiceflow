@@ -52,7 +52,7 @@ interface BusinessType {
   address: string;
   phone?: string;
   vat?: number
-  logo?: string
+  logo?: url | ''
 }
 
 interface NewInvoicePageProps {

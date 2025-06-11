@@ -50,3 +50,32 @@ export async function uploadFileAndGetUrl(file: File): Promise<string> {
   console.log(`File uploaded successfully: ${publicUrlData.publicUrl}`);
   return publicUrlData.publicUrl;
 }
+
+
+export async function deleteFileFromBucket(publicUrl: string): Promise<void> {
+  const { userId } = await auth();
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
+  const supabase = createSupabaseClient();
+
+  const urlParts = publicUrl.split("/storage/v1/object/public/");
+  if (urlParts.length !== 2) {
+    console.error("Invalid public URL format:", publicUrl);
+    throw new Error("Invalid public URL format.");
+  }
+
+  const filePath = urlParts[1]; 
+
+  const { error } = await supabase.storage
+    .from("logos")
+    .remove([filePath.replace(/^logos\//, '')]);
+
+  if (error) {
+    console.error("Supabase file delete error:", error);
+    throw new Error(`Failed to delete file: ${error.message}`);
+  }
+
+  console.log(`File deleted successfully: ${filePath}`);
+}
