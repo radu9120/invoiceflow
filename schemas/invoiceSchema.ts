@@ -17,7 +17,7 @@ const itemSchema = z.object({
 });
 
 export const billToSchema = z.object({
-  id: z.coerce.number(),
+  id: z.coerce.number().optional(),
   name: z.string().min(1, { message: "Name is required" }),
   email: z.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format"),
   address: z.string().min(1, { message: "Quantity is required" }),

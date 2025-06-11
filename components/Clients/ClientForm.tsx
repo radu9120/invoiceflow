@@ -31,24 +31,29 @@ export const ClientForm = ({ business_id }: { business_id: number }) => {
       business_id: business_id,
     },
   });
+
   const onSubmit = async (values: z.infer<typeof billToSchema>) => {
     const client = await createClient(values);
 
     if (client) {
       redirect(`/dashboard/clients?business_id=${business_id}`);
     } else {
-      console.log("Failed to create a business");
+      console.log("Failed to create a client");
       redirect(`/dashboard`);
     }
   };
-  console.log(form.formState.isValid);
+
+  // console.log("Form valid:", form.formState.isValid);
+  // console.log("Form errors:", form.formState.errors);
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4  w-full mt-8  "
+        className="space-y-6 w-full mt-8"
       >
-        <div className="space-y-4 grid-cols-2 grid space-x-6">
+        {/* FIXED: Removed conflicting CSS classes */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
             name="name"
@@ -75,20 +80,21 @@ export const ClientForm = ({ business_id }: { business_id: number }) => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input placeholder="Phone" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
+
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone</FormLabel>
+              <FormControl>
+                <Input placeholder="Phone" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -107,21 +113,20 @@ export const ClientForm = ({ business_id }: { business_id: number }) => {
         <div className="py-6">
           <div className="flex gap-3">
             <Button
+              type="button"
               variant="secondary"
-              //   onClick={() => setIsNewCompanyModalOpen(false)}
               className="flex-1 border-blue-200"
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              className="flex-1 bg-gradient-to-r from-primary to-accent text-white w-full"
-              disabled={form.formState.isSubmitting}
+              className="flex-1 bg-gradient-to-r from-primary to-accent text-white"
+              disabled={!form.formState.isValid || form.formState.isSubmitting}
             >
               <Plus className="h-4 w-4 mr-2" />
               Save Client
             </Button>
-            {/* )} */}
           </div>
         </div>
       </form>
