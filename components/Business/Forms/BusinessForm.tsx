@@ -14,221 +14,312 @@ import {
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { Textarea } from "../../ui/textarea";
-import { Plus } from "lucide-react";
+import { Plus, AlertTriangle, Crown } from "lucide-react";
 import { companySchema } from "@/schemas/invoiceSchema";
 import { createBusiness } from "@/lib/actions/business.actions";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
+interface BusinessFormProps {
+  form: UseFormReturn<z.infer<typeof companySchema>>;
+  onSubmit: (values: z.infer<typeof companySchema>) => Promise<void>;
+  submitButtonText?: string;
+  onFileChange: (file: File | null) => void;
+  existingLogoUrl?: string | null;
+  isSubmitting?: boolean;
+  onCancel?: () => void;
+}
+
 export default function BusinessForm({
-    form,
-    onSubmit,
-    submitButtonText = 'Submit',
-    onFileChange,
-    existingLogoUrl, 
+  form,
+  onSubmit,
+  submitButtonText = "Submit",
+  onFileChange,
+  existingLogoUrl,
+  isSubmitting = false,
+  onCancel,
+}: BusinessFormProps) {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const userPlan = "free";
 
-}: {
-    form: UseFormReturn<z.infer<typeof companySchema>>;
-    onSubmit: (values: z.infer<typeof companySchema>) => Promise<void>; // Expects an async function
-    submitButtonText?: string; // Optional custom text for the submit button
-    onFileChange: (file: File | null) => void;
-    existingLogoUrl?: string | null; // Made optional
-}) {
+  useEffect(() => {
+    // More robust validation
+    if (
+      existingLogoUrl &&
+      existingLogoUrl.trim() !== "" &&
+      existingLogoUrl !== "null" &&
+      existingLogoUrl !== "undefined" &&
+      (existingLogoUrl.startsWith("http") ||
+        existingLogoUrl.startsWith("/") ||
+        existingLogoUrl.startsWith("blob:"))
+    ) {
+      setPreviewUrl(existingLogoUrl);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [existingLogoUrl]);
 
-    const [previewUrl, setPreviewUrl] = useState<string | null>(existingLogoUrl || null);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
 
-    useEffect(() => {
-        setPreviewUrl(existingLogoUrl || null);
-    }, [existingLogoUrl]);
-    
-    const userPlan = 'free'
+    if (file) {
+      onFileChange(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      form.setValue("logo", "");
+    } else {
+      onFileChange(null);
+      form.setValue("logo", "");
+      // More robust validation here too
+      if (
+        existingLogoUrl &&
+        existingLogoUrl.trim() !== "" &&
+        existingLogoUrl !== "null" &&
+        existingLogoUrl !== "undefined" &&
+        (existingLogoUrl.startsWith("http") ||
+          existingLogoUrl.startsWith("/") ||
+          existingLogoUrl.startsWith("blob:"))
+      ) {
+        setPreviewUrl(existingLogoUrl);
+      } else {
+        setPreviewUrl(null);
+      }
+    }
+  };
 
-    return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className=" py-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                        <FormItem className="w-full">
-                            <FormLabel className="block text-sm font-medium text-secondary-text ">Company/Name</FormLabel>
-                            <FormControl>
-                            <Input placeholder="Company/Name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="block text-sm font-medium text-secondary-text ">Email</FormLabel>
-                            <FormControl>
-                            <Input placeholder="Email" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="phone"
-                        render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="block text-sm font-medium text-secondary-text ">Phone</FormLabel>
-                            <FormControl>
-                            <Input placeholder="Phone" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="vat"
-                        render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="block text-sm font-medium text-secondary-text ">Vat</FormLabel>
-                            <FormControl>
-                            <Input placeholder="VAT" type="number" {...field} value={field.value ?? ""} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                        )}
-                    />
-                </div>
-                <FormField
-                    control={form.control}
-                    name="address"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel className="block text-sm font-medium text-secondary-text ">Address</FormLabel>
-                        <FormControl>
-                            <Textarea placeholder="Address" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-8">
+        {/* Company Details Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel className="block text-sm font-medium text-secondary-text">
+                  Company/Name *
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter company name"
+                    {...field}
+                    disabled={isSubmitting}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="block text-sm font-medium text-secondary-text">
+                  Email *
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="Enter email address"
+                    {...field}
+                    disabled={isSubmitting}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="block text-sm font-medium text-secondary-text">
+                  Phone
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="tel"
+                    placeholder="Enter phone number"
+                    {...field}
+                    disabled={isSubmitting}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="vat"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="block text-sm font-medium text-secondary-text">
+                  VAT Number
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter VAT number"
+                    type="number"
+                    {...field}
+                    value={field.value ?? ""}
+                    disabled={isSubmitting}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* Address Field */}
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="block text-sm font-medium text-secondary-text">
+                Address *
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Enter company address"
+                  {...field}
+                  disabled={isSubmitting}
+                  rows={3}
                 />
-                <div className="space-y-6">
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-                    <FormField
-                        control={form.control}
-                        name="logo"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel className="block text-sm font-medium text-secondary-text ">Logo</FormLabel>
-                            <FormControl>
-                                <Input
-                                type="file"
-                                accept="image/*"
-                                max={1}
-                                onChange={(e) => {
-                                    if (e.target.files && e.target.files[0]) {
-                                        const file = e.target.files[0];
-                                        onFileChange(file)
-                                        setPreviewUrl(URL.createObjectURL(file));
-                                        field.onChange('')
-                                    } else {
-                                        onFileChange(null); // No file selected, clear the state in parent
-                                        field.onChange('')
-                                        setPreviewUrl(existingLogoUrl || null);
-                                        ; // Clear the form's 'logo' field
-                                    }
-                                }}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    {previewUrl && ( 
-                        <div className="w-full h-20">
-                            <Image
-                                src={previewUrl}
-                                alt={'Logo Preview'}
-                                className="mt-1 h-full w-auto object-contain rounded-md border border-gray-200"
-                                width={300}
-                                height={300}
-                            />
-                        </div>
-                    )}
+        {/* Logo Upload Section */}
+        <div className="space-y-4">
+          <FormField
+            control={form.control}
+            name="logo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="block text-sm font-medium text-secondary-text">
+                  Company Logo
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    disabled={isSubmitting}
+                    className="cursor-pointer"
+                  />
+                </FormControl>
+                <FormDescription className="text-xs text-secondary-text">
+                  Upload a logo for your company (PNG, JPG, JPEG - Max 5MB)
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-                    <div className="space-y-6">
-                        {/* Free Plan Warning */}
-                        {/* {userPlan === "free" && (
-                            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                            <div className="flex items-start gap-3">
-                                <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5" />
-                                <div>
-                                <h4 className="font-medium text-red-800 mb-1">
-                                    Company Limit Reached
-                                </h4>
-                                <p className="text-sm text-red-700">
-                                    Free plan allows only 1 company. Upgrade to Pro to create
-                                    unlimited companies.
-                                </p>
-                                </div>
-                            </div>
-                            </div>
-                        )} */}
+          {/* Logo Preview */}
+          {previewUrl && (
+            <div className="w-full">
+              <p className="text-sm font-medium text-secondary-text mb-2">
+                Logo Preview:
+              </p>
+              <div className="w-32 h-20 border border-gray-200 rounded-md overflow-hidden bg-gray-50 flex items-center justify-center">
+                <Image
+                  src={previewUrl}
+                  alt="Logo Preview"
+                  className="max-w-full max-h-full object-contain"
+                  width={128}
+                  height={80}
+                />
+              </div>
+            </div>
+          )}
+        </div>
 
-                        <div className="bg-blue-50 rounded-lg p-4 ">
-                            <h4 className="font-medium text-primary mb-2">
-                                {userPlan === "free"
-                                    ? "Free Plan Includes:"
-                                    : "Pro Plan Includes:"}
-                            </h4>
-                            <ul className="text-sm text-secondary-text space-y-1">
-                                {userPlan === "free" ? (
-                                    <>
-                                    <li>• 1 company</li>
-                                    <li>• Up to 1 invoice</li>
-                                    <li>• Basic client management</li>
-                                    <li>• Email support</li>
-                                    </>
-                                ) : (
-                                    <>
-                                    <li>• Unlimited companies</li>
-                                    <li>• Unlimited invoices</li>
-                                    <li>• Advanced client management</li>
-                                    <li>• Priority support</li>
-                                    </>
-                                )}
-                            </ul>
-                        </div>
+        {/* Plan Information */}
+        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+          <h4 className="font-medium text-primary mb-2">
+            {userPlan === "free" ? "Free Plan Includes:" : "Pro Plan Includes:"}
+          </h4>
+          <ul className="text-sm text-secondary-text space-y-1">
+            {userPlan === "free" ? (
+              <>
+                <li>• 1 company</li>
+                <li>• Up to 10 invoices</li>
+                <li>• Basic client management</li>
+                <li>• Email support</li>
+              </>
+            ) : (
+              <>
+                <li>• Unlimited companies</li>
+                <li>• Unlimited invoices</li>
+                <li>• Advanced client management</li>
+                <li>• Priority support</li>
+                <li>• Custom branding</li>
+                <li>• Advanced reporting</li>
+              </>
+            )}
+          </ul>
+        </div>
 
-                        <div className="flex gap-3">
-                            <Button
-                            variant="secondary"
-                            //   onClick={() => setIsNewCompanyModalOpen(false)}
-                            className="flex-1 border-blue-200"
-                            >
-                            Cancel
-                            </Button>
-                            {/* {userPlan === "free" && companies.length >= 1 ? (
-                            <Button className="flex-1 bg-gradient-to-r from-primary to-accent text-white">
-                                <Crown className="h-4 w-4 mr-2" />
-                                Upgrade to Pro
-                            </Button>
-                            ) : ( */}
-                            <Button
-                            type="submit"
-                            className="flex-1 bg-gradient-to-r from-primary to-accent text-white w-full"
-                            disabled={!form.formState.isValid || form.formState.isSubmitting}
-                            >
-                            <Plus className="h-4 w-4 mr-2" />
-                                {submitButtonText}
-                            </Button>
-                            {/* )} */}
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </Form>
-    )
+        {/* Free Plan Warning (if needed) */}
+        {userPlan === "free" && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+              <div>
+                <h4 className="font-medium text-amber-800 mb-1">
+                  Free Plan Limitations
+                </h4>
+                <p className="text-sm text-amber-700">
+                  You can create 1 company on the free plan. Upgrade to Pro for
+                  unlimited companies and advanced features.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-4">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onCancel}
+            className="flex-1 border-blue-200 hover:bg-blue-50"
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            type="submit"
+            className="flex-1 bg-gradient-to-r from-primary to-accent text-white hover:from-primary/90 hover:to-accent/90"
+            disabled={!form.formState.isValid || isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Plus className="h-4 w-4 mr-2" />
+                {submitButtonText}
+              </>
+            )}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
 }
