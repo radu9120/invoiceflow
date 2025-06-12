@@ -1,23 +1,31 @@
+"use client"; // Add this for useRouter
 import { Button } from "@/components/ui/button";
 import { Company } from "@/types";
 import { Crown } from "lucide-react";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 interface PlanLimitationsProps {
   userPlan: "free" | "pro" | "enterprise";
   companiesLengh: number;
-  totalInvoices: number
+  totalInvoices: number;
 }
 
 export default function BusinessAvailabilty({
   userPlan,
   companiesLengh,
-  totalInvoices
+  totalInvoices,
 }: PlanLimitationsProps) {
+  const router = useRouter(); // Initialize router
+
   const getCompanyLimitText = () => {
     if (userPlan === "free") {
       return `${companiesLengh}/1`;
     }
     return `${companiesLengh}/∞`;
+  };
+
+  const handleUpgradeClick = () => {
+    router.push("/pricing"); // Navigate to pricing page
   };
 
   return (
@@ -52,16 +60,25 @@ export default function BusinessAvailabilty({
             </div>
             <div className="text-sm">
               <span className="font-medium">Total Invoices: </span>
-              <span>
+              <span
+                className={
+                  userPlan === "free" && totalInvoices >= 1
+                    ? "text-red-600 font-semibold"
+                    : ""
+                }
+              >
                 {totalInvoices}
                 {userPlan === "free" ? "/1" : ""}
               </span>
             </div>
           </div>
           {userPlan === "free" && (
-            <Button className="bg-gradient-to-r from-primary to-accent text-white">
+            <Button
+              onClick={handleUpgradeClick} // Add click handler
+              className="bg-gradient-to-r from-primary to-accent text-white"
+            >
               <Crown className="h-4 w-4 mr-2" />
-              Upgrade to Pro
+              Upgrade Plan
             </Button>
           )}
         </div>

@@ -6,184 +6,296 @@ import { companySchema } from "@/schemas/invoiceSchema";
 import BusinessForm from "./BusinessForm";
 import { useEffect, useState } from "react";
 import { BusinessType } from "@/types";
-import { getBusinessById, updateBusiness } from "@/lib/actions/business.actions";
+import {
+  getBusinessById,
+  updateBusiness,
+} from "@/lib/actions/business.actions";
 import { useRouter } from "next/navigation";
-import { deleteFileFromBucket, uploadFileAndGetUrl } from "@/lib/actions/logo.action";
+import {
+  deleteFileFromBucket,
+  uploadFileAndGetUrl,
+  updateFileInBucket,
+} from "@/lib/actions/logo.action";
+import { CheckCircle } from "lucide-react";
 
+interface UpdateBusinessProps {
+  businessId: number;
+  closeModal?: () => void;
+}
 
+type CompanyFormData = z.infer<typeof companySchema>;
 
-type CompanyFormData = z.infer<typeof companySchema>
-export const UpdateBusiness = ({ businessId }: { businessId: number }) => {
-    const router = useRouter(); // ADD THIS LINE
+export const UpdateBusiness = ({
+  businessId,
+  closeModal,
+}: UpdateBusinessProps) => {
+  const router = useRouter();
 
-    const userPlan = "free"; // This should be fetched from user context or state
+  const [business, setBusiness] = useState<BusinessType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [newLogoFile, setNewLogoFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
 
-    const [business, setBusiness] = useState<BusinessType | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    const [newLogoFile, setNewLogoFile] = useState<File | null>(null);
-
-    useEffect(() => {
-        const fetchBusinessData = async () => {
-            setIsLoading(true);
-            setError(null);
-            try {
-                const fetchedBusiness = await getBusinessById(businessId); // Call your Supabase fetch function
-                if (fetchedBusiness) {
-                    setBusiness(fetchedBusiness);
-                } else {
-                    setError("Business not found.");
-                }
-            } catch (err) {
-                console.error("Failed to fetch business:", err);
-                setError("Failed to load business data. Please try again.");
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        if (businessId) {
-            fetchBusinessData();
+  useEffect(() => {
+    const fetchBusinessData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const fetchedBusiness = await getBusinessById(businessId);
+        if (fetchedBusiness) {
+          setBusiness(fetchedBusiness);
+        } else {
+          setError("Business not found.");
         }
-    }, [businessId]); // Re-run effect if businessId changes
-
-    const form = useForm<z.infer<typeof companySchema>>({
-        resolver: zodResolver(companySchema),
-        defaultValues: {
-            name: "",
-            email: "",
-            address: "",
-            phone: "",
-            vat: undefined,
-            logo: '',
-            },
-        values: business ? { // Use `values` to reset the form when `business` changes
-            name: business.name,
-            email: business.email,
-            address: business.address,
-            phone: business.phone,
-            vat: business.vat,
-            logo: business.logo,
-        } : undefined,
-        mode: "onChange",
-            // Add `mode: "onChange"` or `reValidateMode: "onChange"` if you want validation to occur as user types
-    });
-
-    // // Reset the form with fetched data once `business` state updates
-    // useEffect(() => {
-    //     if (business) {
-    //         // This is crucial to initialize the form with the fetched data
-    //         // and establish the "original" state for dirty fields tracking.
-    //         form.reset({
-    //             name: business.name,
-    //             email: business.email,
-    //             address: business.address,
-    //             phone: business.phone,
-    //             vat: business.vat,
-    //             // For logo, we assume it's a URL in DB. We don't populate the file input value.
-    //             // If you later handle logo upload, you'd send the new File or its URL.
-    //             logo: business.logo,
-    //         });
-    //     }
-    // }, [business, form]);
-
-    const handleUpdateSubmit = async (values: CompanyFormData) => {
-        if (!business) {
-            console.error("No business data available to update.");
-            setError("Cannot update: Business data not loaded.");
-            return;
-        }
-
-        // Get the fields that have been changed from their initial values
-        const dirtyFields = form.formState.dirtyFields;
-        const formValues = form.getValues(); // Get the latest current values from the form
-
-        // Initialize payload with its correct type.
-        // We'll build this object with only the truly changed fields.
-        const payload: Partial<CompanyFormData> = {};
-
-        // Iterate over the keys of the form data
-        // We use `Object.keys(dirtyFields)` to iterate only over fields that were actually modified.
-        try {
-            if (newLogoFile) {
-                if (business.logo && business.logo.trim() !== "") {
-                    // Delete the previous logo from bucket
-                    await deleteFileFromBucket(business.logo);
-                    console.log('deleted', business.logo )
-                }
-
-                // Upload new logo and get its URL
-                const newLogoUrl = await uploadFileAndGetUrl(newLogoFile);
-                console.log('uploaded new', newLogoUrl )
-                payload.logo = newLogoUrl;
-            } else if (dirtyFields.logo) {
-                // If the logo field was edited (e.g., cleared), update it accordingly
-                payload.logo = formValues.logo;
-            }
-
-            for (const key of Object.keys(dirtyFields) as Array<keyof CompanyFormData>) {
-                // TypeScript should correctly infer `key` as a valid key of `CompanyFormData` here.
-
-                if (key === 'logo' && newLogoFile) continue; // handled above                
-
-                if (key === 'vat') {
-                    // VAT: Handles `number` or `undefined` directly.
-                    // `formValues.vat` will already be `number | undefined` as per your `BusinessForm`'s `onChange`.
-                    // The `dirtyFields` ensures we only send it if it was changed.
-                    payload.vat = formValues.vat;
-                
-                } else {
-                    // For all other fields that are dirty, assign their current value from the form
-                    // This assignment should now be correctly typed as `payload[key]` (which is `CompanyFormData[key] | undefined`)
-                    // is assigned `formValues[key]` (which is `CompanyFormData[key] | undefined`).
-                    payload.vat = formValues.vat;
-                }
-            }
-
-            if (Object.keys(payload).length === 0) {
-                console.log("No changes detected. Not submitting update.");
-                // Optionally, show a toast/notification to the user
-                return;
-            }
-
-            const updated = await updateBusiness(business.id, payload);
-
-            if (updated) {
-                console.log("Business updated successfully!", updated);
-                
-            } else {
-                console.error("Failed to update business: No data returned.");
-                setError("Failed to update business. Please try again.");
-            }
-        } catch (err) {
-            console.error("Error during business update:", err);
-            setError("An error occurred during update: " + (err as Error).message);
-        }
+      } catch (err) {
+        console.error("Failed to fetch business:", err);
+        setError("Failed to load business data. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    
-
-    if (isLoading) {
-        return (
-            <div className="space-y-4 p-4">
-                Loading...
-            </div>
-        );
+    if (businessId) {
+      fetchBusinessData();
     }
+  }, [businessId]);
 
-    if (error) {
-        return
+  const form = useForm<z.infer<typeof companySchema>>({
+    resolver: zodResolver(companySchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      address: "",
+      phone: "",
+      vat: undefined,
+      logo: "",
+    },
+    values: business
+      ? {
+          name: business.name,
+          email: business.email,
+          address: business.address,
+          phone: business.phone || "",
+          vat: business.vat,
+          logo: business.logo || "",
+        }
+      : undefined,
+    mode: "onChange",
+  });
+
+  useEffect(() => {
+    if (business) {
+      form.reset({
+        name: business.name,
+        email: business.email,
+        address: business.address,
+        phone: business.phone || "",
+        vat: business.vat,
+        logo: business.logo || "",
+      });
     }
+  }, [business, form]);
 
+  const handleUpdateSubmit = async (validatedValues: CompanyFormData) => {
     if (!business) {
-        // This case should ideally be covered by `error` state, but as a fallback:
-        return (
-            <div className="text-center p-4 text-gray-500">
-                No business data available for update.
-            </div>
-        );
+      setError("Cannot update: Business data not loaded.");
+      return;
     }
+    setIsSubmitting(true);
+    setError(null);
 
-    return <BusinessForm form={form} onSubmit={handleUpdateSubmit} submitButtonText="Update Business" onFileChange={setNewLogoFile} existingLogoUrl={business.logo}/>
+    const payload: Partial<CompanyFormData> = {};
+    let hasMeaningfulChanges = false;
+
+    try {
+      // 1. Handle logo change
+      if (newLogoFile) {
+        console.log("Client: New logo file detected:", newLogoFile.name);
+        console.log("Client: Current business logo:", business.logo);
+
+        if (
+          business.logo &&
+          typeof business.logo === "string" &&
+          business.logo.trim() !== ""
+        ) {
+          // Update existing logo file and get cache-busted URL
+          console.log("Client: Updating existing logo file:", business.logo);
+          const updatedLogoUrl = await updateFileInBucket(
+            business.logo,
+            newLogoFile
+          );
+          console.log(
+            "Client: Logo file updated successfully with URL:",
+            updatedLogoUrl
+          );
+
+          // IMPORTANT: Update form state to reflect the new URL
+          form.setValue("logo", updatedLogoUrl);
+
+          // Update database with the cache-busted URL
+          payload.logo = updatedLogoUrl;
+          hasMeaningfulChanges = true;
+        } else {
+          // Upload new logo (no existing logo)
+          console.log("Client: Uploading new logo file");
+          const newLogoUrl = await uploadFileAndGetUrl(newLogoFile);
+          console.log("Client: New logo uploaded with URL:", newLogoUrl);
+
+          // Update local state immediately
+          setBusiness((prev) => (prev ? { ...prev, logo: newLogoUrl } : null));
+          form.setValue("logo", newLogoUrl);
+
+          payload.logo = newLogoUrl;
+          hasMeaningfulChanges = true;
+        }
+      } else if (
+        form.formState.dirtyFields.logo &&
+        validatedValues.logo === "" &&
+        business.logo &&
+        typeof business.logo === "string" &&
+        business.logo.trim() !== ""
+      ) {
+        // Delete logo (clearing it)
+        console.log("Client: Deleting cleared logo:", business.logo);
+        try {
+          await deleteFileFromBucket(business.logo);
+          console.log("Client: Logo deleted successfully");
+        } catch (deleteError) {
+          console.warn("Could not delete logo:", deleteError);
+        }
+
+        // Update local state
+        setBusiness((prev) => (prev ? { ...prev, logo: "" } : null));
+        form.setValue("logo", "");
+
+        payload.logo = "";
+        hasMeaningfulChanges = true;
+      }
+
+      // 2. Handle other fields (EXCLUDING logo field entirely)
+      for (const key of Object.keys(validatedValues) as Array<
+        keyof CompanyFormData
+      >) {
+        const typedKey = key as keyof CompanyFormData;
+
+        // SKIP logo field completely - we handled it above
+        if (typedKey === "logo") {
+          continue;
+        }
+
+        const originalValue = business[typedKey as keyof BusinessType];
+        if (
+          form.formState.dirtyFields[typedKey] &&
+          validatedValues[typedKey] !== originalValue
+        ) {
+          if (typedKey === "vat") {
+            payload.vat =
+              validatedValues.vat === null ||
+              validatedValues.vat === undefined ||
+              String(validatedValues.vat) === ""
+                ? undefined
+                : Number(validatedValues.vat);
+          } else {
+            // @ts-ignore
+            payload[typedKey] = validatedValues[typedKey];
+          }
+          hasMeaningfulChanges = true;
+        }
+      }
+
+      // 3. Update database only if there are meaningful changes
+      if (hasMeaningfulChanges) {
+        console.log("Client: Payload being sent to updateBusiness:", payload);
+        const updated = await updateBusiness(business.id, payload);
+
+        if (!updated) {
+          setError(
+            "Failed to update business. The server did not confirm the update."
+          );
+          return;
+        }
+        console.log("Business updated successfully!", updated);
+      } else {
+        console.log("No meaningful database changes detected.");
+      }
+
+      // 4. Reset the file input since we've processed it
+      setNewLogoFile(null);
+
+      // 5. Show success and close
+      setShowSuccessOverlay(true);
+      setTimeout(() => {
+        setShowSuccessOverlay(false);
+        if (closeModal) closeModal();
+        router.refresh();
+      }, 1500);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "An unknown error occurred.";
+      setError(`An error occurred: ${errorMessage}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (showSuccessOverlay) {
+    return (
+      <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity duration-300 ease-in-out">
+        <div className="bg-white/80 backdrop-blur-md p-6 sm:p-10 rounded-xl shadow-2xl text-center transform transition-all duration-300 ease-in-out scale-100 opacity-100 flex flex-col items-center">
+          <CheckCircle className="w-16 h-16 sm:w-20 sm:h-20 text-green-600 mx-auto mb-5" />
+          <p className="text-xl sm:text-2xl font-semibold text-slate-700">
+            Updated Successfully!
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-8 min-h-[200px]">
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <span className="ml-3 text-secondary-text">
+          Loading business data...
+        </span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 my-4 text-center text-red-700 bg-red-100 border border-red-300 rounded-lg min-h-[200px] flex flex-col justify-center items-center">
+        <p className="font-semibold text-lg">Update Error</p>
+        <p className="text-sm mt-1 mb-3">{error}</p>
+        <button
+          onClick={() => setError(null)}
+          className="mt-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+        >
+          Acknowledge
+        </button>
+      </div>
+    );
+  }
+
+  if (!business) {
+    return (
+      <div className="text-center p-8 text-gray-500 min-h-[200px] flex items-center justify-center">
+        No business data available for update.
+      </div>
+    );
+  }
+
+  return (
+    <BusinessForm
+      form={form}
+      onSubmit={handleUpdateSubmit}
+      submitButtonText="Update Business"
+      onFileChange={setNewLogoFile}
+      existingLogoUrl={business.logo}
+      isSubmitting={isSubmitting}
+      onCancel={closeModal}
+    />
+  );
 };

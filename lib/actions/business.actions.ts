@@ -3,12 +3,16 @@ import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 import { CreateBusiness } from "@/schemas/invoiceSchema";
 import { redirect } from "next/navigation";
-import { BusinessDashboardPageProps, BusinessType, DashboardBusinessStats } from "@/types";
+import {
+  BusinessDashboardPageProps,
+  BusinessType,
+  DashboardBusinessStats,
+} from "@/types";
 import { createActivity } from "./userActivity.actions";
 
 export const createBusiness = async (formData: CreateBusiness) => {
   const { userId: author } = await auth();
-  if (!author) redirect('/sign-in')
+  if (!author) redirect("/sign-in");
 
   const supabase = createSupabaseClient();
 
@@ -16,11 +20,10 @@ export const createBusiness = async (formData: CreateBusiness) => {
     .from("Businesses")
     .insert({ ...formData, author })
     .select()
-    .single()
+    .single();
 
   if (error || !business)
     throw new Error(error?.message || "Failed to create a business");
-
 
   await createActivity({
     user_id: author,
@@ -81,10 +84,14 @@ export const updateBusiness = async (
   businessId: number,
   formData: Partial<CreateBusiness>
 ) => {
+  console.log(
+    `Server: updateBusiness called for ID ${businessId} with formData:`,
+    formData
+  ); // ADD THIS LOG
   const { userId: author } = await auth();
 
   if (!author) {
-    redirect('/sign-in');
+    redirect("/sign-in");
   }
 
   const supabase = createSupabaseClient();
@@ -107,7 +114,7 @@ export const updateBusiness = async (
     throw new Error("Business not found or user not authorized to update it.");
   }
 
-  const updatedBusiness: BusinessType = data
+  const updatedBusiness: BusinessType = data;
 
   await createActivity({
     user_id: author,
@@ -121,39 +128,51 @@ export const updateBusiness = async (
   return data;
 };
 
-export const getBusiness = async ({ business_id } : BusinessDashboardPageProps) => {
+export const getBusiness = async ({
+  business_id,
+}: BusinessDashboardPageProps) => {
   const supabase = createSupabaseClient();
 
-  let query = supabase.from("Businesses").select('id, name, email').eq('id', business_id).single();
+  let query = supabase
+    .from("Businesses")
+    .select("id, name, email")
+    .eq("id", business_id)
+    .single();
 
   const { data: business, error } = await query;
 
   if (error) throw new Error(error.message);
 
   return business;
-}
+};
 
-
-export const getBusinessStats = async ({ business_id } : BusinessDashboardPageProps) => {
+export const getBusinessStats = async ({
+  business_id,
+}: BusinessDashboardPageProps) => {
   const supabase = createSupabaseClient();
 
-  const { data: businessStats, error } = await supabase.rpc('get_business_stats', { p_business_id: business_id })
+  const { data: businessStats, error } = await supabase.rpc(
+    "get_business_stats",
+    { p_business_id: business_id }
+  );
   if (error) throw new Error(error.message);
 
-  return businessStats ? businessStats[0] : null
-}
+  return businessStats ? businessStats[0] : null;
+};
 
-export const getDashboardStats = async (): Promise<DashboardBusinessStats[]> => {
+export const getDashboardStats = async (): Promise<
+  DashboardBusinessStats[]
+> => {
   const { userId: author } = await auth();
-  if (!author) redirect('/sign-in')
+  if (!author) redirect("/sign-in");
 
   const supabase = createSupabaseClient();
-  const {data: dashboardStats, error } = await supabase.rpc('get_all_dashboard_stats', { p_author_id: author })
+  const { data: dashboardStats, error } = await supabase.rpc(
+    "get_all_dashboard_stats",
+    { p_author_id: author }
+  );
 
   if (error) throw new Error(error.message);
 
-  return dashboardStats ?? []
-}
-
-
-
+  return dashboardStats ?? [];
+};

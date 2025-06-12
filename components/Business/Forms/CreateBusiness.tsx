@@ -2,16 +2,25 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { companySchema } from "@/schemas/invoiceSchema";
-import BusinessForm from "./BusinessForm";
-import { createBusiness } from "@/lib/actions/business.actions";
+import { companySchema } from "@/schemas/invoiceSchema"; // Adjust path as needed
+import BusinessForm from "./BusinessForm"; // Adjust path as needed
+import { createBusiness as createBusinessAction } from "@/lib/actions/business.actions"; // Adjust path
 import { useState } from "react";
-import { uploadFileAndGetUrl } from "@/lib/actions/logo.action";
+import { uploadFileAndGetUrl } from "@/lib/actions/logo.action"; // Adjust path
+import { useRouter } from "next/navigation"; // Import useRouter
 
-export const CreateBusiness = () => {
-  const userPlan = "free"; // This should be fetched from user context or state
-  const [selectedFile, setSelectedFile] = useState<File | null>(null); // New state to hold the selected File object
-  const [isUploading, setIsUploading] = useState(false); // New loading state for the upload process
+interface CreateBusinessProps {
+  closeModal?: () => void; // Optional prop to close the modal
+  onSuccess?: () => void; // Optional generic success callback
+}
+
+export const CreateBusiness = ({
+  closeModal,
+  onSuccess,
+}: CreateBusinessProps) => {
+  const router = useRouter();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false); // For loading state
 
   const form = useForm<z.infer<typeof companySchema>>({
     resolver: zodResolver(companySchema),
@@ -21,49 +30,68 @@ export const CreateBusiness = () => {
       address: "",
       phone: "",
       vat: undefined,
-      logo: '',
+      logo: "", // Initialize as empty string
     },
   });
 
   const handleCreateSubmit = async (values: z.infer<typeof companySchema>) => {
-    setIsUploading(true);
+    setIsSubmitting(true);
     try {
-      let logoUrl: string = '';
-      
+      let logoUrl: string = "";
+
       if (selectedFile) {
-        console.log("Uploading selected logo file...");
-        // Call the server action to upload the file to Supabase Storage
-        // The 'business-logos' string is the folder name in your Supabase bucket
-        logoUrl = await uploadFileAndGetUrl(selectedFile);  
-      } else if (values.logo && typeof values.logo === 'string') {
-        // If no new file was selected but the form already has a logo string (e.g., for edits),
-        // use the existing logo URL.
-        logoUrl = values.logo;
+        logoUrl = await uploadFileAndGetUrl(selectedFile);
       }
+      // No need to check values.logo here for create, as it's for new entities
 
       const finalValues = {
         ...values,
         logo: logoUrl,
       };
-      const business = await createBusiness(finalValues);
+
+      const business = await createBusinessAction(finalValues);
 
       if (business) {
-        console.log('success, created business with logo', business)
-          // redirect(`/dashboard/business?business_id=${business.id}&name=${business.name}`);
+        console.log("Success, created business:", business);
+        router.refresh(); // Refresh page data
+
+        if (onSuccess) {
+          // Call generic onSuccess if provided
+          onSuccess();
+        }
+
+        if (closeModal) {
+          // Close the modal
+          closeModal();
+        }
       } else {
-          console.log("Failed to create a business");
-          // redirect(`/dashboard`);
+        console.error(
+          "Failed to create a business: No data returned from action."
+        );
+        // Handle error display to user, e.g., using a toast or form error
+        form.setError("root", {
+          message: "Failed to create business. Please try again.",
+        });
       }
     } catch (error: any) {
-      console.error("Error during logo upload or business creation:", error);
-      // Provide user feedback about the error
-      alert(`Error: ${error.message || "Something went wrong during business creation."}`);
-      // redirect(`/dashboard?error=${encodeURIComponent(error.message || "failed_to_create_business")}`);
+      console.error("Error during business creation:", error);
+      form.setError("root", {
+        message: error.message || "An unexpected error occurred.",
+      });
     } finally {
-      setIsUploading(false); // Stop loading indicator
+      setIsSubmitting(false);
     }
-  }
-  
+  };
 
-  return <BusinessForm form={form} onSubmit={handleCreateSubmit} submitButtonText="Create Business" onFileChange={setSelectedFile} />
+  return (
+    <BusinessForm
+      form={form}
+      onSubmit={handleCreateSubmit}
+      submitButtonText="Create Business"
+      onFileChange={setSelectedFile}
+      isSubmitting={isSubmitting} // Pass submitting state to the form
+      // If BusinessForm has an onCancel that should also close the modal:
+      onCancel={closeModal}
+    />
+  );
 };

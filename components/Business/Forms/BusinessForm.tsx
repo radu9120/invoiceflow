@@ -254,7 +254,7 @@ export default function BusinessForm({
             {userPlan === "free" ? (
               <>
                 <li>• 1 company</li>
-                <li>• Up to 10 invoices</li>
+                <li>• Up to 1 invoices</li>
                 <li>• Basic client management</li>
                 <li>• Email support</li>
               </>

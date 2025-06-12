@@ -55,11 +55,12 @@ interface BusinessType {
 }
 
 interface NewInvoicePageProps {
-  searchParams: {
+  //modified this to silence an error about searchParams being a Promise
+  searchParams: Promise<{
     business_id?: string;
     client_id?: string;
     from?: string;
-  };
+  }>;
 }
 
 interface BusinessStatistics {

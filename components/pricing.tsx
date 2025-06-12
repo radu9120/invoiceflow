@@ -65,7 +65,7 @@ export default function Pricing() {
           highlightedText="Pricing"
           description="Choose the plan that works best for your business."
         />
-        <PricingTable/>
+        <PricingTable />
 
         {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {pricingPlans.map((plan, index) => (

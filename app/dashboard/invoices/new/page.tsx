@@ -12,7 +12,7 @@ export default async function NewInvoice({
   const { userId } = await auth();
   if (!userId) redirect("/sign-in");
   // Ensure searchParams is awaited if it's a Promise
-  const params = searchParams;
+  const params = await searchParams;
   const businessId = params.business_id;
   const clientId = params.client_id;
   // const clientId = searchParams.client_id
