@@ -106,12 +106,23 @@ export interface Invoice {
   notes: string;
 }
 
-interface InvoiceListItem {
-  id: string;
+export interface InvoiceListItem {
+  id: number;
+  items: any[] | string | object;
+  bill_to: any;
+  company_details: any;
   invoice_number: string;
-  total: number;
-  status: string;
+  description?: string;
+  issue_date?: string;
   due_date: string;
+  status: string;
+  currency?: string;
+  subtotal?: number;
+  discount?: number;
+  shipping?: number;
+  total: string;
+  notes?: string;
+  bank_details?: string;
 }
 
 interface UserActivityLog {

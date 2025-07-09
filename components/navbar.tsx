@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { MenuIcon, XIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import {
   SignInButton,
   SignUpButton,
@@ -17,6 +18,8 @@ import {
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const searchParams = useSearchParams();
+  const businessId = searchParams?.get("business_id");
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -111,18 +114,31 @@ export default function Navbar() {
               >
                 Dashboard
               </Link>
-              <Link
-                href="/dashboard/clients"
-                className="text-primary-text hover:text-primary transition-colors font-medium"
-              >
-                Clients
-              </Link>
-              <Link
-                href="/dashboard/invoices"
-                className="text-primary-text hover:text-primary transition-colors font-medium"
-              >
-                Invoices
-              </Link>
+              {businessId ? (
+                <>
+                  <Link
+                    href={`/dashboard/clients?business_id=${businessId}`}
+                    className="text-primary-text hover:text-primary transition-colors font-medium"
+                  >
+                    Clients
+                  </Link>
+                  <Link
+                    href={`/dashboard/invoices?business_id=${businessId}`}
+                    className="text-primary-text hover:text-primary transition-colors font-medium"
+                  >
+                    Invoices
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <span className="text-gray-400 font-medium cursor-not-allowed">
+                    Clients
+                  </span>
+                  <span className="text-gray-400 font-medium cursor-not-allowed">
+                    Invoices
+                  </span>
+                </>
+              )}
               <Link
                 href="/dashboard/settings"
                 className="text-primary-text hover:text-primary transition-colors font-medium"
@@ -253,20 +269,33 @@ export default function Navbar() {
                     >
                       Dashboard
                     </Link>
-                    <Link
-                      href="/dashboard/clients"
-                      className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
-                      onClick={closeMenu}
-                    >
-                      Clients
-                    </Link>
-                    <Link
-                      href="/dashboard/invoices"
-                      className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
-                      onClick={closeMenu}
-                    >
-                      Invoices
-                    </Link>
+                    {businessId ? (
+                      <>
+                        <Link
+                          href={`/dashboard/clients?business_id=${businessId}`}
+                          className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                          onClick={closeMenu}
+                        >
+                          Clients
+                        </Link>
+                        <Link
+                          href={`/dashboard/invoices?business_id=${businessId}`}
+                          className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                          onClick={closeMenu}
+                        >
+                          Invoices
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <span className="px-4 py-3 text-gray-400 font-medium cursor-not-allowed">
+                          Clients
+                        </span>
+                        <span className="px-4 py-3 text-gray-400 font-medium cursor-not-allowed">
+                          Invoices
+                        </span>
+                      </>
+                    )}
                     <Link
                       href="/dashboard/settings"
                       className="px-4 py-3 text-primary-text hover:text-primary hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
