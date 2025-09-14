@@ -1,4 +1,5 @@
 import type React from "react";
+import { Suspense } from "react";
 import "./globals.css";
 import {
   ClerkProvider,
@@ -34,10 +35,12 @@ export default function RootLayout({
         <ClerkProvider appearance={{ variables: { colorPrimary: "#3b82f6" } }}>
           {" "}
           <Analytics />
-          <Navbar />
-          <div id="root">
-            {children}
-          </div>
+          <Suspense fallback={null}>
+            <Navbar />
+          </Suspense>
+          <Suspense fallback={null}>
+            <div id="root">{children}</div>
+          </Suspense>
           <div id="modal-root"></div>
           <Footer />
           <CookieBanner />

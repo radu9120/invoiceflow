@@ -29,21 +29,22 @@ import {
 import getStatusBadge from "@/components/ui/getStatusBadge";
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     business_id?: string;
     search?: string;
     status?: string;
     page?: string;
     sort?: string;
-  };
+  }>;
 }
 
 export default async function InvoicesPage({ searchParams }: PageProps) {
-  const businessId = searchParams.business_id;
-  const searchQuery = searchParams.search || "";
-  const statusFilter = searchParams.status || "all";
-  const currentPage = parseInt(searchParams.page || "1");
-  const sortOrder = searchParams.sort || "desc";
+  const params = await searchParams;
+  const businessId = params.business_id;
+  const searchQuery = params.search || "";
+  const statusFilter = params.status || "all";
+  const currentPage = parseInt(params.page || "1");
+  const sortOrder = params.sort || "desc";
 
   if (!businessId) {
     redirect("/dashboard");

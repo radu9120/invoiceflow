@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,16 +11,7 @@ import {
   FileText,
   Globe,
 } from "lucide-react";
-import { useState, useEffect } from "react";
-
 export default function PrivacyPolicyPage() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    document.title = "Privacy Policy | InvoiceFlow";
-    setMounted(true);
-  }, []);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-white">
       <div className="container mx-auto px-4 md:px-6 py-8 md:py-12">
@@ -45,8 +34,7 @@ export default function PrivacyPolicyPage() {
                 Privacy Policy
               </h1>
               <p className="text-secondary-text mt-1">
-                Last updated:{" "}
-                {mounted ? new Date().toLocaleDateString() : "Loading..."}
+                Last updated: {new Date().toLocaleDateString()}
               </p>
             </div>
           </div>
