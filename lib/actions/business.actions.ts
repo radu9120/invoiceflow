@@ -9,31 +9,84 @@ import {
   DashboardBusinessStats,
 } from "@/types";
 import { createActivity } from "./userActivity.actions";
-
-export const createBusiness = async (formData: CreateBusiness) => {
+export const createBusiness = async (
+  formData: CreateBusiness
+): Promise<BusinessType | null> => {
   const { userId: author } = await auth();
   if (!author) redirect("/sign-in");
 
   const supabase = createSupabaseClient();
+  // Retry the insert a couple of times in case of transient network errors
+  let attemptError: any = null;
+  let created: any = null;
+  for (let i = 0; i < 2; i++) {
+    try {
+      const { data, error } = await supabase
+        .from("Businesses")
+        .insert({ ...formData, author })
+        .select()
+        .single();
+      if (error) {
+        attemptError = error;
+        const msg = String(error?.message || error);
+        const transient =
+          /fetch failed|ENOTFOUND|ECONNREFUSED|EAI_AGAIN|ETIMEDOUT/i.test(msg);
+        if (i === 1 || !transient) break; // don't retry non-transient
+      } else {
+        created = data;
+        attemptError = null;
+        break; // success
+      }
+    } catch (err: any) {
+      attemptError = err;
+      const msg = String(err?.message || err);
+      const transient =
+        /fetch failed|ENOTFOUND|ECONNREFUSED|EAI_AGAIN|ETIMEDOUT/i.test(msg);
+      if (i === 1 || !transient) break;
+    }
+    // small backoff before retry
+    await new Promise((r) => setTimeout(r, 250));
+  }
 
-  const { data: business, error } = await supabase
-    .from("Businesses")
-    .insert({ ...formData, author })
-    .select()
-    .single();
+  if (!created) {
+    // Log a robust snapshot server-side and return null so the UI can show a friendly error
+    try {
+      console.error(
+        "Supabase insert Businesses failed",
+        JSON.stringify(
+          {
+            message: String(attemptError?.message || attemptError),
+            status: attemptError?.status,
+            details: attemptError?.details,
+            hint: attemptError?.hint,
+          },
+          null,
+          2
+        )
+      );
+    } catch (_) {}
+    return null;
+  }
 
-  if (error || !business)
-    throw new Error(error?.message || "Failed to create a business");
+  // Best-effort activity log; don't fail the main operation if logging fails
+  try {
+    await createActivity({
+      user_id: author,
+      business_id: created.id, // assuming this exists in the invoice schema
+      action: "Created Business instance",
+      target_type: "business",
+      target_name: formData.name,
+    });
+  } catch (logErr: any) {
+    try {
+      console.warn(
+        "createActivity failed after business creation",
+        JSON.stringify({ message: String(logErr?.message || logErr) })
+      );
+    } catch (_) {}
+  }
 
-  await createActivity({
-    user_id: author,
-    business_id: business.id, // assuming this exists in the invoice schema
-    action: "Created Business instance",
-    target_type: "business",
-    target_name: formData.name,
-  });
-
-  return business;
+  return created as BusinessType;
 };
 
 export const getUserBusinesses = async () => {
@@ -151,13 +204,24 @@ export const getBusinessStats = async ({
 }: BusinessDashboardPageProps) => {
   const supabase = createSupabaseClient();
 
-  const { data: businessStats, error } = await supabase.rpc(
-    "get_business_stats",
-    { p_business_id: business_id }
-  );
-  if (error) throw new Error(error.message);
-
-  return businessStats ? businessStats[0] : null;
+  try {
+    const { data: businessStats, error } = await supabase.rpc(
+      "get_business_stats",
+      { p_business_id: business_id }
+    );
+    if (error) throw error;
+    return businessStats ? businessStats[0] : null;
+  } catch (e: any) {
+    // Useful server-side context
+    console.error("Supabase RPC get_business_stats failed", {
+      business_id,
+      message: e?.message,
+      status: e?.status,
+      details: e?.details,
+      hint: e?.hint,
+    });
+    throw new Error(e?.message || "Failed to fetch business stats");
+  }
 };
 
 export const getDashboardStats = async (): Promise<
@@ -167,12 +231,96 @@ export const getDashboardStats = async (): Promise<
   if (!author) redirect("/sign-in");
 
   const supabase = createSupabaseClient();
-  const { data: dashboardStats, error } = await supabase.rpc(
-    "get_all_dashboard_stats",
-    { p_author_id: author }
-  );
+  try {
+    // Inline retry (2 attempts) for transient network failures
+    let rpcData: any = null;
+    let rpcError: any = null;
+    for (let i = 0; i < 2; i++) {
+      try {
+        const { data, error } = await supabase.rpc("get_all_dashboard_stats", {
+          p_author_id: author,
+        });
+        rpcData = data;
+        rpcError = error;
+        break; // success path (even if error is non-network, we'll handle below)
+      } catch (err: any) {
+        const msg = String(err?.message || err);
+        const transient =
+          /fetch failed|ENOTFOUND|ECONNREFUSED|EAI_AGAIN|ETIMEDOUT/i.test(msg);
+        if (i === 1 || !transient) throw err;
+        await new Promise((r) => setTimeout(r, 250));
+      }
+    }
 
-  if (error) throw new Error(error.message);
+    if (rpcError) throw rpcError;
+    return rpcData ?? [];
+  } catch (e: any) {
+    // Distinguish generic network error (fetch failed) from Supabase errors
+    const isNetwork = /fetch failed|ENOTFOUND|ECONNREFUSED|EAI_AGAIN/i.test(
+      String(e?.message || e)
+    );
+    // Log a robust snapshot of the error
+    try {
+      console.error(
+        "Supabase RPC get_all_dashboard_stats failed",
+        JSON.stringify(
+          {
+            author,
+            message: String(e?.message || e),
+            status: e?.status,
+            details: e?.details,
+            hint: e?.hint,
+            isNetwork,
+          },
+          null,
+          2
+        )
+      );
+    } catch (_) {
+      // do nothing if console fails
+    }
 
-  return dashboardStats ?? [];
+    // Fallback: compute a minimal dashboard list without the RPC so the page can render
+    try {
+      const { data: businesses, error: bizErr } = await supabase
+        .from("Businesses")
+        .select("id, name, created_at")
+        .eq("author", author)
+        .order("created_at", { ascending: false });
+      if (bizErr) throw bizErr;
+
+      // For fallback, set counts to 0; optionally, we could query counts per business to be richer
+      const fallback: DashboardBusinessStats[] = (businesses || []).map(
+        (b: any) => ({
+          id: b.id,
+          name: b.name,
+          totalinvoices: 0,
+          totalrevenue: 0,
+          totalclients: 0,
+          created_on: b.created_at,
+        })
+      );
+      return fallback;
+    } catch (fallbackErr: any) {
+      try {
+        console.error(
+          "Dashboard fallback query failed",
+          JSON.stringify(
+            { message: String(fallbackErr?.message || fallbackErr) },
+            null,
+            2
+          )
+        );
+      } catch (_) {}
+      if (isNetwork) {
+        console.warn(
+          "Dashboard is running in offline mode: returning empty stats array"
+        );
+        return [];
+      }
+      throw new Error(
+        String(e?.message || e) || "Failed to load dashboard stats"
+      );
+    }
+  }
 };
