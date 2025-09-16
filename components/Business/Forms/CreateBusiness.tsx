@@ -4,7 +4,10 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { companySchema } from "@/schemas/invoiceSchema"; // Adjust path as needed
 import BusinessForm from "./BusinessForm"; // Adjust path as needed
-import { createBusiness as createBusinessAction } from "@/lib/actions/business.actions"; // Adjust path
+import {
+  createBusiness as createBusinessAction,
+  type CreateBusinessResult,
+} from "@/lib/actions/business.actions"; // Adjust path
 import { useState } from "react";
 import { uploadFileAndGetUrl } from "@/lib/actions/logo.action"; // Adjust path
 import { useRouter } from "next/navigation"; // Import useRouter
@@ -49,10 +52,12 @@ export const CreateBusiness = ({
         logo: logoUrl,
       };
 
-      const business = await createBusinessAction(finalValues);
+      const result: CreateBusinessResult = await createBusinessAction(
+        finalValues
+      );
 
-      if (business) {
-        console.log("Success, created business:", business);
+      if (result.ok) {
+        console.log("Success, created business:", result.business);
         router.refresh(); // Refresh page data
 
         if (onSuccess) {
@@ -65,13 +70,11 @@ export const CreateBusiness = ({
           closeModal();
         }
       } else {
-        console.error(
-          "Failed to create a business: No data returned from action."
-        );
-        // Handle error display to user, e.g., using a toast or form error
-        form.setError("root", {
-          message: "Failed to create business. Please try again.",
-        });
+        console.error("Failed to create business:", result.error);
+        const baseMsg = result.transient
+          ? "Network issue prevented creating the business. Please check your connection and retry."
+          : result.error || "Failed to create business.";
+        form.setError("root", { message: baseMsg });
       }
     } catch (error: any) {
       console.error("Error during business creation:", error);

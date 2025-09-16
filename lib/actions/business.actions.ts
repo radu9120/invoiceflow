@@ -9,9 +9,17 @@ import {
   DashboardBusinessStats,
 } from "@/types";
 import { createActivity } from "./userActivity.actions";
+
+// Simple module-level timestamp to throttle repeated network error logs for dashboard
+let lastDashboardNetworkLog: number | null = null;
+
+export type CreateBusinessResult =
+  | { ok: true; business: BusinessType }
+  | { ok: false; error: string; transient?: boolean; details?: any };
+
 export const createBusiness = async (
   formData: CreateBusiness
-): Promise<BusinessType | null> => {
+): Promise<CreateBusinessResult> => {
   const { userId: author } = await auth();
   if (!author) redirect("/sign-in");
 
@@ -49,23 +57,29 @@ export const createBusiness = async (
   }
 
   if (!created) {
-    // Log a robust snapshot server-side and return null so the UI can show a friendly error
+    const message = String(
+      attemptError?.message || attemptError || "Failed to create business"
+    );
+    const transient =
+      /fetch failed|ENOTFOUND|ECONNREFUSED|EAI_AGAIN|ETIMEDOUT/i.test(message);
+    // Log server-side
     try {
       console.error(
         "Supabase insert Businesses failed",
         JSON.stringify(
           {
-            message: String(attemptError?.message || attemptError),
+            message,
             status: attemptError?.status,
             details: attemptError?.details,
             hint: attemptError?.hint,
+            transient,
           },
           null,
           2
         )
       );
     } catch (_) {}
-    return null;
+    return { ok: false, error: message, transient, details: attemptError };
   }
 
   // Best-effort activity log; don't fail the main operation if logging fails
@@ -86,7 +100,7 @@ export const createBusiness = async (
     } catch (_) {}
   }
 
-  return created as BusinessType;
+  return { ok: true, business: created as BusinessType };
 };
 
 export const getUserBusinesses = async () => {
@@ -255,32 +269,47 @@ export const getDashboardStats = async (): Promise<
     if (rpcError) throw rpcError;
     return rpcData ?? [];
   } catch (e: any) {
-    // Distinguish generic network error (fetch failed) from Supabase errors
-    const isNetwork = /fetch failed|ENOTFOUND|ECONNREFUSED|EAI_AGAIN/i.test(
-      String(e?.message || e)
-    );
-    // Log a robust snapshot of the error
+    const message = String(e?.message || e);
+    const isNetwork =
+      /fetch failed|ENOTFOUND|ECONNREFUSED|EAI_AGAIN|ETIMEDOUT/i.test(message);
+
+    // Single consolidated log
     try {
-      console.error(
-        "Supabase RPC get_all_dashboard_stats failed",
-        JSON.stringify(
-          {
-            author,
-            message: String(e?.message || e),
-            status: e?.status,
-            details: e?.details,
-            hint: e?.hint,
-            isNetwork,
-          },
-          null,
-          2
-        )
+      const now = Date.now();
+      const shouldLogNetwork =
+        !isNetwork ||
+        !lastDashboardNetworkLog ||
+        now - lastDashboardNetworkLog > 60_000; // 1 minute window
+      if (shouldLogNetwork) {
+        if (isNetwork) lastDashboardNetworkLog = now;
+        console.error(
+          "Supabase RPC get_all_dashboard_stats failed",
+          JSON.stringify(
+            {
+              author,
+              message,
+              status: e?.status,
+              details: e?.details,
+              hint: e?.hint,
+              isNetwork,
+              throttled: !shouldLogNetwork,
+            },
+            null,
+            2
+          )
+        );
+      }
+    } catch (_) {}
+
+    // If this is clearly a network failure, skip the fallback (it would also fail) and return offline mode immediately
+    if (isNetwork) {
+      console.warn(
+        "Dashboard offline mode: network error detected, returning empty stats array"
       );
-    } catch (_) {
-      // do nothing if console fails
+      return [];
     }
 
-    // Fallback: compute a minimal dashboard list without the RPC so the page can render
+    // Non-network (logical / permission / RPC) errors: attempt lightweight fallback
     try {
       const { data: businesses, error: bizErr } = await supabase
         .from("Businesses")
@@ -288,23 +317,19 @@ export const getDashboardStats = async (): Promise<
         .eq("author", author)
         .order("created_at", { ascending: false });
       if (bizErr) throw bizErr;
-
-      // For fallback, set counts to 0; optionally, we could query counts per business to be richer
-      const fallback: DashboardBusinessStats[] = (businesses || []).map(
-        (b: any) => ({
-          id: b.id,
-          name: b.name,
-          totalinvoices: 0,
-          totalrevenue: 0,
-          totalclients: 0,
-          created_on: b.created_at,
-        })
-      );
-      return fallback;
+      return (businesses || []).map((b: any) => ({
+        id: b.id,
+        name: b.name,
+        totalinvoices: 0,
+        totalrevenue: 0,
+        totalclients: 0,
+        created_on: b.created_at,
+      }));
     } catch (fallbackErr: any) {
+      // Final log before surfacing error
       try {
         console.error(
-          "Dashboard fallback query failed",
+          "Dashboard fallback query failed (non-network error path)",
           JSON.stringify(
             { message: String(fallbackErr?.message || fallbackErr) },
             null,
@@ -312,15 +337,7 @@ export const getDashboardStats = async (): Promise<
           )
         );
       } catch (_) {}
-      if (isNetwork) {
-        console.warn(
-          "Dashboard is running in offline mode: returning empty stats array"
-        );
-        return [];
-      }
-      throw new Error(
-        String(e?.message || e) || "Failed to load dashboard stats"
-      );
+      throw new Error(message || "Failed to load dashboard stats");
     }
   }
 };
