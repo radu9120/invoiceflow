@@ -10,7 +10,6 @@ import {
 } from "@/lib/actions/business.actions"; // Adjust path
 import { useState } from "react";
 import { uploadFileAndGetUrl } from "@/lib/actions/logo.action"; // Adjust path
-import { useRouter } from "next/navigation"; // Import useRouter
 
 interface CreateBusinessProps {
   closeModal?: () => void; // Optional prop to close the modal
@@ -21,7 +20,6 @@ export const CreateBusiness = ({
   closeModal,
   onSuccess,
 }: CreateBusinessProps) => {
-  const router = useRouter();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false); // For loading state
 
@@ -58,7 +56,7 @@ export const CreateBusiness = ({
 
       if (result.ok) {
         console.log("Success, created business:", result.business);
-        router.refresh(); // Refresh page data
+        window.location.reload(); // Refresh page data
 
         if (onSuccess) {
           // Call generic onSuccess if provided

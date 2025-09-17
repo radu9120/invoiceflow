@@ -2,7 +2,6 @@
 import { AlertTriangle, PlusIcon, Crown } from "lucide-react";
 import CustomModal from "../ModalsForms/CustomModal"; // Ensure this path is correct
 import { CreateBusiness } from "../Business/Forms/CreateBusiness";
-import { useRouter } from "next/navigation";
 
 export default function DashboardHeader({
   userPlan,
@@ -11,8 +10,6 @@ export default function DashboardHeader({
   userPlan: string;
   totalBusinesses: number;
 }) {
-  const router = useRouter();
-
   const isFreePlan = userPlan === "free";
   // Define paid plans based on your Clerk plan identifiers.
   // For simplicity, assuming any plan not 'free' is a paid plan.
@@ -38,11 +35,12 @@ export default function DashboardHeader({
   const showUpgradeElements = hasReachedFreeLimit;
 
   const handleBusinessCreated = () => {
-    router.refresh();
+    // Refresh will be handled by the modal closing and re-rendering
+    window.location.reload();
   };
 
   const handleUpgradeClick = () => {
-    router.push("/pricing"); // Navigate to your page that renders <PricingTable />
+    window.location.href = "/pricing";
   };
 
   return (
